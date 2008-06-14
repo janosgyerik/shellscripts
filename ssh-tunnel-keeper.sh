@@ -11,6 +11,9 @@
 # PURPOSE: Create an ssh rtunnel and try to keep it alive as long as possible
 #          by fine-tuned ssh client options and by restarting it whenever it
 #          becomes unusable (dies or "just stops working").
+#	   IMPORTANT: "autossh" is a program that does the same thing this
+#	   script is trying to do, and it does it better. Use this script
+#	   only if you cannot use "autossh". 
 #
 # REV LIST:
 #        DATE:	DATE_of_REVISION
