@@ -1,0 +1,76 @@
+#!/bin/sh
+#
+# SCRIPT: pdf-pages.sh
+# AUTHOR: Janos Gyerik <janos.gyerik@gmail.com>
+# DATE:   2008-07-07
+# REV:    1.0.D (Valid are A, B, D, T and P)
+#               (For Alpha, Beta, Dev, Test and Production)
+#
+# PLATFORM: Not platform dependent
+#	    Tested in: hardy/ubuntu
+#
+# PURPOSE: Cut out a range of pages from PDF files.
+#
+# REV LIST:
+#        DATE:	DATE_of_REVISION
+#        BY:	AUTHOR_of_MODIFICATION   
+#        MODIFICATION: Describe what was modified, new features, etc-
+#
+#
+# set -n   # Uncomment to check your syntax, without execution.
+#          # NOTE: Do not forget to put the comment back in or
+#          #       the shell script will not execute!
+# set -x   # Uncomment to debug this shell script (Korn shell only)
+#
+
+usage() {
+    test $# = 0 || echo $@
+    echo "Usage: $0 [OPTION]... [pdf-file]..."
+    echo "Cut out a range of pages from PDF files."
+    echo
+    echo "  -f, --first FIRST  default = $first"
+    echo "  -l, --last LAST    default = $last"
+    echo
+    echo "  -h, --help         Print this help"
+    echo
+    exit 1
+}
+
+neg=0
+args=
+#arg=
+#flag=off
+#param=
+first=
+last=
+while [ $# != 0 ]; do
+    case $1 in
+    -h|--help) usage ;;
+#    !) neg=1; shift; continue ;;
+#    -f|--flag) test $neg = 1 && flag=off || flag=on ;;
+#    -p|--param) shift; param=$1 ;;
+    -f|--first) shift; first=$1 ;;
+    -l|--last) shift; last=$1 ;;
+#    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
+    -?*) usage "Unknown option: $1" ;;
+    *) args="$args \"$1\"" ;;  # script that takes multiple arguments
+#    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
+#    *) arg=$1 ;;  # forgiving with excess arguments
+    esac
+    shift
+    neg=0
+done
+
+eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 
+
+test "$first" -a "$last" || usage
+
+for i in "$@"; do
+    test -f "$i" || continue
+    out=$(echo $i | sed -e s/.pdf$//i)-p$first-$last.pdf
+    echo '* creating '$out ...
+    pdftops -f $first -l $last "$i" - | ps2pdf - "$out"
+    echo '* done'
+done
+
+# eof
