@@ -46,24 +46,26 @@ set_longest() {
     test $l -gt $longest && longest=$l
 }
 
-neg=0
 #flag=off
 #param=
 #args=
 test "$AUTHOR" && author=$AUTHOR || author='AUTHOR <email@address.com>'
 stub=off
 longest=5
+description='BRIEF DESCRIPTION OF THE SCRIPT'
 # options starting with "f" are flags, options starting with "p" are parameters.
 options=
 file=
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-    !) neg=1; shift; continue ;;
-#    -f|--flag) test $neg = 1 && flag=off || flag=on ;;
+#    -f|--flag) flag=on ;;
+#    --no-flag) flag=off ;;
 #    -p|--param) shift; param=$1 ;;
     -a|--author) shift; author=$1 ;;
-    --stub) test $neg = 1 && stub=off || stub=on ;;
+    --stub) stub=on ;;
+    --no-stub) stub=off ;;
+    -d|--description) shift; description="$1" ;;
     -f|--flag) shift; options="$options f$1"; set_longest $1 ;;
     -p|--param) shift; options="$options p$1"; set_longest $1 ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
@@ -73,7 +75,6 @@ while [ $# != 0 ]; do
     *) file=$1 ;;  # forgiving with excess arguments
     esac
     shift
-    neg=0
 done
 
 test "$file" || usage
@@ -86,7 +87,7 @@ else
     file=/tmp/.template-sh.$$
     test=1
 fi
-echo Creating \"$file\" ...
+echo "Creating \"$file\" ..."
 
 trap 'rm -f "$file"; exit 1' 1 2 3 15
 
@@ -123,18 +124,18 @@ if [ $stub = on ]; then
 EOF
 fi
 
-cat << "EOF" >> "$file"
+cat << EOF >> "$file"
 
 usage() {
-    test $# = 0 || echo $@
-    echo "Usage: $0 [OPTION]... [ARG]..."
-    echo "BRIEF DESCRIPTION OF THE SCRIPT"
+    test \$# = 0 || echo \$@
+    echo "Usage: \$0 [OPTION]... [ARG]..."
+    echo $description
     echo
 EOF
 
 set_padding() {
     padding=
-    j=$(echo $1 | wc -c)
+    j=$(echo "$1" | wc -c)
     while [ $j -lt $width ]; do
 	padding="$padding "
 	j=$(expr $j + 1)
@@ -152,14 +153,20 @@ for i in $options; do
 	has_flags=yes
 	optionstring="  -$first, --$name"
 	echo "Adding flag -$first, --$name ..."
+	set_padding "$optionstring"
+	echo "    echo \"$optionstring$padding default = \$$name\"" >> "$file"
+	optionstring="      --no-$name"
+	echo "Adding flag --no-$name ..."
+	set_padding "$optionstring"
+	echo "    echo \"$optionstring$padding default = ! \$$name\"" >> "$file"
     else
 	# this is a param
 	pname=$(echo $name | tr a-z A-Z)
 	optionstring="  -$first, --$name $pname"
 	echo "Adding param -$first, --$name ..."
+	set_padding "$optionstring"
+	echo "    echo \"$optionstring$padding default = \$$name\"" >> "$file"
     fi
-    set_padding "$optionstring"
-    echo "    echo \"$optionstring$padding default = \$$name\"" >> "$file"
 done
 
 helpstring="  -h, --help"
@@ -171,7 +178,6 @@ cat << EOF >> "$file"
     exit 1
 }
 
-neg=0
 args=
 #arg=
 #flag=off
@@ -189,11 +195,11 @@ cat << EOF >> "$file"
 while [ \$# != 0 ]; do
     case \$1 in
     -h|--help) usage ;;
-$ttmp    !) neg=1; shift; continue ;;
 EOF
 
 # an example entry to illustrate parsing a flag
-echo "#    -f|--flag) test \$neg = 1 && flag=off || flag=on ;;" >> "$file"
+echo "#    -f|--flag) flag=on ;;" >> "$file"
+echo "#    --no-flag) flag=off ;;" >> "$file"
 # an example entry to illustrate parsing a param
 echo "#    -p|--param) shift; param=\$1 ;;" >> "$file"
 
@@ -203,7 +209,8 @@ for i in $options; do
     first=$(expr $name : '\(.\)')
     if [ $f = f ]; then
 	# this is a flag
-	echo "    -$first|--$name) test \$neg = 1 && $name=off || $name=on ;;" >> "$file"
+	echo "    -$first|--$name) $name=on ;;" >> "$file"
+	echo "    --no-$name) $name=off ;;" >> "$file"
     else
 	# this is a param
 	echo "    -$first|--$name) shift; $name=\$1 ;;" >> "$file"
@@ -218,7 +225,6 @@ cat << "EOF" >> "$file"
 #    *) arg=$1 ;;  # forgiving with excess arguments
     esac
     shift
-    neg=0
 done
 
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 
