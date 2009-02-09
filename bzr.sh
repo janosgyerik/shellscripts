@@ -139,6 +139,8 @@ case "$1" in
 	test "$1" || eval 'set -- .'
 	bzr_status() {
 	    test -d "$1" || return
+	    dd="$1"
+	    test "$2" && pp="$pp/$dd" || pp="$dd"
 	    cd "$1"
 	    if test -d .bzr; then
 		tmp=/tmp/.bzr-status-$$-1
@@ -152,6 +154,7 @@ case "$1" in
 		fi
 		revision=r$(grep -o '  [0-9][0-9]* revision' $tmp | head -n 1 | cut -f3 -d' ')
 		repository=$(sed -e '/checkout of / p' -e d $tmp | sed -e 's/.*branch: \(.*\)/\1/')
+		test "$repository" || repository=$pp
 		spacing="	"
 		printstring="$spacing$revision$spacing$repository"
 		if test $ret_info != 0; then
@@ -170,7 +173,7 @@ case "$1" in
 		rm -f $tmp
 	    else
 		for i in *; do
-		    (bzr_status $i)
+		    (bzr_status $i $pp)
 		done
 	    fi
 	}
