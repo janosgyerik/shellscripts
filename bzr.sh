@@ -3,7 +3,7 @@
 # SCRIPT: bzr.sh
 # AUTHOR: Janos Gyerik <janos.gyerik@gmail.com>
 # DATE:   2008-05-03
-# REV:    1.0.D (Valid are A, B, D, T and P)
+# REV:    1.0.T (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)
 #
 # PLATFORM: Not platform dependent
@@ -60,6 +60,9 @@ usage() {
     echo "Local copy commands:"
     echo "  status, stat, st"
     echo "  update, up"
+    echo
+    echo "Misc commands:"
+    echo "  cleanse, cl"
     echo
     exit 1
 }
@@ -208,6 +211,14 @@ case "$1" in
 	    (bzr_up $i)
 	done
 	;;
+    cleanse|cl)
+	shift
+	test "$1" || eval 'set -- .'
+	for i in "$@"; do
+	    find "$i" -name \*~ -exec rm -v {} \;
+	done
+	;;
+    *) usage ;;
 esac
 
 rm -f $workfile
