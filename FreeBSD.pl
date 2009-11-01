@@ -40,7 +40,6 @@ my $URL_PACKAGES = $URL_FREEBSD."/All";
 &usage() unless @ARGV;
 
 my @args;
-my $neg = 0;
 my $match = "BOTH";
 my $action = "";
 my $verbosity = 0;
@@ -54,7 +53,6 @@ my $EXT = $+ ? ($+ >= 5 ? "tbz" : "tgz") : "tgz";
 OUTER: while (@ARGV) {
     for (shift(@ARGV)) {
 	($_ eq '-h' || $_ eq '--help') && do { &usage; };
-	($_ eq '!') && do { $neg = 1; next OUTER; };
 	($_ eq '--index') && do { &fetch_index(); last; };
 	($_ eq '-i' || $_ eq '--install') && do { $action = "INSTALL"; last; };
 	($_ eq '-r' || $_ eq '--remove') && do { $action = "REMOVE"; last; };
@@ -65,7 +63,6 @@ OUTER: while (@ARGV) {
 	($_ eq '-v' || $_ eq '--verbose') && do { ++$verbosity; last; };
 	push(@args, $_);
     }
-    $neg = 0;
 }
 
 sub usage {

@@ -27,17 +27,14 @@ use warnings;
 &usage() unless @ARGV;
 
 my @args;
-my $neg = 0;
 
 OUTER: while (@ARGV) {
     for (shift(@ARGV)) {
         ($_ eq '-h' || $_ eq '--help') && do { &usage(); };
-	($_ eq '!') && do { $neg = 1; next OUTER; };
         ($_ eq '--') && do { push(@args, @ARGV); undef @ARGV; last; };
         ($_ =~ m/^-.+/) && do { print "Unknown option: $_\n"; &usage(); };
         push(@args, $_);
     }
-    $neg = 0;
 }
 
 sub usage {

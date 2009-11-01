@@ -55,7 +55,6 @@ usage() {
     exit 1
 }
 
-neg=0
 base=
 url=
 test -f $rcfile && . $rcfile
@@ -66,11 +65,10 @@ initftp=off
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-    !) neg=1; shift; continue ;;
     --base) shift; base=$1 ;;
     --url) shift; url=$1 ;;
-    --init) test $neg = 1 && init=off || init=on ;;
-    --initftp) test $neg = 1 && initftp=off || initftp=on ;;
+    --init) init=on ;;
+    --initftp) initftp=on ;;
     --daily) dir=daily; nametag=$(date +%a) ;;
     --weekly) dir=weekly; d=$(date +%d) ;;
     --monthly) dir=monthly; nametag=$(date +%b) ;;

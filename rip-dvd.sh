@@ -60,7 +60,6 @@ usage() {
 }
 
 args=
-neg=0
 device=
 title=1
 chapter=
@@ -76,14 +75,13 @@ aid=
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-    !) neg=1; shift; continue ;;
-#    -f|--flag) test $neg = 1 && flag=off || flag=on ;;
+#    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
     -d|--device) shift; device=$1 ;;
     -t|--title) shift; title=$1 ;;
     -c|--chapter) shift; chapter=$1 ;;
-    --widescreen) test $neg = 1 && widescreen=off || widescreen=on ;;
-    --test) test $neg = 1 && testonly=off || testonly=on ;;
+    --widescreen) widescreen=on ;;
+    --test) testonly=on ;;
     --vbitrate) shift; vbitrate=$1 ;;
     --volume) shift; volume=$1 ;;
     --aid) shift; aid=$1 ;;
@@ -92,7 +90,6 @@ while [ $# != 0 ]; do
     *) out=$1 ;;
     esac
     shift
-    neg=0
 done
 
 dir=$(dirname "$out")

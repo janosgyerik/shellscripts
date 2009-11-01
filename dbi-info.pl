@@ -23,19 +23,16 @@ use warnings;
 #&usage() unless @ARGV;
 
 my @args;
-my $neg = 0;
 
 my $all = "";
 OUTER: while (@ARGV) {
     for (shift(@ARGV)) {
         ($_ eq '-h' || $_ eq '--help') && do { &usage(); };
-	($_ eq '!') && do { $neg = 1; next OUTER; };
-        ($_ eq '-a' || $_ eq '--all') && do { $all = $neg ? "" : 1; last; };
+        ($_ eq '-a' || $_ eq '--all') && do { $all = 1; last; };
         ($_ eq '--') && do { push(@args, @ARGV); undef @ARGV; last; };
         ($_ =~ m/^-.+/) && do { print "Unknown option: $_\n"; &usage(); };
         push(@args, $_);
     }
-    $neg = 0;
 }
 
 sub usage {

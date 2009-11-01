@@ -46,7 +46,6 @@ set_longest() {
     test $l -gt $longest && longest=$l
 }
 
-neg=0
 #flag=off
 #param=
 #args=
@@ -59,11 +58,10 @@ file=
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-    !) neg=1; shift; continue ;;
-#    -f|--flag) test $neg = 1 && flag=off || flag=on ;;
+#    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
     -a|--author) shift; author=$1 ;;
-    --stub) test $neg = 1 && stub=off || stub=on ;;
+    --stub) stub=on ;;
     -f|--flag) shift; options="$options f$1"; set_longest $1 ;;
     -p|--param) shift; options="$options p$1"; set_longest $1 ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
@@ -73,7 +71,6 @@ while [ $# != 0 ]; do
     *) file=$1 ;;  # forgiving with excess arguments
     esac
     shift
-    neg=0
 done
 
 test "$file" || usage
@@ -124,7 +121,6 @@ use strict;
 use warnings;
 
 my @args;
-my $neg = 0;
 #my $arg = '';
 #my $flag = '';
 #my $param = '';
@@ -143,11 +139,10 @@ cat << EOF >> $file
 OUTER: while (@ARGV) {
     for (shift(@ARGV)) {
         (\$_ eq '-h' || \$_ eq '--help') && do { &usage(); };
-$ttmp	(\$_ eq '!') && do { \$neg = 1; next OUTER; };
 EOF
 
 # an example entry to illustrate parsing a flag
-echo "#        (\$_ eq '-f' || \$_ eq '--flag') && do { \$flag = \$neg ? \"\" : 1; last; };" >> "$file"
+echo "#        (\$_ eq '-f' || \$_ eq '--flag') && do { \$flag = 1; last; };" >> "$file"
 # an example entry to illustrate parsing a param
 echo "#        (\$_ eq '-p' || \$_ eq '--param') && do { \$param = shift(@ARGV); last; };" >> "$file"
 
@@ -157,7 +152,7 @@ for i in $options; do
     first=`expr $name : '\(.\)'`
     if [ $f = f ]; then
 	# this is a flag
-	echo "        (\$_ eq '-$first' || \$_ eq '--$name') && do { \$$name = \$neg ? \"\" : 1; last; };" >> "$file"
+	echo "        (\$_ eq '-$first' || \$_ eq '--$name') && do { \$$name = 1; last; };" >> "$file"
     else
 	# this is a param
 	echo "        (\$_ eq '-$first' || \$_ eq '--$name') && do { \$$name = shift(@ARGV); last; };" >> "$file"
@@ -171,7 +166,6 @@ cat << "EOF" >> "$file"
 #	$arg ? $arg = $_ : &usage();  # strict with excess arguments
 #	$arg = $_;  # forgiving with excess arguments
     }
-    $neg = 0;
 }
 
 sub usage() {

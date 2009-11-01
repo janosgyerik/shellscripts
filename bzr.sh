@@ -67,7 +67,6 @@ usage() {
     exit 1
 }
 
-neg=0
 args=
 #arg=
 #flag=off
@@ -79,11 +78,10 @@ local=off
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-    !) neg=1; shift; continue ;;
-#    -f|--flag) test $neg = 1 && flag=off || flag=on ;;
+#    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
-    --brief) test $neg = 1 && brief=off || brief=on ;;
-    --local) test $neg = 1 && local=off || local=on ;;
+    --brief) brief=on ;;
+    --local) local=on ;;
     --ssh)
 	test $# -gt 1 || usage
 	shift; bzrhost=$1
@@ -96,7 +94,6 @@ while [ $# != 0 ]; do
 #    *) arg=$1 ;;  # forgiving with excess arguments
     esac
     shift
-    neg=0
 done
 
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@

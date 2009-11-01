@@ -42,7 +42,6 @@ usage() {
     exit 1
 }
 
-neg=0
 args=
 #arg=
 #flag=off
@@ -57,11 +56,10 @@ replacement_flag=off
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-    !) neg=1; shift; continue ;;
-#    -f|--flag) test $neg = 1 && flag=off || flag=on ;;
-    -f|--force) test $neg = 1 && force=off || force=on ;;
-    -t|--test) test $neg = 1 && testonly=off || testonly=on ;;
-    -g|--global) test $neg = 1 && global=off || global=on ;;
+#    -f|--flag) flag=on ;;
+    -f|--force) force=on ;;
+    -t|--test) testonly=on ;;
+    -g|--global) global=on ;;
 #    -p|--param) shift; param=$1 ;;
     --) shift
 	while [ $# != 0 ]; do 
@@ -94,7 +92,6 @@ while [ $# != 0 ]; do
 	;;
     esac
     shift
-    neg=0
 done
 
 test "$pattern" || usage

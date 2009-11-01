@@ -43,7 +43,6 @@ usage() {
     exit 1
 }
 
-neg=0
 args=
 #arg=
 #flag=off
@@ -53,8 +52,7 @@ dir=
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-#    !) neg=1; shift; continue ;;
-#    -f|--flag) test $neg = 1 && flag=off || flag=on ;;
+#    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
     -d|--device) shift; device=$1 ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
@@ -64,7 +62,6 @@ while [ $# != 0 ]; do
     *) dir=$1 ;;
     esac
     shift
-    neg=0
 done
 
 test "$device" && dev_op="-d $device" || dev_op=

@@ -33,23 +33,20 @@ usage () {
 }
 
 args=
-neg=0
 #flag=off
 #param=
 verbose=off
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-    !) neg=1; shift; continue ;;
-#    -f|--flag) test $neg = 1 && flag=off || flag=on ;;
+#    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
-    -v|--verbose) test $neg = 1 && verbose=off || verbose=on ;;
+    -v|--verbose) verbose=on ;;
     --) shift; for i; do args="$args \"$i\""; done; shift $# ;;
     -?*) echo Unknown option: $1 ; usage ;;
     *) args="$args \"$1\"" ;;
     esac
     shift
-    neg=0
 done
 
 eval "set -- $args"

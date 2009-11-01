@@ -23,17 +23,14 @@ usage () {
 }
 
 args=
-neg=0
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-    !) neg=1; shift; continue ;;
     --) shift; for i; do args="$args \"$i\""; done; shift $# ;;
     -?*) echo Unknown option: $1 ; usage ;;
     *) args="$args \"$1\"" ;;
     esac
     shift
-    neg=0
 done
 
 eval "set -- $args"

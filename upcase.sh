@@ -33,7 +33,6 @@ usage() {
     exit 1
 }
 
-neg=0
 args=
 #arg=
 #flag=off
@@ -41,8 +40,7 @@ args=
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-#    !) neg=1; shift; continue ;;
-#    -f|--flag) test $neg = 1 && flag=off || flag=on ;;
+#    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
     --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
@@ -51,7 +49,6 @@ while [ $# != 0 ]; do
 #    *) arg=$1 ;;  # forgiving with excess arguments
     esac
     shift
-    neg=0
 done
 
 eval "set -- $args"

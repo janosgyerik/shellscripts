@@ -109,7 +109,6 @@ EOF
 }
 
 args=
-neg=0
 #flag=off
 #param=
 init=off
@@ -122,14 +121,13 @@ port_list=
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-    !) neg=1; shift; continue ;;
-#    -f|--flag) test $neg = 1 && flag=off || flag=on ;;
+#    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
     --doc) doc ;;
-    --init) test $neg = 1 && init=off || init=on ;;
+    --init) init=on ;;
     --net) shift; if_net=$1 ;;
     --lan) shift; if_lan=$1 ;;
-    --gw) test $neg = 1 && gw=off || gw=on ;;
+    --gw) gw=on ;;
     --proto) shift; proto_list="$proto_list $1" ;;
     -f|--from) shift; addr_list="$addr_list $1" ;;
     -p|--port) shift; port_list="$port_list $1" ;;
@@ -138,7 +136,6 @@ while [ $# != 0 ]; do
     *) args="$args \"$1\"" ;;
     esac
     shift
-    neg=0
 done
 
 if test $init = on; then

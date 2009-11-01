@@ -44,7 +44,6 @@ usage() {
     exit 1
 }
 
-neg=0
 args=
 #arg=
 #flag=off
@@ -55,12 +54,11 @@ list=off
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-    !) neg=1; shift; continue ;;
-#    -f|--flag) test $neg = 1 && flag=off || flag=on ;;
+#    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
     -f|--from) shift; from=$1 ;;
     -t|--to) shift; to=$1 ;;
-    -l|--list) test $neg = 1 && list=off || list=on ;;
+    -l|--list) list=on ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
@@ -68,7 +66,6 @@ while [ $# != 0 ]; do
 #    *) arg=$1 ;;  # forgiving with excess arguments
     esac
     shift
-    neg=0
 done
 
 test $list = on && { $program -l ; exit 0 ; }

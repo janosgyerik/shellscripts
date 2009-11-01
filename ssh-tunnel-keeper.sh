@@ -41,7 +41,6 @@ usage() {
     exit 1
 }
 
-neg=0
 args=
 #flag=off
 #param=
@@ -55,8 +54,7 @@ ssh_banner=SSH-
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-#    !) neg=1; shift; continue ;;
-#    -f|--flag) test $neg = 1 && flag=off || flag=on ;;
+#    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
     -l|--lport) shift; lport=$1 ;;
     --rport) shift; rport=$1 ;;
@@ -67,7 +65,6 @@ while [ $# != 0 ]; do
     *) usage ;;
     esac
     shift
-    neg=0
 done
 
 eval "set -- $args"

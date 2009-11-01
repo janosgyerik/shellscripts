@@ -58,7 +58,6 @@ usage() {
     exit 1
 }
 
-neg=0
 args=
 #arg=
 #flag=off
@@ -72,15 +71,14 @@ verbose=off
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-    !) neg=1; shift; continue ;;
-#    -f|--flag) test $neg = 1 && flag=off || flag=on ;;
+#    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
     -s|--source) shift; source=$1 ;;
     -t|--target) shift; target=$1 ;;
-    -d|--dump) test $neg = 1 && dump=off || dump=on ;;
-    -l|--load) test $neg = 1 && load=off || load=on ;;
-    -y|--yes) test $neg = 1 && yes=off || yes=on ;;
-    -v|--verbose) test $neg = 1 && verbose=off || verbose=on ;;
+    -d|--dump) dump=on ;;
+    -l|--load) load=on ;;
+    -y|--yes) yes=on ;;
+    -v|--verbose) verbose=on ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
@@ -88,7 +86,6 @@ while [ $# != 0 ]; do
 #    *) arg=$1 ;;  # forgiving with excess arguments
     esac
     shift
-    neg=0
 done
 
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 

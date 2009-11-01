@@ -41,7 +41,6 @@ usage() {
     exit 1
 }
 
-neg=0
 args=
 #arg=
 #flag=off
@@ -53,8 +52,7 @@ outdir=
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-#    !) neg=1; shift; continue ;;
-#    -f|--flag) test $neg = 1 && flag=off || flag=on ;;
+#    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
     -w|--width) shift; width=$1 ;;
     -H|--height) shift; height=$1 ;;
@@ -67,7 +65,6 @@ while [ $# != 0 ]; do
 #    *) arg=$1 ;;  # forgiving with excess arguments
     esac
     shift
-    neg=0
 done
 
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 
