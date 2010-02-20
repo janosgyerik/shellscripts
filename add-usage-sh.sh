@@ -8,8 +8,7 @@
 #
 # PLATFORM: Not platform dependent
 #
-# PURPOSE: Add a sample command-line parser and usage() function to a shell 
-#          script."
+# PURPOSE: Add a usage() function to shell scripts.
 #
 # REV LIST:
 #        DATE:	DATE_of_REVISION
@@ -21,12 +20,12 @@
 #          # NOTE: Do not forget to put the comment back in or
 #          #       the shell script will not execute!
 # set -x   # Uncomment to debug this shell script (Korn shell only)
-#          
+#
 
 usage() {
-    test $# = 0 || echo $@
+    test "$1" && echo $@
     echo "Usage: $0 [OPTION]... [FILE]..."
-    echo "Add a sample command-line parser and usage() function to a shell script."
+    echo "Add a usage() function to shell scripts."
     echo
     echo "  -h, --help            Print this help"
     echo
@@ -45,19 +44,23 @@ while [ $# != 0 ]; do
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
 #    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
+#    *) arg=$1 ;;  # forgiving with excess arguments
     esac
     shift
 done
 
 eval "set -- $args"
 
-test $# = 0 && usage
+test -f "$1" || usage
 
-tmp=/tmp/.add-usage-sh.$$
-trap 'rm -f $tmp; echo $tmp; exit 1' 1 2 3 15
-cat << "EOF" > $tmp
+for i in "$@"; do
+    test -f "$i" || continue
+    echo "Adding usage() function to $i ..."
+    tmp1="$i".tmp1
+    tmp2="$i".tmp2
+    cat << "EOF" > "$tmp1"
 usage() {
-    test $# = 0 || echo $@
+    test "$1" && echo $@
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo "BRIEF DESCRIPTION OF THE SCRIPT"
     echo
@@ -86,24 +89,18 @@ done
 
 eval "set -- $args"
 
-#test $# = 0 && usage
+#test -f "$1" || usage
 
 EOF
-
-work=$tmp.work
-for i in "$@"; do
-    test -f "$i" || continue
     sed -e "
 /^$/ {
-r $tmp
+r "$tmp1"
 : rest
 n
 b rest
 }
-" "$i" > $work
-    test $? = 0 && cp $work "$i"
+" "$i" > "$tmp2" && cp "$tmp2" "$i"
+    rm -f $tmp1 $tmp2
 done
-
-rm -f $tmp $work
 
 # eof

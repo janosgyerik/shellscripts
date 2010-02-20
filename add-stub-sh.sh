@@ -6,7 +6,7 @@
 # REV:    1.0.T (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)
 #
-# PLATFORM: Non platform dependent
+# PLATFORM: Not platform dependent
 #
 # PURPOSE: Insert a stub template after the first line of a shell script.
 #
@@ -23,7 +23,7 @@
 #
 
 usage() {
-    test $# = 0 || echo $@
+    test "$1" && echo $@
     echo "Usage: $0 [OPTION]... [FILE]..."
     echo "Insert a stub template after the first line of a shell script."
     echo
@@ -53,16 +53,15 @@ done
 
 eval "set -- $args"
 
-test $# = 0 && usage
-
-tmp=/tmp/.add-stub-sh.$$
-trap 'rm -f $tmp; exit 1' 1 2 3 15
+test -f "$1" || usage
 
 for i in "$@"; do
+    test -f "$i" || continue
     echo Adding stub to $i ...
-    > $tmp
-    head -1 "$i" >> $tmp
-    cat << EOF >> $tmp
+    tmp="$i".tmp
+    > "$tmp"
+    head -n 1 "$i" >> "$tmp"
+    cat << EOF >> "$tmp"
 #
 # SCRIPT: $(basename "$i")
 # AUTHOR: $author
@@ -90,10 +89,9 @@ for i in "$@"; do
 # set -x   # Uncomment to debug this shell script (Korn shell only)
 #          
 EOF
-    tail +2 "$i" >> $tmp
-    cp $tmp "$i"
+    tail -n +2 "$i" >> "$tmp"
+    cp "$tmp" "$i"
+    rm -f "$tmp"
 done
-
-rm -f $tmp
 
 # eof
