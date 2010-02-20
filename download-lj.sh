@@ -41,7 +41,7 @@ usage() {
     echo
     echo Options:
     echo
-    echo "  -d, --dir             Output directory, default = $outdir"
+    echo "  -d, --dir PATH        Path to the output directory, default = $outdir"
     echo
     echo "  -h, --help            Print this help"
     echo
