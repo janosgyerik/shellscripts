@@ -101,7 +101,7 @@ eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@
 workfile=/tmp/.bzr.sh-$$
 trap 'rm -f $workfile; exit 1' 1 2 3 15
 
-repolistcmd="find $bzrroot -name .bzr | while read d; do test -d \$d/branch && echo \$d; done | sed -e s:/.bzr::"
+repolistcmd="find $bzrroot -name .bzr | sed -e s:/.bzr:: | sort | awk -v prev=0 '\$0 !~ prev { print; prev=\$0 }'"
 
 case "$1" in
     checkout|co)
