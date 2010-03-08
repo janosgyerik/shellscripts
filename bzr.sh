@@ -50,7 +50,7 @@ usage() {
     echo "Options:"
     echo "      --ssh BZRHOST BZRROOT   Set the ssh host and bzrroot, default = $bzrhost $bzrroot"
     echo "      --brief                 Brief output, default = $brief"
-    echo "      --local                 Do not try to connect repository, default = $brief"
+    echo "      --local                 Do not try to connect repository, default = $local"
     echo "  -h, --help                  Print this help"
     echo
     echo "Remote repository commands:"
