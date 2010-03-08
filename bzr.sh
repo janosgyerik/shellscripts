@@ -8,7 +8,7 @@
 #
 # PLATFORM: Not platform dependent
 #
-# PURPOSE: Various miscellaneous repository manipulations via bzr+ssh:
+# PURPOSE: Manipulate a tree of bzr repositories at once:
 #	   * remote repository operations:
 #		* only with bzr+ssh repositories, for path traversal
 #		* list projects
@@ -45,7 +45,7 @@
 usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... cmd"
-    echo "Check out all projects in a Bazaar repository into the specified directory."
+    echo "Manipulate a tree of bzr repositories at once"
     echo
     echo "Options:"
     echo "      --ssh BZRHOST BZRROOT   Set the ssh host and bzrroot, default = $bzrhost $bzrroot"
@@ -56,6 +56,7 @@ usage() {
     echo "Remote repository commands:"
     echo "  checkout, co"
     echo "  list, ls"
+    echo "  push"
     echo
     echo "Local copy commands:"
     echo "  status, stat, st"
@@ -213,6 +214,35 @@ case "$1" in
 	test "$1" || eval 'set -- .'
 	for i in "$@"; do
 	    find "$i" -name \*~ -exec rm -v {} \;
+	done
+	;;
+    push)
+	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
+	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
+	shift
+	test "$1" || eval 'set -- .'
+	bzr_push() {
+	    test -d "$1" || return
+	    test "$2" && path=$2 || path=.
+	    cd "$1"
+	    if test -d .bzr; then
+		target=bzr+ssh://$bzrhost/$bzrroot/$path/$1
+		if test $brief = on; then
+		    :
+		else
+		    echo Push source: $PWD
+		    echo Push target: $target
+		fi
+		bzr push $target --create-prefix
+		echo
+	    else
+		for i in *; do
+		    (bzr_push $i $1)
+		done
+	    fi
+	}
+	for i in "$@"; do
+	    (bzr_push $i)
 	done
 	;;
     *) usage ;;
