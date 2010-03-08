@@ -227,12 +227,8 @@ case "$1" in
 	    cd "$1"
 	    if test -d .bzr; then
 		target=bzr+ssh://$bzrhost/$bzrroot/$path/$1
-		if test $brief = on; then
-		    :
-		else
-		    echo Push source: $PWD
-		    echo Push target: $target
-		fi
+		echo Push source: $PWD
+		echo Push target: $target
 		bzr push $target --create-prefix
 		echo
 	    else
