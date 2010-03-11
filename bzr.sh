@@ -223,17 +223,17 @@ case "$1" in
 	test "$1" || eval 'set -- .'
 	bzr_push() {
 	    test -d "$1" || return
-	    test "$2" && path=$2 || path=.
+	    test "$2" && path=$2/ || path=
 	    cd "$1"
 	    if test -d .bzr; then
-		target=bzr+ssh://$bzrhost/$bzrroot/$path/$1
+		target=bzr+ssh://$bzrhost/$bzrroot/$path$1
 		echo Push source: $PWD
 		echo Push target: $target
 		bzr push $target --create-prefix
 		echo
 	    else
 		for i in *; do
-		    (bzr_push $i $1)
+		    (bzr_push $i $path$1)
 		done
 	    fi
 	}
