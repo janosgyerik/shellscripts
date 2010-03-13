@@ -17,7 +17,7 @@
 #		* show status of local copy
 #		* update local copy
 #	   * note:
-#		* as of 1.4rc1, there is no (reasonable) way to distinguish 
+#		* as of 2.0.4, there is seems to be no way to distinguish 
 #		  between an unmodified local copy with a local copy that has
 #		  local commits. This becomes a problem when updating local
 #		  copies with local commits. When updating a local copy with
@@ -144,34 +144,26 @@ case "$1" in
 	    test "$2" && pp="$pp/$dd" || pp="$dd"
 	    cd "$1"
 	    if test -d .bzr; then
-		tmp=/tmp/.bzr-status-$$-1
-		trap 'rm -f $tmp; exit 1' 1 2 3 15
-		if test $local = on; then
-		    bzr info > $tmp 2>/dev/null
-		    ret_info=1
+		revno=$(bzr revno)
+		repo=$(bzr info | grep 'checkout of branch:' | sed -e 's/^[^:]*: //')
+		test "$repo" && checkout=1 || checkout=0
+		test $checkout = 0 && repo=standalone:$pp
+		tab="	"
+		if bzr diff >/dev/null 2>/dev/null; then
+		    test "$(bzr st 2>/dev/null | head -n 1)" && f1=\? || f1=\*
+		    if test $local = on -o $checkout = 0; then
+			f2=-
+		    else
+			bzr info -v >/dev/null 2>/dev/null && f2= || f2=E 
+			if test ! "$f2"; then
+			    bzr info -v | grep -F 'Branch is out of date' >/dev/null && f2=O || f2=\*
+			fi
+		    fi
 		else
-		    bzr info -v > $tmp 2>/dev/null
-		    ret_info=$?
+		    f1=M
+		    f2=-
 		fi
-		revision=r$(grep -o '  [0-9][0-9]* revision' $tmp | head -n 1 | cut -f3 -d' ')
-		repository=$(sed -e '/checkout of / p' -e d $tmp | sed -e 's/.*branch: \(.*\)/\1/')
-		test "$repository" || repository=$pp
-		spacing="	"
-		printstring="$spacing$revision$spacing$repository"
-		if test $ret_info != 0; then
-		    flag1=-
-		elif grep -F 'Branch is out of date' $tmp >/dev/null; then
-		    flag1=O
-		else
-		    flag1=\*
-		fi
-		if ! bzr diff >/dev/null; then
-		    flag2=M
-		else
-		    flag2=\*
-		fi
-		echo "$flag1$flag2$printstring"
-		rm -f $tmp
+		echo "$f1$f2$tab"r"$revno$tab$repo"
 	    else
 		for i in *; do
 		    (bzr_status $i $pp)
