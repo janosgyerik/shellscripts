@@ -98,14 +98,16 @@ eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@
 workfile=/tmp/.bzr.sh-$$
 trap 'rm -f $workfile; exit 1' 1 2 3 15
 
-repolistcmd="find $bzrroot -name .bzr | sed -e s:/.bzr:: | sort | awk -v prev=0 '\$0 !~ prev { print; prev=\$0 }'"
+repolistcmd() {
+    echo "find $1 -name .bzr | sed -e s:/.bzr:: | sort | awk -v prev=0 '\$0 !~ prev { print; prev=\$0 }'"
+}
 
 case "$1" in
     checkout|co)
 	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
 	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
 	test "$2" && localbase=$2 || localbase=.
-	ssh $bzrhost "$repolistcmd" | while read rdir; do
+	ssh $bzrhost "$(repolistcmd $bzrroot)" | while read rdir; do
 	    if test "$rdir" = "$bzrroot"; then
 		pdir=$localbase/$(basename $rdir)
 	    else
@@ -127,7 +129,7 @@ case "$1" in
 	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
 	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
 	test "$2" && localbase=$2 || localbase=.
-	ssh $bzrhost "$repolistcmd"
+	ssh $bzrhost "$(repolistcmd $bzrroot)"
 	;;
     status|stat|st)
 	shift
