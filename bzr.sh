@@ -50,20 +50,16 @@ usage() {
     echo "Options:"
     echo "      --ssh BZRHOST BZRROOT   Set the ssh host and bzrroot, default = $bzrhost $bzrroot"
     echo "      --brief                 Brief output, default = $brief"
-    echo "      --local                 Do not try to connect repository, default = $local"
+    echo "      --local                 Run commands in local mode, default = $local"
     echo "  -h, --help                  Print this help"
     echo
-    echo "Remote repository commands:"
-    echo "  checkout, co"
-    echo "  list, ls"
-    echo "  push"
-    echo
-    echo "Local copy commands:"
-    echo "  status, stat, st"
-    echo "  update, up"
-    echo
-    echo "Misc commands:"
-    echo "  cleanse, cl"
+    echo "Commands:"
+    echo "  checkout, co                Checkout remote repo tee"
+    echo "  list, ls                    Show list of repos in remote repo tree"
+    echo "  push                        Push local repo tree to remote location"
+    echo "  status, stat, st            Show status of local repo tree"
+    echo "  update, up                  Update local repo tree"
+    echo "  cleanse, cl                 Remove .~1~ files created by bzr"
     echo
     exit 1
 }
@@ -205,7 +201,7 @@ case "$1" in
 	shift
 	test "$1" || eval 'set -- .'
 	for i in "$@"; do
-	    find "$i" -name \*~ -exec rm -v {} \;
+	    find "$i" -name '*.~?~' -exec rm -v {} \;
 	done
 	;;
     push)
