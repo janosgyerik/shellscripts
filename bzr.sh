@@ -105,9 +105,7 @@ case "$1" in
 	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
 	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
 	test "$2" && localbase=$2 || localbase=.
-	ssh $bzrhost "$repolistcmd" > $workfile
-	exec 5<$workfile
-	while read rdir<&5; do
+	ssh $bzrhost "$repolistcmd" | while read rdir; do
 	    if test "$rdir" = "$bzrroot"; then
 		pdir=$localbase/$(basename $rdir)
 	    else
