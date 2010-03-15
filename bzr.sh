@@ -57,6 +57,7 @@ usage() {
     echo "  checkout, co                Checkout remote repo tee"
     echo "  list, ls                    Show list of repos in remote repo tree"
     echo "  locallist, lls              Show list of repos in local repo tree"
+    echo "  diff                        Show differences between local and remote tree"
     echo "  push                        Push local repo tree to remote location"
     echo "  status, stat, st            Show status of local repo tree"
     echo "  update, up                  Update local repo tree"
@@ -129,11 +130,17 @@ case "$1" in
     list|ls)
 	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
 	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
-	test "$2" && localbase=$2 || localbase=.
 	ssh $bzrhost "$(repolistcmd $bzrroot)"
 	;;
     locallist|lls)
 	eval "$(repolistcmd $PWD)"
+	;;
+    diff)
+	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
+	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
+	test "$2" && localrepo=$2 || localrepo=$PWD
+	ssh $bzrhost "$(repolistcmd $bzrroot)" | sed -e "s?$bzrroot??" > $workfile
+	eval "$(repolistcmd $PWD)" | sed -e "s?$localrepo??" | diff -u - $workfile
 	;;
     status|stat|st)
 	shift
