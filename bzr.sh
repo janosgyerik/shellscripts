@@ -50,22 +50,24 @@ usage() {
     echo "Options:"
     echo "      --ssh BZRHOST BZRROOT   Set the ssh host and bzrroot, default = $bzrhost $bzrroot"
     echo "      --brief                 Brief output, default = $brief"
-    echo "      --local                 Do not try to connect repository, default = $local"
+    echo "      --local                 Run commands in local mode, default = $local"
     echo "  -h, --help                  Print this help"
     echo
-    echo "Remote repository commands:"
-    echo "  checkout, co"
-    echo "  list, ls"
-    echo "  push"
-    echo
-    echo "Local copy commands:"
-    echo "  status, stat, st"
-    echo "  update, up"
-    echo
-    echo "Misc commands:"
-    echo "  cleanse, cl"
+    echo "Commands:"
+    echo "  checkout, co                Checkout remote repo tee"
+    echo "  list, ls                    Show list of repos in remote repo tree"
+    echo "  locallist, lls              Show list of repos in local repo tree"
+    echo "  diff                        Show differences between local and remote tree"
+    echo "  push                        Push local repo tree to remote location"
+    echo "  status, stat, st            Show status of local repo tree"
+    echo "  update, up                  Update local repo tree"
+    echo "  cleanse, cl                 Remove .~1~ files created by bzr"
     echo
     exit 1
+}
+
+normalpath() {
+    echo $1 | sed -e 's?//*?/?g' -e 's?/*$??'
 }
 
 args=
@@ -84,9 +86,9 @@ while [ $# != 0 ]; do
     --brief) brief=on ;;
     --local) local=on ;;
     --ssh)
-	test $# -gt 1 || usage
+	test "$2" -a "$3" || usage
 	shift; bzrhost=$1
-	shift; bzrroot=$1 
+	shift; bzrroot=$(normalpath "$1")
 	;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
@@ -102,16 +104,16 @@ eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@
 workfile=/tmp/.bzr.sh-$$
 trap 'rm -f $workfile; exit 1' 1 2 3 15
 
-repolistcmd="find $bzrroot -name .bzr | sed -e s:/.bzr:: | sort | awk -v prev=0 '\$0 !~ prev { print; prev=\$0 }'"
+repolistcmd() {
+    echo "find $1 -name .bzr | sed -e s:/.bzr:: | sort | awk -v prev=0 '\$0 !~ prev { print; prev=\$0 }'"
+}
 
 case "$1" in
     checkout|co)
 	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
 	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
-	test "$2" && localbase=$2 || localbase=.
-	ssh $bzrhost "$repolistcmd" > $workfile
-	exec 5<$workfile
-	while read rdir<&5; do
+	test "$2" && localbase=$(normalpath "$2") || localbase=.
+	ssh $bzrhost "$(repolistcmd $bzrroot)" | while read rdir; do
 	    if test "$rdir" = "$bzrroot"; then
 		pdir=$localbase/$(basename $rdir)
 	    else
@@ -132,8 +134,18 @@ case "$1" in
     list|ls)
 	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
 	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
-	test "$2" && localbase=$2 || localbase=.
-	ssh $bzrhost "$repolistcmd"
+	ssh $bzrhost "$(repolistcmd $bzrroot)"
+	;;
+    locallist|lls)
+	test "$2" && localrepo=$(normalpath "$2") || localrepo=$PWD
+	eval "$(repolistcmd $localrepo)"
+	;;
+    diff)
+	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
+	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
+	test "$2" && localrepo=$(normalpath "$2") || localrepo=$PWD
+	ssh $bzrhost "$(repolistcmd $bzrroot)" | sed -e "s?$bzrroot??" > $workfile
+	eval "$(repolistcmd $localrepo)" | sed -e "s?$localrepo??" | diff -u - $workfile
 	;;
     status|stat|st)
 	shift
@@ -205,7 +217,7 @@ case "$1" in
 	shift
 	test "$1" || eval 'set -- .'
 	for i in "$@"; do
-	    find "$i" -name \*~ -exec rm -v {} \;
+	    find "$i" -name '*.~?~' -exec rm -v {} \;
 	done
 	;;
     push)
@@ -230,7 +242,7 @@ case "$1" in
 	    fi
 	}
 	for i in "$@"; do
-	    (bzr_push $i)
+	    (bzr_push $(normalpath "$i"))
 	done
 	;;
     *) usage ;;
