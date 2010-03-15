@@ -66,6 +66,10 @@ usage() {
     exit 1
 }
 
+normalpath() {
+    echo $1 | sed -e 's?//*?/?g' -e 's?/*$??'
+}
+
 args=
 #arg=
 #flag=off
@@ -82,9 +86,9 @@ while [ $# != 0 ]; do
     --brief) brief=on ;;
     --local) local=on ;;
     --ssh)
-	test $# -gt 1 || usage
+	test "$2" -a "$3" || usage
 	shift; bzrhost=$1
-	shift; bzrroot=$1 
+	shift; bzrroot=$(normalpath "$1")
 	;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
@@ -108,7 +112,7 @@ case "$1" in
     checkout|co)
 	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
 	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
-	test "$2" && localbase=$2 || localbase=.
+	test "$2" && localbase=$(normalpath "$2") || localbase=.
 	ssh $bzrhost "$(repolistcmd $bzrroot)" | while read rdir; do
 	    if test "$rdir" = "$bzrroot"; then
 		pdir=$localbase/$(basename $rdir)
@@ -133,14 +137,15 @@ case "$1" in
 	ssh $bzrhost "$(repolistcmd $bzrroot)"
 	;;
     locallist|lls)
-	eval "$(repolistcmd $PWD)"
+	test "$2" && localrepo=$(normalpath "$2") || localrepo=$PWD
+	eval "$(repolistcmd $localrepo)"
 	;;
     diff)
 	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
 	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
-	test "$2" && localrepo=$2 || localrepo=$PWD
+	test "$2" && localrepo=$(normalpath "$2") || localrepo=$PWD
 	ssh $bzrhost "$(repolistcmd $bzrroot)" | sed -e "s?$bzrroot??" > $workfile
-	eval "$(repolistcmd $PWD)" | sed -e "s?$localrepo??" | diff -u - $workfile
+	eval "$(repolistcmd $localrepo)" | sed -e "s?$localrepo??" | diff -u - $workfile
 	;;
     status|stat|st)
 	shift
@@ -237,7 +242,7 @@ case "$1" in
 	    fi
 	}
 	for i in "$@"; do
-	    (bzr_push $i)
+	    (bzr_push $(normalpath "$i"))
 	done
 	;;
     *) usage ;;
