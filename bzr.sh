@@ -54,7 +54,8 @@ usage() {
     echo "  -h, --help                  Print this help"
     echo
     echo "Commands:"
-    echo "  checkout, co                Checkout remote repo tee"
+    echo "  checkout, co                Checkout remote repo tree"
+    echo "  localco, lco                Checkout local repo tree"
     echo "  list, ls                    Show list of repos in remote repo tree"
     echo "  locallist, lls              Show list of repos in local repo tree"
     echo "  diff                        Show differences between local and remote tree"
@@ -128,6 +129,16 @@ case "$1" in
 		echo
 		mkdir -p $(dirname $pdir)
 		bzr co bzr+ssh://$bzrhost$rdir $pdir
+	    fi
+	done
+	;;
+    localco|lco)
+	test "$2" && localrepo=$(normalpath "$2") || localrepo=$PWD
+	eval "$(repolistcmd $localrepo)" | while read line; do
+	    if ! ls "$line" | grep . >/dev/null; then
+		echo Local checkout: $line
+		(cd "$line"; bzr co)
+		echo
 	    fi
 	done
 	;;
