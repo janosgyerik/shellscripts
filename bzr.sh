@@ -51,6 +51,7 @@ usage() {
     echo "      --ssh BZRHOST BZRROOT   Set the ssh host and bzrroot, default = $bzrhost $bzrroot"
     echo "      --brief                 Brief output, default = $brief"
     echo "      --local                 Run commands in local mode, default = $local"
+    echo "      --test                  Run in test mode, default = $testmode"
     echo "  -h, --help                  Print this help"
     echo
     echo "Commands:"
@@ -80,6 +81,7 @@ bzrhost=
 bzrroot=
 brief=off
 local=off
+testmode=off
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
@@ -87,6 +89,7 @@ while [ $# != 0 ]; do
 #    -p|--param) shift; param=$1 ;;
     --brief) brief=on ;;
     --local) local=on ;;
+    --dry-run|--test) testmode=on ;;
     --ssh)
 	test "$2" -a "$3" || usage
 	shift; bzrhost=$1
@@ -128,8 +131,12 @@ case "$1" in
 	    else
 		echo "Checking out bzr+ssh://$bzrhost$rdir into $pdir ..."
 		echo
-		mkdir -p $(dirname $pdir)
-		bzr co bzr+ssh://$bzrhost$rdir $pdir
+		if $testmode = on; then
+		    echo '(test mode, skipping)'
+		else
+		    mkdir -p $(dirname $pdir)
+		    bzr co bzr+ssh://$bzrhost$rdir $pdir
+		fi
 	    fi
 	done
 	;;
@@ -138,7 +145,7 @@ case "$1" in
 	eval "$(repolistcmd $localrepo)" | while read line; do
 	    if ! ls "$line" | grep . >/dev/null; then
 		echo Local checkout: $line
-		(cd "$line"; bzr co)
+		test $testmode = on && echo '(test mode, skipping)' || (cd "$line"; bzr co)
 		echo
 	    fi
 	done
@@ -245,7 +252,7 @@ case "$1" in
 		target=bzr+ssh://$bzrhost/$bzrroot/$path$1
 		echo Push source: $PWD
 		echo Push target: $target
-		bzr push $target --create-prefix
+		test $testmode = on && echo '(test mode, skipping)' || bzr push $target --create-prefix
 		echo
 	    else
 		for i in *; do
@@ -270,11 +277,15 @@ case "$1" in
 		target=bzr+ssh://$bzrhost/$bzrroot/$path$1
 		echo Local repo: $PWD
 		echo Bind target: $target
-		bzr bind $target || {
-		    echo Local repo: $PWD
-		    echo Bind target: $target
-		    echo
-		} >&2
+		if test $testmode = on; then
+		    echo '(test mode, skipping)'
+		else
+		    bzr bind $target || {
+			echo Local repo: $PWD
+			echo Bind target: $target
+			echo
+		    } >&2
+		fi
 		echo
 	    else
 		for i in *; do
