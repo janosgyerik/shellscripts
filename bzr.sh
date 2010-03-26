@@ -60,6 +60,7 @@ usage() {
     echo "  locallist, lls              Show list of repos in local repo tree"
     echo "  diff                        Show differences between local and remote tree"
     echo "  push                        Push local repo tree to remote location"
+    echo "  bind                        Bind to corresponding remote locations"
     echo "  status, stat, st            Show status of local repo tree"
     echo "  update, up                  Update local repo tree"
     echo "  cleanse, cl                 Remove .~1~ files created by bzr"
@@ -254,6 +255,35 @@ case "$1" in
 	}
 	for i in "$@"; do
 	    (bzr_push $(normalpath "$i"))
+	done
+	;;
+    bind)
+	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
+	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
+	shift
+	test "$1" || eval 'set -- .'
+	bzr_bind() {
+	    test -d "$1" || return
+	    test "$2" -a "$2" != . && path=$2/ || path=
+	    cd "$1"
+	    if test -d .bzr; then
+		target=bzr+ssh://$bzrhost/$bzrroot/$path$1
+		echo Local repo: $PWD
+		echo Bind target: $target
+		bzr bind $target || {
+		    echo Local repo: $PWD
+		    echo Bind target: $target
+		    echo
+		} >&2
+		echo
+	    else
+		for i in *; do
+		    (bzr_bind $i $path$1)
+		done
+	    fi
+	}
+	for i in "$@"; do
+	    (bzr_bind $(normalpath "$i"))
 	done
 	;;
     *) usage ;;
