@@ -131,7 +131,7 @@ case "$1" in
 	    else
 		echo "Checking out bzr+ssh://$bzrhost$rdir into $pdir ..."
 		echo
-		if $testmode = on; then
+		if test $testmode = on; then
 		    echo '(test mode, skipping)'
 		else
 		    mkdir -p $(dirname $pdir)
