@@ -130,10 +130,11 @@ case "$1" in
 		(cd $pdir; bzr update)
 	    else
 		echo "Checking out bzr+ssh://$bzrhost$rdir into $pdir ..."
-		echo
 		if test $testmode = on; then
 		    echo '(test mode, skipping)'
+		    echo
 		else
+		    echo
 		    mkdir -p $(dirname $pdir)
 		    bzr co bzr+ssh://$bzrhost$rdir $pdir
 		fi
