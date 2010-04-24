@@ -86,6 +86,11 @@ test -d "$outdir" || mkdir -p "$outdir"
 msg Downloading portal page ...
 wget "$portal_url" -O "$portal_html" -o "$portal_log"
 
+if ! test -s "$portal_html"; then
+    msg Error: The portal page is empty. This is a problem.
+    exit 1
+fi
+
 msg Parsing portal page ...
 base_url=$(grep ^Location: "$portal_log" | cut -f2 -d' ' | sed -e 's?/pdf/.*??')
 pdf_path=$(grep -o '/pdf/.*' "$portal_html" | head -n 1 | sed -e 's/".*//' -e 's/&amp;/\&/g')
