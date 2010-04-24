@@ -9,7 +9,7 @@
 # PLATFORM: Linux, possibly other *NIX
 #
 # PURPOSE: Rename and tag numbered mp3 files in the current directory based
-#          on configuration info in a file named $configuration.
+#          on configuration info in a file named $configfile.
 #          If the file is not present, a sample is created automatically,
 #          which should be edited by hand appropriately.
 #          Declared but missing files will be listed in $missing.
@@ -100,20 +100,36 @@ if [ -f $configfile ]; then
 	$program --artist "$artist" --album "$album" --genre "$genre" --year "$year" --track 99 "$i" > /dev/null
     done
 else
-    echo Autodecting id3v2 info:
+    echo Autodetecting id3v info:
     for i in *mp3; do
 	$id3v2_list_cmd "$i" >$id3v2_list_tmpfile
 	complete=1
-	artist=$(cat $id3v2_list_tmpfile | grep ^TPE1 | cut -f2 -d: | sed -e 's/^ *//')
-	test "$artist" || complete=0
-	album=$(cat $id3v2_list_tmpfile | grep ^TAL | cut -f2 -d: | sed -e 's/^ *//')
-	test "$album" || complete=0
-	genre=$(cat $id3v2_list_tmpfile | grep ^TCON | cut -f2 -d: | perl -ne 'm/\d+/;print $&,"\n"')
-	test "$genre" || complete=0
-	year=$(cat $id3v2_list_tmpfile | grep ^TYE | cut -f2 -d: | sed -e 's/^ *//')
-	test "$year" || complete=0
+	id3v=$(grep -o id3v2 $id3v2_list_tmpfile)
+	test "$id3v" || id3v=$(grep -o id3v1 $id3v2_list_tmpfile)
+	if test "$id3v" = id3v2; then
+	    artist=$(cat $id3v2_list_tmpfile | grep ^TPE1 | cut -f2 -d: | sed -e 's/^ *//')
+	    test "$artist" || complete=0
+	    album=$(cat $id3v2_list_tmpfile | grep ^TAL | cut -f2 -d: | sed -e 's/^ *//')
+	    test "$album" || complete=0
+	    genre=$(cat $id3v2_list_tmpfile | grep ^TCON | cut -f2 -d: | perl -ne 'm/\d+/;print $&,"\n"')
+	    test "$genre" || complete=0
+	    year=$(cat $id3v2_list_tmpfile | grep ^TYE | cut -f2 -d: | sed -e 's/^ *//')
+	    test "$year" || complete=0
+	elif test "$id3v" = id3v1; then
+	    artist=$(cat $id3v2_list_tmpfile | grep -o Artist:.* | cut -f2- -d' ')
+	    test "$artist" || complete=0
+	    album=$(cat $id3v2_list_tmpfile | grep -o Album.*:. | sed -e 's/[^:]*:.//' -e 's/   *.*//')
+	    test "$album" || complete=0
+	    genre=$(cat $id3v2_list_tmpfile | grep -o Genre:.* | cut -f2- -d' ')
+	    test "$genre" || complete=0
+	    year=$(cat $id3v2_list_tmpfile | grep -o Year:..... | cut -f2 -d' ')
+	    test "$year" || complete=0
+	else
+	    complete=0
+	fi
 	test $complete = 1 && break
     done
+    echo "  id3v=$id3v"
     echo "  artist=$artist"
     echo "  album=$album"
     echo "  genre=$genre"
