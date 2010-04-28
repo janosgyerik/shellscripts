@@ -5,9 +5,9 @@
 
 require="flac lame"
 failed=no
-for i in $require; do
+for program in $require; do
     if ! type $program 2>/dev/null >/dev/null; then 
-	echo "Ouch! Program $program not found! Please install it first!"
+	echo "Error: the program '$program' is not installed or not in PATH"
 	failed=yes
     fi
 done
