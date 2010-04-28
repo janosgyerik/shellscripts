@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 #
 # SCRIPT: dbi-info.pl
 # AUTHOR: Janos Gyerik <janos.gyerik@gmail.com>
@@ -8,7 +8,7 @@
 #
 # PLATFORM: Not platform dependent
 #
-# PURPOSE: Obtain info about available DBI drivers and data sources.
+# PURPOSE: Print the list of available DBI drivers and data sources.
 #
 # REV LIST:
 #        DATE:	DATE_of_REVISION
@@ -37,8 +37,10 @@ OUTER: while (@ARGV) {
 
 sub usage {
     $0 =~ m|[^/]+$|;
-    print qq{usage: $& [-h|--help] [-a|--all]\n};
-    exit;
+    print "Usage: $& [-h|--help] [-a|--all]\n";
+    print "\n";
+    print "Print the list of available DBI drivers and data sources.\n";
+    exit 1;
 }
 
 use DBI;

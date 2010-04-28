@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 #
 # SCRIPT: geoip-lookup.pl
 # AUTHOR: Janos Gyerik <janos.gyerik@gmail.com>
@@ -8,9 +8,7 @@
 #
 # PLATFORM: Not platform dependent
 #
-# PURPOSE: Simply a command line interface for the Geo::IPfree perl package
-#          to look up country of IP addresses or hostnames specified on the
-#          command line. Requires the Geo::IPfree perl module.
+# PURPOSE: Find the country of a hostname or IP address using Geo::IPfree
 #
 # REV LIST:
 #        DATE:	DATE_of_REVISION
@@ -37,11 +35,13 @@ while (@ARGV) {
 
 sub usage {
     $0 =~ m|[^/]+$|;
-    print qq{usage: $& [-h|--help] host1 ...\n};
+    print "Usage: $& [-h|--help] host1 ...\n";
+    print "\n";
+    print "Find the country of a hostname or IP address using Geo::IPfree\n";
     exit;
 }
 
-use Geo::IPfree;
+require Geo::IPfree;
 my $GeoIP = Geo::IPfree::new();
 
 foreach my $host (@args) {

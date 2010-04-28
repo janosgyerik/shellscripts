@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 #
 # SCRIPT: FreeBSD.pl
 # AUTHOR: Janos Gyerik <janos.gyerik@gmail.com>

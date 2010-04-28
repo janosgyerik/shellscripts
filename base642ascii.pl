@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 #
 # SCRIPT: base642ascii.pl
 # AUTHOR: Janos Gyerik <janos.gyerik@gmail.com>
