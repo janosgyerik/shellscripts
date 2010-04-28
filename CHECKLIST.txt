@@ -10,7 +10,7 @@ script optimization checklist
 
 * usage
 
-    * = usage() {
+    * signature: usage() {
 
     * test $# = 0 || echo $@
 
@@ -18,7 +18,7 @@ script optimization checklist
 
     * usage line does not use basename $0 but simply $0
 
-    * good brief description
+    * good brief usage message
 
     * list of options
 
@@ -28,11 +28,11 @@ script optimization checklist
 
 	* help option -h, --help
 
-    ! exit 1 in the end !
+    * exit 1 in the end
 
 * command line parser
 
-    * new style negation --no-FLAG
+    * negate with --no-FLAG
 
     * sample lines (optional if there are real examples)
     
@@ -56,16 +56,15 @@ script optimization checklist
 
     * zero argument check: test "$1" || usage "possibly a message"
 
-* main : general flaws
+* main
 
-    * taking care of filenames with spaces
+    * take care of filenames with spaces
 
-    * cleaning up using trap. 
-      but should use it when a script creates temporary files, esp using $$
+    * clean up using trap: trap 'cleanup; exit 1' 1 2 3 15
 
-    * differences in command flags across different OS-es
+    * watch out for differences in command flags across different OS-es
 
-    * use date +%F instead of date --iso
+    * use date +%F instead of date --iso, or even date +%Y%m%d
 
     * use $() instead of ``
 
@@ -73,5 +72,5 @@ script optimization checklist
 
     * do not put space after " >"
 
-    * exit codes: make sure it's 1 on failure. and in traps.
+    * exit codes: make sure it's 1 on any non-normal exit
 
