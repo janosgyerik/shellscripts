@@ -25,7 +25,8 @@
 usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... FILE..."
-    echo "Capitalize the first word or all words in the specified filenames."
+    echo
+    echo "Capitalize the first word or all words in filenames."
     echo
     echo "  -g, --global          Capitalize all words, default = $global"
     echo

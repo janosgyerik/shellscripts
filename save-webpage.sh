@@ -27,6 +27,7 @@
 usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... [ARG]..."
+    echo
     echo "Save a webpage and all the files necessary to display properly."
     echo
     echo "  -u, --user USER     Username to login, default = $username"

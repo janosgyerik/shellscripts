@@ -26,6 +26,7 @@
 usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... FILE..."
+    echo
     echo "Rename specified files to all lowercase letters."
     echo
     echo "  -h, --help            Print this help"

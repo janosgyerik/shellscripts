@@ -45,6 +45,7 @@
 usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... cmd"
+    echo
     echo "Manipulate a tree of bzr repositories at once"
     echo
     echo "Options:"

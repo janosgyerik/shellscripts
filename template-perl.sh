@@ -29,6 +29,7 @@
 usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... FILENAME"
+    echo
     echo "Generate the template of a Bourne shell script that can parse simple parameters."
     echo
     echo "  -a, --author AUTHOR   Name of the author, default = $author"

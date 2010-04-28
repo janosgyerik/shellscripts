@@ -28,6 +28,7 @@ fi
 usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]..."
+    echo
     echo "Configure a very simple firewall using iptables."
     echo
     echo "      --init         Set default policies and flush chains/tables"

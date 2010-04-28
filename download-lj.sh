@@ -25,7 +25,8 @@
 usage() {
     test "$1" && echo $@
     echo "Usage: $0 [OPTION]... [ARG]..."
-    echo A simple script to download Linux Journal PDFs
+    echo
+    echo Download Linux Journal PDFs from your digital subscription account.
     echo
     echo You need to create a file: $0.config
     echo with the PDF download URL in it, which looks like this:

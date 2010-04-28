@@ -37,6 +37,7 @@ fi
 usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... FILE [-- $program options...]"
+    echo
     echo "Rip a DVD movie into a high quality DIVX file."
     echo
     echo "  -d, --device          DVD device to rip from, default = $device"

@@ -29,6 +29,7 @@
 usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... [ARG]..."
+    echo
     echo "Convert wav files specified on the command line to mp3."
     echo
     echo "  -c, --converter CONVERTER   Use converter, default = autodetect"

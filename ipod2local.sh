@@ -30,6 +30,7 @@ fi
 usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... source target"
+    echo
     echo Import mp3 files from ipod to hard disk.
     echo
     echo "  -h, --help         Print this help"

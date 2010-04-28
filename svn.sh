@@ -33,6 +33,7 @@
 usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... cmd"
+    echo
     echo "Check out all projects in a Subversion repository into the specified directory."
     echo
     echo "Options:"
