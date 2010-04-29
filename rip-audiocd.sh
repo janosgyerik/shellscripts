@@ -16,15 +16,6 @@
 # set -x   # Uncomment to debug this shell script (Korn shell only)
 #          
 
-program=cdparanoia
-program_checkcd="cdparanoia -Q"
-program_batch="cdparanoia -B"
-
-if ! type $program >/dev/null 2>&1; then
-    echo You need $program to rip audio CDs. Exit.
-    exit
-fi
-
 usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... DIR"
@@ -58,6 +49,15 @@ while [ $# != 0 ]; do
     esac
     shift
 done
+
+program=cdparanoia
+program_checkcd="cdparanoia -Q"
+program_batch="cdparanoia -B"
+
+if ! type $program >/dev/null 2>&1; then
+    echo You need $program to rip audio CDs. Exit.
+    exit
+fi
 
 test "$device" && dev_op="-d $device" || dev_op=
 if ! $program_checkcd $dev_op >/dev/null 2>&1; then

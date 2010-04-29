@@ -22,16 +22,16 @@ avg.awk
 	TODO
 
 backup.sh
-	TODO
+	Archive files under BASE/sources/{daily,weekly,monthly}
 
 base642ascii.pl
-	TODO
+	Convert a Base64 string to ASCII
 
 bzr.sh
-	Manipulate a tree of bzr repositories at once
+	Perform repository operations on a tree of bzr repositories
 
 capitalize.sh
-	Capitalize the first word or all words in filenames.
+	Capitalize words in filenames.
 
 dbi-info.pl
 	Print the list of available DBI drivers and data sources.
@@ -43,7 +43,7 @@ extract-icon-from-platter.sh
 	Extract an icon image from a platter of icon images.
 
 flac2mp3.sh
-	TODO
+	Convert FLAC files to MP3 using flac and lame
 
 geoip-lookup.pl
 	Find the country of a hostname or IP address using Geo::IPfree
@@ -70,10 +70,10 @@ iptables-simple.sh
 	TODO
 
 lowcase.sh
-	Rename specified files to all lowercase letters.
+	Rename files to all lowercase letters.
 
 m4a2mp3.sh
-	TODO
+	Convert M4A files to MP3 using faad and bladeenc
 
 max.awk
 	TODO
@@ -82,13 +82,13 @@ min.awk
 	TODO
 
 mv-replace.sh
-	PATTERN with (possibly empty) REPLACEMENT.
+	Replace regex patterns in filenames.
 
 pdf-pages.sh
 	Cut out a range of pages from PDF files.
 
 rip-audiocd.sh
-	TODO
+	Copy titles in an audio CD to wav files in the specified directory.
 
 rip-dvd.sh
 	TODO
@@ -103,9 +103,6 @@ ssh-tunnel-keeper.sh
 	Create an ssh rtunnel and try to keep it alive as long as possible.
 
 sum.awk
-	TODO
-
-svn-cleanse.sh
 	TODO
 
 svn.sh
@@ -130,14 +127,14 @@ unrar.sh
 	Properly unrar files in directories containing spaces in their names.
 
 upcase.sh
-	Rename specified files to all lowercase letters.
+	Rename files to all uppercase letters.
 
 var.awk
 	TODO
 
 wav2mp3.sh
-	Convert wav files specified on the command line to mp3.
+	Convert WAV files to MP3 using bladeenc or lame
 
 wma2mp3.sh
-	TODO
+	Convert WAV files to MP3 using mplayer, and bladeenc or lame
 

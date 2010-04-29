@@ -20,17 +20,11 @@
 # set -x   # Uncomment to debug this shell script (Korn shell only)
 #          
 
-mplayer=mplayer
-if ! type $mplayer 2>/dev/null >/dev/null; then
-    echo You need $mplayer for this script to work. Exit. 
-    exit 1
-fi
-
 usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
-    echo "Convert wav files specified on the command line to mp3."
+    echo "Convert WAV files to MP3 using mplayer, and bladeenc or lame"
     echo
     echo "  -c, --converter CONVERTER   Use converter, default = autodetect"
     echo "  -r, --bitrate BITRATE       Set bitrate, default = $bitrate"
@@ -63,6 +57,12 @@ while [ $# != 0 ]; do
 done
 
 eval "set -- $args"
+
+mplayer=mplayer
+if ! type $mplayer 2>/dev/null >/dev/null; then
+    echo You need $mplayer for this script to work. Exit. 
+    exit 1
+fi
 
 if ! test "$converter"; then
     try="bladeenc lame"

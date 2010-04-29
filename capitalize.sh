@@ -8,7 +8,7 @@
 #
 # PLATFORM: Not platform dependent
 #
-# PURPOSE: Capitalize the first word or all words in the specified filenames.
+# PURPOSE: Capitalize words in the filenames.
 #
 # set -n   # Uncomment to check your syntax, without execution.
 #          # NOTE: Do not forget to put the comment back in or
@@ -20,7 +20,7 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... FILE..."
     echo
-    echo "Capitalize the first word or all words in filenames."
+    echo "Capitalize words in filenames."
     echo
     echo "  -g, --global          Capitalize all words, default = $global"
     echo

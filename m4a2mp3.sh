@@ -1,8 +1,35 @@
 #!/bin/sh
 #
-# Convert .wav files to .mp3 with an available converter.
-# Tried converters: bladeenc
-#
+
+usage() {
+    test "$1" && echo $@
+    echo "Usage: $0 [OPTION]... [ARG]..."
+    echo
+    echo "Convert M4A files to MP3 using faad and bladeenc"
+    exit 1
+}
+
+args=
+#arg=
+#flag=off
+#param=
+while [ $# != 0 ]; do
+    case $1 in
+    -h|--help) usage ;;
+#    -f|--flag) flag=on ;;
+#    -p|--param) shift; param=$1 ;;
+#    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
+    -?*) usage "Unknown option: $1" ;;
+    *) args="$args \"$1\"" ;;  # script that takes multiple arguments
+#    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
+#    *) arg=$1 ;;  # forgiving with excess arguments
+    esac
+    shift
+done
+
+eval "set -- $args"
+
+#test -f "$1" || usage
 
 try="bladeenc"
 converter=

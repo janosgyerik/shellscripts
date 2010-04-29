@@ -37,7 +37,10 @@ if ! type $program >/dev/null 2>/dev/null; then
 fi
 
 usage() {
-    echo "usage: `basename $0` [-h|--help]"
+    echo "Usage: $0 [-h|--help]"
+    echo
+    echo Set the id3v2 tag of MP3 files in the current directory.
+    echo
     echo This program renames and tags numbered mp3 files in the current directory
     echo based on configuration info in a file named "$configfile".
     echo If the file is not present, a sample is created automatically, which

@@ -25,8 +25,10 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]..."
     echo
-    echo "Create an ssh rtunnel and try to keep it alive as long as possible."
+    echo Create an ssh rtunnel and try to keep it alive as long as possible.
+    echo Note: if you can, you should use autossh instead.
     echo
+    echo Options:
     echo "  -l, --lport LPORT  "
     echo "      --rport RPORT  "
     echo "      --rhost RHOST  "

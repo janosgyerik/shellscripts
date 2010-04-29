@@ -7,12 +7,8 @@
 #               (For Alpha, Beta, Dev, Test and Production)
 #
 # PLATFORM: Not platform dependent
-# PLATFORM: Linux only
-# PLATFORM: FreeBSD only
 #
-# PURPOSE: Give a clear, and if necessary, long, description of the
-#          purpose of the shell script. This will also help you stay
-#          focused on the task at hand.
+# PURPOSE: Convert a Base64 string to ASCII
 #
 
 use strict;
@@ -33,8 +29,10 @@ OUTER: while (@ARGV) {
 
 sub usage {
     $0 =~ m|[^/]+$|;
-    print qq{usage: $& [-h|--help]\n};
-    exit;
+    print "Usage: $& [-h|--help]\n";
+    print "\n";
+    print "Convert a Base64 string to ASCII\n";
+    exit 1;
 }
 
 use MIME::Base64;

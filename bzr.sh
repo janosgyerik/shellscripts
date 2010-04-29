@@ -8,7 +8,7 @@
 #
 # PLATFORM: Not platform dependent
 #
-# PURPOSE: Manipulate a tree of bzr repositories at once:
+# PURPOSE: Perform repository operations on a tree of bzr repositories:
 #	   * remote repository operations:
 #		* only with bzr+ssh repositories, for path traversal
 #		* list projects
@@ -40,7 +40,7 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... cmd"
     echo
-    echo "Manipulate a tree of bzr repositories at once"
+    echo "Perform repository operations on a tree of bzr repositories"
     echo
     echo "Options:"
     echo "      --ssh BZRHOST BZRROOT   Set the ssh host and bzrroot, default = $bzrhost $bzrroot"
