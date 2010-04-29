@@ -10,10 +10,10 @@ add-stub-pl.sh
 	TODO
 
 add-stub-sh.sh
-	Insert a stub template after the first line of a shell script.
+	Insert a script header after the first line of a shell script.
 
 add-usage-sh.sh
-	Add a usage() function to shell scripts.
+	Add a usage() function after the first blank line of a shell script.
 
 alert.sh
 	TODO
@@ -124,7 +124,7 @@ template-perl.sh
 	Generate the template of a Bourne shell script that can parse simple parameters.
 
 template-sh.sh
-	Generate the template of a /bin/sh script that can parse simple parameters.
+	Generate a /bin/sh script template with a simple command line parser.
 
 unrar.sh
 	Properly unrar files in directories containing spaces in their names.

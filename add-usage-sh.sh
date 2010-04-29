@@ -8,7 +8,7 @@
 #
 # PLATFORM: Not platform dependent
 #
-# PURPOSE: Add a usage() function to shell scripts.
+# PURPOSE: Add a usage() function after the first blank line of a shell script.
 #
 # REV LIST:
 #        DATE:	DATE_of_REVISION
@@ -26,10 +26,7 @@ usage() {
     test "$1" && echo $@
     echo "Usage: $0 [OPTION]... [FILE]..."
     echo
-    echo "Add a usage() function to shell scripts."
-    echo
-    echo "  -h, --help            Print this help"
-    echo
+    echo "Add a usage() function after the first blank line of a shell script."
     exit 1
 }
 
@@ -63,10 +60,8 @@ for i in "$@"; do
 usage() {
     test "$1" && echo $@
     echo "Usage: $0 [OPTION]... [ARG]..."
+    echo
     echo "BRIEF DESCRIPTION OF THE SCRIPT"
-    echo
-    echo "  -h, --help            Print this help"
-    echo
     exit 1
 }
 

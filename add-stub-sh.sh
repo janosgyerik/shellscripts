@@ -26,10 +26,7 @@ usage() {
     test "$1" && echo $@
     echo "Usage: $0 [OPTION]... [FILE]..."
     echo
-    echo "Insert a stub template after the first line of a shell script."
-    echo
-    echo "  -h, --help            Print this help"
-    echo
+    echo "Insert a script header after the first line of a shell script."
     exit 1
 }
 

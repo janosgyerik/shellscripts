@@ -7,12 +7,7 @@
 #
 # PLATFORM: Not platform dependent (Confirmed in: Linux, FreeBSD, Solaris 10)
 #
-# PURPOSE: Generate the skeleton of a shell script, with the capability to
-#          process "flags" and "params". Here, "flag" means option without
-#          arguments, and "param" means option with one argument.
-#          Note: the program (intentionally) does not handle flags/params
-#          with funny characters in them. You should make simple, easy to use
-#          flags/params anyway.
+# PURPOSE: Generate a /bin/sh script template with a simple command line parser
 #
 # REV LIST:
 #        DATE:	DATE_of_REVISION
@@ -30,7 +25,7 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... FILENAME"
     echo
-    echo "Generate the template of a /bin/sh script that can parse simple parameters."
+    echo "Generate a /bin/sh script template with a simple command line parser."
     echo
     echo Options:
     echo "  -a, --author AUTHOR   Name of the author, default = $author"
@@ -131,8 +126,10 @@ cat << EOF >> "$file"
 usage() {
     test \$# = 0 || echo \$@
     echo "Usage: \$0 [OPTION]... [ARG]..."
+    echo
     echo $description
     echo
+    echo Options:
 EOF
 
 set_padding() {
