@@ -10,12 +10,6 @@
 #
 # PURPOSE: Find the country of a hostname or IP address using Geo::IPfree
 #
-# REV LIST:
-#        DATE:	DATE_of_REVISION
-#        BY:	AUTHOR_of_MODIFICATION   
-#        MODIFICATION: Describe what was modified, new features, etc-
-#
-#          
 
 use strict;
 use warnings;

@@ -11,11 +11,6 @@
 # PURPOSE: Compute the average of values in the input files or pipe. One number
 #          per line is expected in the input.
 #
-# REV LIST:
-#        DATE:	DATE_of_REVISION
-#        BY:	AUTHOR_of_MODIFICATION   
-#        MODIFICATION: Describe what was modified, new features, etc-
-#
 
 usage () {
     echo "usage: `basename $0` [-h|--help] file"

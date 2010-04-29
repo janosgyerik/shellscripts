@@ -14,12 +14,6 @@
 #          purpose of the shell script. This will also help you stay
 #          focused on the task at hand.
 #
-# REV LIST:
-#        DATE:	DATE_of_REVISION
-#        BY:	AUTHOR_of_MODIFICATION   
-#        MODIFICATION: Describe what was modified, new features, etc-
-#
-#
 
 use strict;
 use warnings;

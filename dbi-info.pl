@@ -10,12 +10,6 @@
 #
 # PURPOSE: Print the list of available DBI drivers and data sources.
 #
-# REV LIST:
-#        DATE:	DATE_of_REVISION
-#        BY:	AUTHOR_of_MODIFICATION   
-#        MODIFICATION: Describe what was modified, new features, etc-
-#
-#          
 
 use strict;
 use warnings;

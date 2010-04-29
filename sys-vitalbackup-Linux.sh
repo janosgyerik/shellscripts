@@ -11,21 +11,11 @@
 # PURPOSE: This program takes a backup of important statistics, configuration
 #          files and other files.
 #
-# REV LIST:
-#        DATE:	DATE_of_REVISION
-#        BY:	AUTHOR_of_MODIFICATION   
-#        MODIFICATION: Describe what was modified, new features, etc-
-#
-#
 # set -n   # Uncomment to check your syntax, without execution.
 #          # NOTE: Do not forget to put the comment back in or
 #          #       the shell script will not execute!
 # set -x   # Uncomment to debug this shell script (Korn shell only)
 #          
-# 
-# A convenience script to print info of the running system, by simply
-# cat-ing certain files in /proc.
-#
 
 usage() {
     test $# = 0 || echo $@

@@ -14,12 +14,6 @@
 #          with funny characters in them. You should make simple, easy to use
 #          flags/params anyway.
 #
-# REV LIST:
-#        DATE:	DATE_of_REVISION
-#        BY:	AUTHOR_of_MODIFICATION   
-#        MODIFICATION: Describe what was modified, new features, etc-
-#
-#
 # set -n   # Uncomment to check your syntax, without execution.
 #          # NOTE: Do not forget to put the comment back in or
 #          #       the shell script will not execute!
@@ -106,12 +100,6 @@ if [ $stub = on ]; then
 # PURPOSE: Give a clear, and if necessary, long, description of the
 #          purpose of the shell script. This will also help you stay
 #          focused on the task at hand.
-#
-# REV LIST:
-#        DATE:	DATE_of_REVISION
-#        BY:	AUTHOR_of_MODIFICATION   
-#        MODIFICATION: Describe what was modified, new features, etc-
-#
 #
 EOF
 fi

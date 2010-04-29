@@ -16,12 +16,6 @@
 #          If the $mp3info program is present, report files that exist but
 #          have other than 192 kbps bitrate in $missing.
 #
-# REV LIST:
-#        DATE:	DATE_of_REVISION
-#        BY:	AUTHOR_of_MODIFICATION   
-#        MODIFICATION: Describe what was modified, new features, etc-
-#
-#
 # set -n   # Uncomment to check your syntax, without execution.
 #          # NOTE: Do not forget to put the comment back in or
 #          #       the shell script will not execute!
