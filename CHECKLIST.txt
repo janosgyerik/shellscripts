@@ -18,7 +18,7 @@ script optimization checklist
 
     * usage line does not use basename $0 but simply $0
 
-    * good brief usage message
+    * good brief usage message in the 3rd line (of the output)
 
     * list of options
 
@@ -58,7 +58,11 @@ script optimization checklist
 
 * main
 
-    * take care of filenames with spaces
+    * proper handling of filenames with spaces
+
+    * proper handling of missing external commands (for example in wav2mp3.sh)
+
+    * proper handling of missing perl modules
 
     * clean up using trap: trap 'cleanup; exit 1' 1 2 3 15
 
