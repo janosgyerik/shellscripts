@@ -16,7 +16,7 @@ add-usage-sh.sh
 	Add a usage() function after the first blank line of a shell script.
 
 alert.sh
-	TODO
+	Sound the system bell.
 
 avg.awk
 	TODO
