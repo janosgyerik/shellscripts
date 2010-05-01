@@ -4,7 +4,7 @@ All scripts print a helpful usage message with -h or --help flag.
 
 
 FreeBSD.pl
-	TODO
+	A package manager for FreeBSD emulating some of the functionality of apt-get.
 
 add-stub-pl.sh
 	TODO

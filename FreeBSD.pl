@@ -6,9 +6,11 @@
 # REV:    1.0.T (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)
 #
-# PLATFORM: FreeBSD (Operation confirmed on 5.3)
+# PLATFORM: FreeBSD (confirmed on 5.3)
 #
-# PURPOSE: search/fetch/install/remove packages in FreeBSD.
+# PURPOSE: A package manager for FreeBSD emulating some of the functionality
+# 	   of apt-get and apt-cache in Debian based systems, in particular:
+# 	   search, download, install, remove
 #
 # set -n   # Uncomment to check your syntax, without execution.
 #          # NOTE: Do not forget to put the comment back in or
@@ -20,22 +22,12 @@ use strict;
 
 -f $ENV{HOME}.'/.FreeBSD.pl' && do $ENV{HOME}.'/.FreeBSD.pl';
 
-my $INDEX = $CFG::INDEX || '/usr/local/FreeBSD.pl/INDEX';
-my $FILES = $CFG::FILES || '/usr/local/FreeBSD.pl/packages';
+my $INDEX = $CFG::INDEX || '/opt/FreeBSD.pl/INDEX';
+my $FILES = $CFG::FILES || '/opt/FreeBSD.pl/packages';
 system(qq{test ! -d "$FILES" && mkdir -p "$FILES"});
 if (! -w "$FILES") {
     warn qq{Directory "$FILES" is not writable!\n};
 }
-
-# $ENV{URL_FREEBSD} is assumed to be set to the base URL of package files.
-# $ENV{URL_FREEBSD}/INDEX
-# $ENV{URL_FREEBSD}/All
-# The value of $ENV{URL_FREEBSD} is something like this:
-# ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/4.8-RELEASE/packages
-die "The environmental variable URL_FREEBSD is undefined.\n\$URL_FREEBSD/All should be a valid URL to the FreeBSD package files.\n" unless exists($ENV{URL_FREEBSD});
-my $URL_FREEBSD = $ENV{URL_FREEBSD};
-my $URL_INDEX = $URL_FREEBSD."/INDEX";
-my $URL_PACKAGES = $URL_FREEBSD."/All";
 
 &usage() unless @ARGV;
 
@@ -45,10 +37,6 @@ my $action = "";
 my $verbosity = 0;
 my @targets;
 my @targets_fix;
-
-# extension of package filenames (tgz for <= 4.x, tbz for >= 5.x)
-$URL_FREEBSD =~ m/(\d+)\.\d+-RELEASE/;
-my $EXT = $+ ? ($+ >= 5 ? "tbz" : "tgz") : "tgz";
 
 OUTER: while (@ARGV) {
     for (shift(@ARGV)) {
@@ -65,31 +53,49 @@ OUTER: while (@ARGV) {
     }
 }
 
+# Set $ENV{URL_FREEBSD} to the base URL of package files.
+# $ENV{URL_FREEBSD}/INDEX
+# $ENV{URL_FREEBSD}/All
+# The value of $ENV{URL_FREEBSD} is something like this:
+# ftp://ftp.freebsd.org/pub/FreeBSD/releases/i386/4.8-RELEASE/packages
+die "The environmental variable URL_FREEBSD is undefined.\n\$URL_FREEBSD/All should be a valid URL to the FreeBSD package files.\n" unless exists($ENV{URL_FREEBSD});
+my $URL_FREEBSD = $ENV{URL_FREEBSD};
+my $URL_INDEX = $URL_FREEBSD."/INDEX";
+my $URL_PACKAGES = $URL_FREEBSD."/All";
+
+# extension of package filenames (tgz for <= 4.x, tbz for >= 5.x)
+$URL_FREEBSD =~ m/(\d+)\.\d+-RELEASE/;
+my $EXT = $+ ? ($+ >= 5 ? "tbz" : "tgz") : "tgz";
+
 sub usage {
     $0 =~ m|[^/]+$|;
-    print qq{usage: $& 
-    [-h|--help] [-i|--install] [-r|--remove] [-f|--fetch] 
-    [-n|--name] [-d|--description]
-    [-s|--silent] [-v|--verbose]
-    string_to_match
+    print <<EOF
+Usage: $& [OPTION]... ARG...
+
+A package manager for FreeBSD emulating some of the functionality of apt-get.
+
 Options:
- -h|--help         Print this help and exit
- -i|--install      Install matching package files
- -r|--remove       Remove matching package files
- -f|--fetch        Fetch matching package files
- -t|--test         Test only
- -n|--name         Match only package name
- -d|--description  Match only package description
- -s|--silent       Silent mode
- -v|--verbose      Increase output verbosity
- --index           Fetch index from homepage
-The package index file: $INDEX
+  -i, --install      Install matching package files
+  -r, --remove       Remove matching package files
+  -f, --fetch        Fetch matching package files
+  -t, --test         Test only
+  -n, --name         Match only package name
+  -d, --description  Match only package description
+  -s, --silent       Silent mode
+  -v, --verbose      Increase output verbosity
+      --index        Fetch index from homepage
+
+  -h, --help         Print this help and exit
+
+Package index file: $INDEX
 Directory containing package files: $FILES
-URL of package file index: $URL_INDEX
-Base URL of package files: $URL_PACKAGES
-Note: package manipulations are done by pkg_add, etc ...
-};
-    exit;
+Package index URL: $URL_INDEX
+Packages base URL: $URL_PACKAGES
+
+Note: package commands are done by pkg_info, pkg_add, pkg_delete, etc...
+EOF
+    ;
+    exit 1;
 }
 
 sub fetch_index {
