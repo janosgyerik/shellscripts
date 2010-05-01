@@ -7,7 +7,7 @@ FreeBSD.pl
 	A package manager for FreeBSD emulating some of the functionality of apt-get.
 
 add-stub-pl.sh
-	TODO
+	Insert a script header after the first line of a perl script.
 
 add-stub-sh.sh
 	Insert a script header after the first line of a shell script.
