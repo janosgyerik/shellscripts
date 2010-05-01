@@ -54,6 +54,9 @@ grabwindow.sh
 icons2dim.sh
 	Resize icon images to have specified width and height.
 
+icons2square.sh
+	Pad images with transparency to have equal width and height
+
 iconv-filenames.sh
 	Convert the encoding of filenames (if possible).
 
