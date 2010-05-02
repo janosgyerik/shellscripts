@@ -36,6 +36,9 @@ capitalize.sh
 dbi-info.pl
 	Print the list of available DBI drivers and data sources.
 
+dos2unix.sh
+	Remove carriage return from files.
+
 download-lj.sh
 	Download Linux Journal PDFs from your digital subscription account.
 
