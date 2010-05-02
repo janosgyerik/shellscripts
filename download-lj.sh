@@ -8,7 +8,7 @@
 #
 # PLATFORM: Not platform dependent
 #
-# PURPOSE: A simple script to download Linux Journal PDFs
+# PURPOSE: Download Linux Journal PDFs from your digital subscription
 #
 # set -n   # Uncomment to check your syntax, without execution.
 #          # NOTE: Do not forget to put the comment back in or
@@ -20,7 +20,7 @@ usage() {
     test "$1" && echo $@
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
-    echo Download Linux Journal PDFs from your digital subscription account.
+    echo Download Linux Journal PDFs from your digital subscription
     echo
     echo You need to create a file: $0.config
     echo with the PDF download URL in it, which looks like this:
