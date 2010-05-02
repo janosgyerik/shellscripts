@@ -29,7 +29,6 @@ usage() {
     echo "  -a, --author AUTHOR   Name of the author, default = $author"
     echo "  -f, --flag FLAG       A parameter that takes no arguments"
     echo "  -p, --param PARAM     A parameter that takes one argument"
-    echo "      --stub            Add a 'stub' to the top of the script, default = $stub"
     echo
     echo "  -h, --help            Print this help"
     echo
@@ -45,7 +44,6 @@ set_longest() {
 #param=
 #args=
 test "$AUTHOR" && author=$AUTHOR || author='AUTHOR <email@address.com>'
-stub=off
 longest=5
 # options starting with "f" are flags, options starting with "p" are parameters.
 options=
@@ -56,7 +54,6 @@ while [ $# != 0 ]; do
 #    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
     -a|--author) shift; author=$1 ;;
-    --stub) stub=on ;;
     -f|--flag) shift; options="$options f$1"; set_longest $1 ;;
     -p|--param) shift; options="$options p$1"; set_longest $1 ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
@@ -82,10 +79,8 @@ echo Creating \"$file\" ...
 
 trap 'rm -f "$file"; exit 1' 1 2 3 15
 
-echo '#!/usr/bin/perl' > "$file"
-
-if [ $stub = on ]; then
-    cat << EOF >> "$file"
+cat << EOF > "$file"
+#!/usr/bin/perl
 #
 # SCRIPT: `basename "$file"`
 # AUTHOR: $author
@@ -101,10 +96,6 @@ if [ $stub = on ]; then
 #          purpose of the shell script. This will also help you stay
 #          focused on the task at hand.
 #
-EOF
-fi
-
-cat << "EOF" >> "$file"
 
 use strict;
 use warnings;

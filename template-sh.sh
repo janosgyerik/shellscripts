@@ -25,7 +25,6 @@ usage() {
     echo "  -a, --author AUTHOR   Name of the author, default = $author"
     echo "  -f, --flag FLAG       A parameter that takes no arguments"
     echo "  -p, --param PARAM     A parameter that takes one argument"
-    echo "      --stub            Add a 'stub' to the top of the script, default = $stub"
     echo
     echo "  -h, --help            Print this help"
     echo
@@ -41,7 +40,6 @@ set_longest() {
 #param=
 #args=
 test "$AUTHOR" && author=$AUTHOR || author='AUTHOR <email@address.com>'
-stub=off
 longest=5
 description='BRIEF DESCRIPTION OF THE SCRIPT'
 # options starting with "f" are flags, options starting with "p" are parameters.
@@ -54,8 +52,6 @@ while [ $# != 0 ]; do
 #    --no-flag) flag=off ;;
 #    -p|--param) shift; param=$1 ;;
     -a|--author) shift; author=$1 ;;
-    --stub) stub=on ;;
-    --no-stub) stub=off ;;
     -d|--description) shift; description="$1" ;;
     -f|--flag) shift; options="$options f$1"; set_longest $1 ;;
     -p|--param) shift; options="$options p$1"; set_longest $1 ;;
@@ -82,10 +78,8 @@ echo "Creating \"$file\" ..."
 
 trap 'rm -f "$file"; exit 1' 1 2 3 15
 
-echo '#!/bin/sh' > "$file"
-
-if [ $stub = on ]; then
-    cat << EOF >> "$file"
+cat << EOF > "$file"
+#!/bin/sh
 #
 # SCRIPT: $(basename "$file")
 # AUTHOR: $author
@@ -106,10 +100,6 @@ if [ $stub = on ]; then
 #          #       the shell script will not execute!
 # set -x   # Uncomment to debug this shell script (Korn shell only)
 #
-EOF
-fi
-
-cat << EOF >> "$file"
 
 usage() {
     test \$# = 0 || echo \$@
