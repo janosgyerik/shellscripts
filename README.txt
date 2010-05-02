@@ -40,7 +40,10 @@ dos2unix.sh
 	Remove carriage return from files.
 
 download-lj.sh
-	Download Linux Journal PDFs from your digital subscription account.
+	Download Linux Journal PDFs from your digital subscription.
+
+download-lm.sh
+	Download Linux Magazine PDFs from your digital subscription.
 
 extract-icon-from-platter.sh
 	Extract an icon image from a platter of icon images.
