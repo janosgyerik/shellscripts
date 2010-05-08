@@ -8,9 +8,39 @@
 #
 # PLATFORM: Not platform dependent
 #
-# PURPOSE: Find the maximum value in the input files or pipe. One number per
-#          line is expected in the input.
+# PURPOSE: Find the maximum numeric value in the input files or pipe. 
+#	   One number per line is expected in the input.
 #
+
+usage() {
+    test "$1" && echo $@
+    echo "Usage: $0 [OPTION]... [ARG]..."
+    echo
+    echo Find the maximum numeric value in the input files or pipe. 
+    exit 1
+}
+
+args=
+#arg=
+#flag=off
+#param=
+while [ $# != 0 ]; do
+    case $1 in
+    -h|--help) usage ;;
+#    -f|--flag) flag=on ;;
+#    -p|--param) shift; param=$1 ;;
+#    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
+    -?*) usage "Unknown option: $1" ;;
+    *) args="$args \"$1\"" ;;  # script that takes multiple arguments
+#    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
+#    *) arg=$1 ;;  # forgiving with excess arguments
+    esac
+    shift
+done
+
+eval "set -- $args"
+
+#test -f "$1" || usage
 
 usage () {
     echo "usage: `basename $0` [-h|--help] file"
@@ -32,12 +62,17 @@ eval "set -- $args"
 
 #test $# = 0 && usage
 
-awk '
-BEGIN {
-    getline max;
-    while (getline value) if (value > max) max = value;
-    print max;
+awk -v first=1 '
+/^[0-9.]/ { 
+    if (first == 1) {
+	first = 0;
+	max = $0;
+    }
+    else {
+	if ($0 > max) max = $0;
+    }
 }
+END { print max; }
 ' $@
 
 # eof

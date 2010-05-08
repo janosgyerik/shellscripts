@@ -19,7 +19,7 @@ alert.sh
 	Sound the system bell.
 
 avg.awk
-	TODO
+	Compute the average of numeric values in the input files or pipe.
 
 backup.sh
 	Archive files under BASE/sources/{daily,weekly,monthly}
@@ -85,10 +85,10 @@ m4a2mp3.sh
 	Convert M4A files to MP3 using faad and bladeenc
 
 max.awk
-	TODO
+	Find the maximum numeric value in the input files or pipe.
 
 min.awk
-	TODO
+	Find the minimum numeric value in the input files or pipe.
 
 mv-replace.sh
 	Replace regex patterns in filenames.
@@ -112,7 +112,7 @@ ssh-tunnel-keeper.sh
 	Create an ssh rtunnel and try to keep it alive as long as possible.
 
 sum.awk
-	TODO
+	Compute the sum of numeric values in the input files or pipe.
 
 svn.sh
 	Check out all projects in a Subversion repository into the specified directory.
@@ -139,7 +139,7 @@ upcase.sh
 	Rename files to all uppercase letters.
 
 var.awk
-	TODO
+	Compute the variance of numeric values in the input files or pipe.
 
 wav2mp3.sh
 	Convert WAV files to MP3 using bladeenc or lame
