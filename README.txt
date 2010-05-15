@@ -54,9 +54,6 @@ flac2mp3.sh
 geoip-lookup.pl
 	Find the country of a hostname or IP address using Geo::IPfree
 
-grabwindow.sh
-	TODO
-
 icons2dim.sh
 	Resize icon images to have specified width and height.
 
@@ -104,6 +101,9 @@ rip-dvd.sh
 
 save-webpage.sh
 	Save a webpage and all the files necessary to display properly.
+
+screenshot.sh
+	Take the screenshot of the entire screen or a window.
 
 ssh-authorizeme.sh
 	TODO
