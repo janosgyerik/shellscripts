@@ -64,7 +64,7 @@ iconv-filenames.sh
 	Convert the encoding of filenames (if possible).
 
 id3tag.sh
-	TODO
+	Set id3 v2 tag on mp3 files in the current directory and rename nicely.
 
 ip.sh
 	TODO
