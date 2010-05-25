@@ -67,7 +67,7 @@ id3tag.sh
 	Set id3 v2 tag on mp3 files in the current directory and rename nicely.
 
 ip.sh
-	TODO
+	Print the IP address of the local host
 
 ipod2local.sh
 	Import mp3 files from ipod to hard disk.
