@@ -106,7 +106,7 @@ screenshot.sh
 	Take the screenshot of the entire screen or a window.
 
 ssh-authorizeme.sh
-	TODO
+	Add a public key to the authorized_keys file on a remote server.
 
 ssh-tunnel-keeper.sh
 	Create an ssh rtunnel and try to keep it alive as long as possible.
