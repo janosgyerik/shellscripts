@@ -73,7 +73,7 @@ ipod2local.sh
 	Import mp3 files from ipod to hard disk.
 
 iptables-simple.sh
-	TODO
+	Configure a very simple firewall using iptables.
 
 lowcase.sh
 	Rename files to all lowercase letters.
@@ -97,7 +97,7 @@ rip-audiocd.sh
 	Copy titles in an audio CD to wav files in the specified directory.
 
 rip-dvd.sh
-	TODO
+	Rip a DVD movie into a high quality DIVX file.
 
 save-webpage.sh
 	Save a webpage and all the files necessary to display properly.
