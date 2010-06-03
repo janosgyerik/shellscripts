@@ -23,11 +23,6 @@
 program=mencoder
 lamebr=96
 
-if ! type $program >/dev/null 2>&1; then
-    echo You need $program to rip DVDs. Exit.
-    exit 1
-fi
-
 usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... FILE [-- $program options...]"
@@ -87,6 +82,11 @@ while [ $# != 0 ]; do
     shift
 done
 
+if ! type $program >/dev/null 2>&1; then
+    echo You need $program to rip DVDs. Exit.
+    exit 1
+fi
+
 dir=$(dirname "$out")
 workdir=$dir/.rip-dvd-sh.$$
 mkdir -p "$workdir"
@@ -95,7 +95,7 @@ cd "$workdir"
 trap "cd ..; rm -r '$workdir'; exit 1" 1 2 3 15
 
 # this directory will not be cleaned up, to allow debugging later
-debugdir=/tmp/rip-dvd-sh/$$
+debugdir=/tmp/rip-dvd.sh/$$
 mkdir -p $debugdir
 
 test "$device" && dev_op="-dvd-device \"$device\"" || dev_op=
