@@ -73,7 +73,7 @@ ipod2local.sh
 	Import mp3 files from ipod to hard disk.
 
 iptables-simple.sh
-	TODO
+	Configure a very simple firewall using iptables.
 
 lowcase.sh
 	Rename files to all lowercase letters.

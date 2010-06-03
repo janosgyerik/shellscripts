@@ -20,17 +20,13 @@ iptables=/sbin/iptables
 
 log_prefix='iptables-simple.sh: '
 
-if ! type $iptables >/dev/null 2>/dev/null; then
-    echo Error: program $iptables does not exist. Exit.
-    exit 1
-fi
-
 usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]..."
     echo
     echo "Configure a very simple firewall using iptables."
     echo
+    echo Options:
     echo "      --init         Set default policies and flush chains/tables"
     echo "                       default = $init"
     echo
@@ -138,6 +134,11 @@ while [ $# != 0 ]; do
     esac
     shift
 done
+
+if ! type $iptables >/dev/null 2>/dev/null; then
+    echo Error: program $iptables does not exist. Exit.
+    exit 1
+fi
 
 if test $init = on; then
     # set default policies
