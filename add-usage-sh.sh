@@ -33,6 +33,7 @@ while [ $# != 0 ]; do
 #    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
+    -) usage "Unknown option: $1" ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
 #    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
@@ -69,6 +70,7 @@ while [ $# != 0 ]; do
 #    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
+    -) usage "Unknown option: $1" ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
 #    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
