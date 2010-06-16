@@ -105,7 +105,7 @@ workfile=/tmp/.bzr.sh-$$
 trap 'rm -f $workfile; exit 1' 1 2 3 15
 
 repolistcmd() {
-    echo "find $1/ -name .bzr | sed -e s:/.bzr:: | sed -e s://:/:g | sort | awk -v prev=0 '\$0 !~ prev { print; prev=\$0 }'"
+    echo "find $1/ -name .bzr | sed -e 's:/\\.bzr::' -e s://:/:g | sort | awk -v prev=0 '\$0 !~ prev { print; prev=\$0 }'"
 }
 
 case "$1" in
