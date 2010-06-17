@@ -148,6 +148,7 @@ case "$1" in
 	case "$protocol" in
 	    bzr+ssh://) ssh $bzrhost "$(repolistcmd $bzrroot)" ;;
 	    '') eval "$(repolistcmd $bzrroot)" ;;
+	    *) fatal "Don't know how to checkout repos with protocol=$protocol" ;;
 	esac | while read rdir; do
 	    if test "$rdir" = "$bzrroot"; then
 		pdir=$localbase/$(basename $rdir)
@@ -197,6 +198,7 @@ case "$1" in
 		    eval "$(repolistcmd $i)"
 		done
 		;;
+	    *) fatal "Don't know how to list repos with protocol=$protocol" ;;
 	esac
 	;;
     diff)
@@ -206,6 +208,7 @@ case "$1" in
 	case "$protocol" in
 	    bzr+ssh://) ssh $bzrhost "$(repolistcmd $bzrroot)" ;;
 	    '') eval "$(repolistcmd $bzrroot)" ;;
+	    *) fatal "Don't know how to diff repos with protocol=$protocol" ;;
 	esac | sed -e "s?$bzrroot??" | diff -u - $workfile
 	;;
     status|stat|st)
