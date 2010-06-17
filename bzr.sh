@@ -275,9 +275,16 @@ case "$1" in
 	    find "$i" -name '*.~?~' -exec rm -v {} \;
 	done
 	;;
-    push) # todo
-	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
-	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
+    push)
+	case "$protocol" in
+	    bzr+ssh://) 
+		test "$bzrhost" || fatal 'Use --bzrhost to specify bzrhost!'
+		;;
+	    '') ;;
+	    *)
+		fatal "Don't know how to push to repos with protocol=$protocol"
+		;;
+	esac
 	shift
 	test "$1" || eval 'set -- .'
 	bzr_push() {
@@ -285,7 +292,7 @@ case "$1" in
 	    test "$2" -a "$2" != . && path=$2/ || path=
 	    cd "$1"
 	    if test -d .bzr; then
-		target=bzr+ssh://$bzrhost$bzrroot/$path$1
+		target=$protocol$bzrhost$bzrroot/$path$1
 		echo Push source: $PWD
 		echo Push target: $target
 		test $testmode = on && echo '(test mode, skipping)' || bzr push $target --create-prefix
