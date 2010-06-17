@@ -199,12 +199,14 @@ case "$1" in
 		;;
 	esac
 	;;
-    diff) # todo
-	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
-	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
+    diff)
+	require_bzrroot
 	test "$2" && localrepo=$(normalpath "$2") || localrepo=$PWD
-	ssh $bzrhost "$(repolistcmd $bzrroot)" | sed -e "s?$bzrroot??" > $workfile
-	eval "$(repolistcmd $localrepo)" | sed -e "s?$localrepo??" | diff -u - $workfile
+	eval "$(repolistcmd $localrepo)" | sed -e "s?$localrepo??" > $workfile
+	case "$protocol" in
+	    bzr+ssh://) ssh $bzrhost "$(repolistcmd $bzrroot)" ;;
+	    '') eval "$(repolistcmd $bzrroot)" ;;
+	esac | sed -e "s?$bzrroot??" | diff -u - $workfile
 	;;
     status|stat|st)
 	shift
