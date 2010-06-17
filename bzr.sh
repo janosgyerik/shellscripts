@@ -49,13 +49,13 @@ usage() {
     echo "      --brief                 Brief output, default = $brief"
     echo "      --local                 Run commands in local mode, default = $local"
     echo "      --test                  Run in test mode, default = $testmode"
+    echo
     echo "  -h, --help                  Print this help"
     echo
     echo "Commands:"
     echo "  checkout, co                Checkout remote repo tree"
     echo "  localco, lco                Checkout local repo tree"
-    echo "  list, ls                    Show list of repos in remote repo tree"
-    echo "  locallist, lls              Show list of repos in local repo tree"
+    echo "  list, ls                    Show list of repos in repo tree"
     echo "  diff                        Show differences between local and remote tree"
     echo "  push                        Push local repo tree to remote location"
     echo "  bind                        Bind to corresponding remote locations"
@@ -120,21 +120,31 @@ repolistcmd() {
     echo "find $1/ -name .bzr | sed -e 's:/\\.bzr::' -e s://:/:g | sort | awk -v prev=0 '\$0 !~ prev { print; prev=\$0 }'"
 }
 
+require_bzrroot() {
+    case "$bzrroot" in
+	/*) ;;
+	?*) fatal 'bzrroot should be absolute path' ;;
+	*) fatal 'Use --bzrroot to specify repository root' ;;
+    esac
+}
+
+# when host is missing, assume '' protocol
+test "$bzrhost" || protocol=
+
+# when host is specified but protocol is missing, assume bzr+ssh://
 test "$bzrhost" -a ! "$protocol" && protocol=bzr+ssh://
+
+# validate protocol
+case "$protocol" in
+    bzr+ssh://) test "$bzrhost" || fatal 'Use --bzrhost to specify bzrhost!' ;;
+    '') ;;
+    *) fatal "Don't know how to handle repos with protocol=$protocol" ;;
+esac
 
 case "$1" in
     checkout|co)
-	test "$bzrroot" || usage 'Use --bzrroot to specify bzrroot!'
+	require_bzrroot
 	test "$2" && localbase=$(normalpath "$2") || localbase=.
-	case "$protocol" in
-	    bzr+ssh://) 
-		test "$bzrhost" || fatal 'Use --bzrhost to specify bzrhost!'
-		;;
-	    '') ;;
-	    *)
-		fatal "Don't know how to get list of repos with protocol=$protocol"
-		;;
-	esac
 	case "$protocol" in
 	    bzr+ssh://) ssh $bzrhost "$(repolistcmd $bzrroot)" ;;
 	    '') eval "$(repolistcmd $bzrroot)" ;;
@@ -174,24 +184,18 @@ case "$1" in
     list|ls)
 	case "$protocol" in
 	    bzr+ssh://) 
-		test "$bzrhost" || fatal 'Use --bzrhost to specify bzrhost!'
-		;;
-	    '') ;;
-	    *)
-		fatal "Don't know how to get list of repos with protocol=$protocol"
-		;;
-	esac
-	case "$protocol" in
-	    bzr+ssh://) ssh $bzrhost "$(repolistcmd $bzrroot)" ;;
+		require_bzrroot
+		ssh $bzrhost "$(repolistcmd $bzrroot)" ;;
 	    '') 
+		shift
 		if test "$bzrroot"; then
-		    localrepo=$bzrroot
-		elif test "$2"; then
-		    localrepo=$(normalpath "$2")
-		else
-		    localrepo=$PWD
+		    eval "set -- $bzrroot"
+		elif ! test "$1"; then
+		    eval 'set -- .'
 		fi
-		eval "$(repolistcmd $localrepo)"
+		for i in "$@"; do
+		    eval "$(repolistcmd $i)"
+		done
 		;;
 	esac
 	;;
@@ -276,15 +280,6 @@ case "$1" in
 	done
 	;;
     push)
-	case "$protocol" in
-	    bzr+ssh://) 
-		test "$bzrhost" || fatal 'Use --bzrhost to specify bzrhost!'
-		;;
-	    '') ;;
-	    *)
-		fatal "Don't know how to push to repos with protocol=$protocol"
-		;;
-	esac
 	shift
 	test "$1" || eval 'set -- .'
 	bzr_push() {
@@ -308,15 +303,6 @@ case "$1" in
 	done
 	;;
     bind)
-	case "$protocol" in
-	    bzr+ssh://) 
-		test "$bzrhost" || fatal 'Use --bzrhost to specify bzrhost!'
-		;;
-	    '') ;;
-	    *)
-		fatal "Don't know how to push to repos with protocol=$protocol"
-		;;
-	esac
 	shift
 	test "$1" || eval 'set -- .'
 	bzr_bind() {
