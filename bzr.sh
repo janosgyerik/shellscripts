@@ -307,9 +307,16 @@ case "$1" in
 	    (bzr_push $(normalpath "$i"))
 	done
 	;;
-    bind) # todo
-	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
-	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
+    bind)
+	case "$protocol" in
+	    bzr+ssh://) 
+		test "$bzrhost" || fatal 'Use --bzrhost to specify bzrhost!'
+		;;
+	    '') ;;
+	    *)
+		fatal "Don't know how to push to repos with protocol=$protocol"
+		;;
+	esac
 	shift
 	test "$1" || eval 'set -- .'
 	bzr_bind() {
@@ -317,7 +324,7 @@ case "$1" in
 	    test "$2" -a "$2" != . && path=$2/ || path=
 	    cd "$1"
 	    if test -d .bzr; then
-		target=bzr+ssh://$bzrhost$bzrroot/$path$1
+		target=$protocol$bzrhost$bzrroot/$path$1
 		echo Local repo: $PWD
 		echo Bind target: $target
 		if test $testmode = on; then
@@ -337,7 +344,7 @@ case "$1" in
 	    fi
 	}
 	for i in "$@"; do
-	    (bzr_bind $(normalpath "$i"))
+	    (cd "$i"; bzr_bind .)
 	done
 	;;
     *) usage ;;
