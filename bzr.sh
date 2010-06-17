@@ -143,12 +143,16 @@ esac
 
 case "$1" in
     checkout|co)
+	case "$protocol" in
+	    bzr+ssh://) ;;
+	    '') ;;
+	    *) fatal "Don't know how to checkout repos with protocol=$protocol" ;;
+	esac
 	require_bzrroot
 	test "$2" && localbase=$(normalpath "$2") || localbase=.
 	case "$protocol" in
 	    bzr+ssh://) ssh $bzrhost "$(repolistcmd $bzrroot)" ;;
 	    '') eval "$(repolistcmd $bzrroot)" ;;
-	    *) fatal "Don't know how to checkout repos with protocol=$protocol" ;;
 	esac | while read rdir; do
 	    if test "$rdir" = "$bzrroot"; then
 		pdir=$localbase/$(basename $rdir)
@@ -202,13 +206,17 @@ case "$1" in
 	esac
 	;;
     diff)
+	case "$protocol" in
+	    bzr+ssh://) ;;
+	    '') ;;
+	    *) fatal "Don't know how to diff repos with protocol=$protocol" ;;
+	esac
 	require_bzrroot
 	test "$2" && localrepo=$(normalpath "$2") || localrepo=$PWD
 	eval "$(repolistcmd $localrepo)" | sed -e "s?$localrepo??" > $workfile
 	case "$protocol" in
 	    bzr+ssh://) ssh $bzrhost "$(repolistcmd $bzrroot)" ;;
 	    '') eval "$(repolistcmd $bzrroot)" ;;
-	    *) fatal "Don't know how to diff repos with protocol=$protocol" ;;
 	esac | sed -e "s?$bzrroot??" | diff -u - $workfile
 	;;
     status|stat|st)
