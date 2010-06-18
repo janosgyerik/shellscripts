@@ -43,17 +43,19 @@ usage() {
     echo "Perform repository operations on a tree of bzr repositories"
     echo
     echo "Options:"
-    echo "      --ssh BZRHOST BZRROOT   Set the ssh host and bzrroot, default = $bzrhost $bzrroot"
+    echo "      --bzrhost BZRHOST       Set bzrhost like bzr+ssh://user@server, default = $bzrhost"
+    echo "      --bzrroot BZRROOT       Set bzrroot like /path/to/repo, default = $bzrroot"
+    echo "      --protocol PROTOCOL     Set protocol like bzr+ssh://, default = $protocol"
     echo "      --brief                 Brief output, default = $brief"
     echo "      --local                 Run commands in local mode, default = $local"
     echo "      --test                  Run in test mode, default = $testmode"
+    echo
     echo "  -h, --help                  Print this help"
     echo
     echo "Commands:"
     echo "  checkout, co                Checkout remote repo tree"
     echo "  localco, lco                Checkout local repo tree"
-    echo "  list, ls                    Show list of repos in remote repo tree"
-    echo "  locallist, lls              Show list of repos in local repo tree"
+    echo "  list, ls                    Show list of repos in repo tree"
     echo "  diff                        Show differences between local and remote tree"
     echo "  push                        Push local repo tree to remote location"
     echo "  bind                        Bind to corresponding remote locations"
@@ -61,6 +63,11 @@ usage() {
     echo "  update, up                  Update local repo tree"
     echo "  cleanse, cl                 Remove .~1~ files created by bzr"
     echo
+    exit 1
+}
+
+fatal() {
+    echo Fatal: "$@"
     exit 1
 }
 
@@ -74,6 +81,7 @@ args=
 #param=
 bzrhost=
 bzrroot=
+protocol=
 brief=off
 local=off
 testmode=off
@@ -85,10 +93,14 @@ while [ $# != 0 ]; do
     --brief) brief=on ;;
     --local) local=on ;;
     --dry-run|--test) testmode=on ;;
-    --ssh)
+    --bzrhost|--host) shift; bzrhost=$1 ;;
+    --bzrroot|--root) shift; bzrroot=$(normalpath "$1") ;;
+    --protocol|--proto) shift; protocol=$1 ;;
+    --ssh) # note: this is deprecated and will be removed
 	test "$2" -a "$3" || usage
 	shift; bzrhost=$1
 	shift; bzrroot=$(normalpath "$1")
+	protocol=bzr+ssh://
 	;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
@@ -105,15 +117,43 @@ workfile=/tmp/.bzr.sh-$$
 trap 'rm -f $workfile; exit 1' 1 2 3 15
 
 repolistcmd() {
-    echo "find $1/ -name .bzr | sed -e s:/.bzr:: | sed -e s://:/:g | sort | awk -v prev=0 '\$0 !~ prev { print; prev=\$0 }'"
+    echo "find $1/ -name .bzr | sed -e 's:/\\.bzr::' -e s://:/:g | sort | awk -v prev=0 '\$0 !~ prev { print; prev=\$0 }'"
 }
+
+require_bzrroot() {
+    case "$bzrroot" in
+	/*) ;;
+	?*) fatal 'bzrroot should be absolute path' ;;
+	*) fatal 'Use --bzrroot to specify repository root' ;;
+    esac
+}
+
+# when host is missing, assume '' protocol
+test "$bzrhost" || protocol=
+
+# when host is specified but protocol is missing, assume bzr+ssh://
+test "$bzrhost" -a ! "$protocol" && protocol=bzr+ssh://
+
+# validate protocol
+case "$protocol" in
+    bzr+ssh://) test "$bzrhost" || fatal 'Use --bzrhost to specify bzrhost!' ;;
+    '') ;;
+    *) fatal "Don't know how to handle repos with protocol=$protocol" ;;
+esac
 
 case "$1" in
     checkout|co)
-	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
-	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
+	case "$protocol" in
+	    bzr+ssh://) ;;
+	    '') ;;
+	    *) fatal "Don't know how to checkout repos with protocol=$protocol" ;;
+	esac
+	require_bzrroot
 	test "$2" && localbase=$(normalpath "$2") || localbase=.
-	ssh $bzrhost "$(repolistcmd $bzrroot)" | while read rdir; do
+	case "$protocol" in
+	    bzr+ssh://) ssh $bzrhost "$(repolistcmd $bzrroot)" ;;
+	    '') eval "$(repolistcmd $bzrroot)" ;;
+	esac | while read rdir; do
 	    if test "$rdir" = "$bzrroot"; then
 		pdir=$localbase/$(basename $rdir)
 	    else
@@ -124,14 +164,14 @@ case "$1" in
 		echo
 		(cd $pdir; bzr update)
 	    else
-		echo "Checking out bzr+ssh://$bzrhost$rdir into $pdir ..."
+		echo "Checking out $protocol$bzrhost$rdir into $pdir ..."
 		if test $testmode = on; then
 		    echo '(test mode, skipping)'
 		    echo
 		else
 		    echo
 		    mkdir -p $(dirname $pdir)
-		    bzr co bzr+ssh://$bzrhost$rdir $pdir
+		    bzr co $protocol$bzrhost$rdir $pdir
 		fi
 	    fi
 	done
@@ -147,20 +187,37 @@ case "$1" in
 	done
 	;;
     list|ls)
-	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
-	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
-	ssh $bzrhost "$(repolistcmd $bzrroot)"
-	;;
-    locallist|lls)
-	test "$2" && localrepo=$(normalpath "$2") || localrepo=$PWD
-	eval "$(repolistcmd $localrepo)"
+	case "$protocol" in
+	    bzr+ssh://) 
+		require_bzrroot
+		ssh $bzrhost "$(repolistcmd $bzrroot)" ;;
+	    '') 
+		shift
+		if test "$bzrroot"; then
+		    eval "set -- $bzrroot"
+		elif ! test "$1"; then
+		    eval 'set -- .'
+		fi
+		for i in "$@"; do
+		    eval "$(repolistcmd $i)"
+		done
+		;;
+	    *) fatal "Don't know how to list repos with protocol=$protocol" ;;
+	esac
 	;;
     diff)
-	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
-	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
+	case "$protocol" in
+	    bzr+ssh://) ;;
+	    '') ;;
+	    *) fatal "Don't know how to diff repos with protocol=$protocol" ;;
+	esac
+	require_bzrroot
 	test "$2" && localrepo=$(normalpath "$2") || localrepo=$PWD
-	ssh $bzrhost "$(repolistcmd $bzrroot)" | sed -e "s?$bzrroot??" > $workfile
-	eval "$(repolistcmd $localrepo)" | sed -e "s?$localrepo??" | diff -u - $workfile
+	eval "$(repolistcmd $localrepo)" | sed -e "s?$localrepo??" > $workfile
+	case "$protocol" in
+	    bzr+ssh://) ssh $bzrhost "$(repolistcmd $bzrroot)" ;;
+	    '') eval "$(repolistcmd $bzrroot)" ;;
+	esac | sed -e "s?$bzrroot??" | diff -u - $workfile
 	;;
     status|stat|st)
 	shift
@@ -236,8 +293,6 @@ case "$1" in
 	done
 	;;
     push)
-	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
-	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
 	shift
 	test "$1" || eval 'set -- .'
 	bzr_push() {
@@ -245,7 +300,7 @@ case "$1" in
 	    test "$2" -a "$2" != . && path=$2/ || path=
 	    cd "$1"
 	    if test -d .bzr; then
-		target=bzr+ssh://$bzrhost$bzrroot/$path$1
+		target=$protocol$bzrhost$bzrroot/$path$1
 		echo Push source: $PWD
 		echo Push target: $target
 		test $testmode = on && echo '(test mode, skipping)' || bzr push $target --create-prefix
@@ -261,8 +316,6 @@ case "$1" in
 	done
 	;;
     bind)
-	test "$bzrhost" || usage 'Use --ssh to specify bzrhost and bzrroot!'
-	test "$bzrroot" || usage 'Use --ssh to specify bzrhost and bzrroot!'
 	shift
 	test "$1" || eval 'set -- .'
 	bzr_bind() {
@@ -270,7 +323,7 @@ case "$1" in
 	    test "$2" -a "$2" != . && path=$2/ || path=
 	    cd "$1"
 	    if test -d .bzr; then
-		target=bzr+ssh://$bzrhost$bzrroot/$path$1
+		target=$protocol$bzrhost$bzrroot/$path$1
 		echo Local repo: $PWD
 		echo Bind target: $target
 		if test $testmode = on; then
@@ -290,7 +343,7 @@ case "$1" in
 	    fi
 	}
 	for i in "$@"; do
-	    (bzr_bind $(normalpath "$i"))
+	    (cd "$i"; bzr_bind .)
 	done
 	;;
     *) usage ;;
