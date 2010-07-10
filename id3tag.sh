@@ -73,7 +73,7 @@ if test -f $configfile; then
     fi
     . $configfile
     rm -f $missing
-    cat $configfile | grep '^z_[0-9]' | while read line; do
+    cat $configfile | grep '^t_[0-9]' | while read line; do
 	tid=$(echo $line | cut -f1 -d= | cut -f2 -d_)
 	title=$(eval echo \$t_$tid)
 	test "$title" || title="Track $tid"
