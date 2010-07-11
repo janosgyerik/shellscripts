@@ -66,6 +66,49 @@ if ! type $program >/dev/null 2>/dev/null; then
     exit
 fi
 
+update_tags() {
+    pattern=$1
+    test "$2" && no_tid=on || no_tid=off
+    cat $configfile | grep $pattern | while read line; do
+	tid=$(echo $line | cut -f1 -d= | cut -f2 -d_)
+	title=$(eval echo \$t_$tid)
+	test "$title" || title="Track $tid"
+	if test $no_tid = off; then
+	    filename="$tid - $title.mp3"
+	else
+	    filename="$title.mp3"
+	fi
+	if test ! -f "$filename"; then
+	    match=$(ls $tid* 2>/dev/null | head -n 1)
+	    if test -f "$match"; then
+		echo mv "$match" "$filename"
+		mv "$match" "$filename"
+	    fi
+	fi
+	test $no_tid = on && tid=99
+	if test -f "$filename"; then
+	    extra=
+	    if test "$mp3info"; then
+		if ! $mp3info $mp3info_ops "$filename" | grep "192 kbps" >/dev/null 2>/dev/null; then
+		    extra="( not 192 kbps, >> $missing )"
+		    echo $filename "*** not 192 kbps ***" >> $missing
+		fi
+	    fi
+	    echo Tagging \"$filename\" ... $extra
+	    if test "$artist"; then
+		echo $program --artist "$artist" --song "$title" --album "$album" --genre "$genre" --year "$year" --track $tid/$tracks "$filename"
+		$program --artist "$artist" --song "$title" --album "$album" --genre "$genre" --year "$year" --track $tid/$tracks "$filename" > /dev/null
+	    else
+		echo $program --song "$title" --album "$album" --genre "$genre" --year "$year" --track $tid/$tracks "$filename"
+		$program --song "$title" --album "$album" --genre "$genre" --year "$year" --track $tid/$tracks "$filename" > /dev/null
+	    fi
+	else
+	    echo Missing \"$filename\" ... "( >> $missing )"
+	    echo $filename >> $missing
+	fi
+    done
+}
+
 if test -f $configfile; then
     if test "$mp3info" && ! type $mp3info >/dev/null 2>/dev/null; then
 	echo Note: 192 kbps bitrate won\'t be confirmed becase \"$mp3info\" program is missing.
@@ -73,62 +116,8 @@ if test -f $configfile; then
     fi
     . $configfile
     rm -f $missing
-    cat $configfile | grep '^t_[0-9]' | while read line; do
-	tid=$(echo $line | cut -f1 -d= | cut -f2 -d_)
-	title=$(eval echo \$t_$tid)
-	test "$title" || title="Track $tid"
-	filename="$tid - $title.mp3"
-	if test ! -f "$filename"; then
-	    match=$(ls $tid* 2>/dev/null | head -n 1)
-	    if test -f "$match"; then
-		echo mv "$match" "$filename"
-		mv "$match" "$filename"
-	    fi
-	fi
-	if test -f "$filename"; then
-	    extra=
-	    if test "$mp3info"; then
-		if ! $mp3info $mp3info_ops "$filename" | grep "192 kbps" >/dev/null 2>/dev/null; then
-		    extra="( not 192 kbps, >> $missing )"
-		    echo $filename "*** not 192 kbps ***" >> $missing
-		fi
-	    fi
-	    echo Tagging \"$filename\" ... $extra
-	    echo $program --artist "$artist" --song "$title" --album "$album" --genre "$genre" --year "$year" --track $tid/$tracks "$filename"
-	    $program --artist "$artist" --song "$title" --album "$album" --genre "$genre" --year "$year" --track $tid/$tracks "$filename" > /dev/null
-	else
-	    echo Missing \"$filename\" ... "( >> $missing )"
-	    echo $filename >> $missing
-	fi
-    done
-    cat $configfile | grep '^t_[^0-9]' | while read line; do
-	tid=$(echo $line | cut -f1 -d= | cut -f2 -d_)
-	title=$(eval echo \$t_$tid)
-	test "$title" || title="Track $tid"
-	filename="$title.mp3"
-	if test ! -f "$filename"; then
-	    match=$(ls $tid* 2>/dev/null | head -n 1)
-	    if test -f "$match"; then
-		echo mv "$match" "$filename"
-		mv "$match" "$filename"
-	    fi
-	fi
-	if test -f "$filename"; then
-	    extra=
-	    if test "$mp3info"; then
-		if ! $mp3info $mp3info_ops "$filename" | grep "192 kbps" >/dev/null 2>/dev/null; then
-		    extra="( not 192 kbps, >> $missing )"
-		    echo $filename "*** not 192 kbps ***" >> $missing
-		fi
-	    fi
-	    echo Tagging \"$filename\" ... $extra
-	    echo $program --artist "$artist" --song "$title" --album "$album" --genre "$genre" --year "$year" --track 0/$tracks "$filename"
-	    $program --artist "$artist" --song "$title" --album "$album" --genre "$genre" --year "$year" --track 0/$tracks "$filename" >/dev/null
-	else
-	    echo Missing \"$filename\" ... "( >> $missing )"
-	    echo $filename >> $missing
-	fi
-    done
+    update_tags '^t_[0-9]'
+    update_tags '^t_[^0-9]' no_tid
 else
     echo Autodetecting id3v info:
     for i in *.mp3; do
