@@ -38,6 +38,7 @@ usage() {
     echo
     echo "  -d, --dir PATH        Path to the output directory, default = $outdir"
     echo
+    echo "  -v, --verbose         Verbose output, useful for debugging, default = $verbose"
     echo "  -h, --help            Print this help"
     echo
     exit 1
@@ -52,11 +53,13 @@ args=
 #flag=off
 #param=
 outdir=.
+verbose=off
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
 #    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
+    -v|--verbose) verbose=on ;;
     -d|--dir) shift; outdir=$1 ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
@@ -79,7 +82,11 @@ portal_log=$outdir/portal.log
 test -d "$outdir" || mkdir -p "$outdir"
 
 msg Downloading portal page ...
-wget "$portal_url" -O "$portal_html" -o "$portal_log"
+if test $verbose = off; then
+    wget "$portal_url" -O "$portal_html" --no-check-certificate -o "$portal_log" -q
+else
+    wget "$portal_url" -O "$portal_html" --no-check-certificate -o "$portal_log"
+fi
 
 if ! test -s "$portal_html"; then
     msg Error: The portal page is empty. This is a problem.
@@ -88,14 +95,16 @@ fi
 
 msg Parsing portal page ...
 base_url=$(grep ^Location: "$portal_log" | cut -f2 -d' ' | sed -e 's?/pdf/.*??')
-pdf_path=$(grep -o '/pdf/.*' "$portal_html" | head -n 1 | sed -e 's/".*//' -e 's/&amp;/\&/g')
-pdf_fn=$(grep -o dlj'[0-9]*.pdf' "$portal_html" | head -n 1)
+pdf_path=$(sed -ne 's?^.*/pdf/?/pdf/? p' "$portal_html" | head -n 1 | sed -e 's/".*//' -e 's/&amp;/\&/g')
+pdf_fn=$(echo $pdf_path | sed -ne 's/.*\(dlj.*.pdf\).*/\1/ p')
 
-if test -f "$outdir/$pdf_fn"; then
-    msg Done: $outdir/$pdf_fn exists, not downloading again.
-else
+if test ! -s "$outdir/$pdf_fn"; then
     msg Downloading $pdf_fn ...
-    wget "$base_url$pdf_path" -O "$outdir/$pdf_fn" -q
+    if test $verbose = off; then
+	wget "$base_url$pdf_path" -O "$outdir/$pdf_fn" --no-check-certificate -q
+    else
+	wget "$base_url$pdf_path" -O "$outdir/$pdf_fn" --no-check-certificate
+    fi
 fi
 
 # eof

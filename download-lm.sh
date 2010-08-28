@@ -31,6 +31,7 @@ usage() {
     echo Options:
     echo "  -d, --dir PATH        Path to the output directory, default = $outdir"
     echo
+    echo "  -v, --verbose         Verbose output, useful for debugging, default = $verbose"
     echo "  -h, --help            Print this help"
     echo
     exit 1
@@ -45,11 +46,13 @@ args=
 #flag=off
 #param=
 outdir=.
+verbose=off
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
 #    -f|--flag) flag=on ;;
 #    -p|--param) shift; param=$1 ;;
+    -v|--verbose) verbose=on ;;
     -d|--dir) shift; outdir=$1 ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
@@ -88,7 +91,11 @@ portal_log=$outdir/portal.log
 test -d "$outdir" || mkdir -p "$outdir"
 
 msg Downloading portal page ...
-wget "$portal_url" -O "$portal_html" -o "$portal_log" --user="$user" --password="$pass"
+if test $verbose = off; then
+    wget "$portal_url" -O "$portal_html" --user="$user" --password="$pass" --no-check-certificate -q | tee "$portal_log" >/dev/null
+else
+    wget "$portal_url" -O "$portal_html" --user="$user" --password="$pass" --no-check-certificate | tee "$portal_log"
+fi
 
 if ! test -s "$portal_html"; then
     msg Error: The portal page is empty. This is a problem.
@@ -96,11 +103,15 @@ if ! test -s "$portal_html"; then
 fi
 
 msg Parsing portal page ...
-grep -o '[0-9][0-9]*/Linux_Magazine_Issue_[0-9][0-9]*\.pdf' $portal_html | while read pdf_url; do
+sed -ne 's/.*"\([0-9][0-9]*\/Linux_Magazine_Issue_[0-9][0-9]*.*\.pdf\).*/\1/ p' $portal_html | while read pdf_url; do
     pdf_fn=$(echo $pdf_url | cut -f2 -d/)
     if ! test -s "$outdir"/$pdf_fn; then
 	msg downloading $pdf_fn ...
-	wget "$issue_url"/$pdf_url -O "$outdir"/$pdf_fn --user="$user" --password="$pass" -q
+	if test $verbose = off; then
+	    wget "$issue_url"/$pdf_url -O "$outdir"/$pdf_fn --user="$user" --password="$pass" --no-check-certificate -q
+	else
+	    wget "$issue_url"/$pdf_url -O "$outdir"/$pdf_fn --user="$user" --password="$pass" --no-check-certificate
+	fi
     fi
 done
 
