@@ -1,4 +1,4 @@
-#!/bin/sh
+!/bin/sh
 #
 # SCRIPT: download-lj.sh
 # AUTHOR: Janos Gyerik <janos.gyerik@gmail.com>
@@ -25,6 +25,7 @@ usage() {
     echo You need to create a file: $0.config
     echo with the PDF download URL in it, which looks like this:
     echo
+    echo http://download.linuxjournal.com/pdf/dl.php?key=gaNNNNNN
     echo https://secure.linuxjournal.com/subs/dl/gaNNNNNN
     echo
     echo You should be able to find this URL in the digital subscribtion emails
@@ -46,6 +47,11 @@ usage() {
 
 msg() {
     echo '* '$@
+}
+
+err() {
+    echo Error: $*
+    exit 1
 }
 
 args=
@@ -81,29 +87,32 @@ portal_html=$outdir/portal.html
 portal_log=$outdir/portal.log
 test -d "$outdir" || mkdir -p "$outdir"
 
-msg Downloading portal page ...
-if test $verbose = off; then
-    wget "$portal_url" -O "$portal_html" --no-check-certificate -o "$portal_log" -q
-else
-    wget "$portal_url" -O "$portal_html" --no-check-certificate -o "$portal_log"
-fi
+do_wget() {
+    dst=$1; shift
+    test $verbose = on && echo wget -O "$dst" $*
+    wget -O "$dst" $*
+    if ! test -s "$dst"; then
+	rm -f "$dst"
+	err downloaded empty file: $dst
+    fi
+    test $verbose = on && ls -l "$dst"
+}
 
-if ! test -s "$portal_html"; then
-    msg Error: The portal page is empty. This is a problem.
-    exit 1
-fi
+msg Downloading portal page ...
+do_wget "$portal_html" "$portal_url" --no-check-certificate -o "$portal_log"
 
 msg Parsing portal page ...
 base_url=$(grep ^Location: "$portal_log" | cut -f2 -d' ' | sed -e 's?/pdf/.*??')
 pdf_path=$(sed -ne 's?^.*/pdf/?/pdf/? p' "$portal_html" | head -n 1 | sed -e 's/".*//' -e 's/&amp;/\&/g')
 pdf_fn=$(echo $pdf_path | sed -ne 's/.*\(dlj.*.pdf\).*/\1/ p')
 
-if test ! -s "$outdir/$pdf_fn"; then
+pdf_out="$outdir/$pdf_fn"
+if test ! -s "$pdf_out"; then
     msg Downloading $pdf_fn ...
     if test $verbose = off; then
-	wget "$base_url$pdf_path" -O "$outdir/$pdf_fn" --no-check-certificate -q
+	do_wget "$pdf_out" "$base_url$pdf_path" --no-check-certificate -q
     else
-	wget "$base_url$pdf_path" -O "$outdir/$pdf_fn" --no-check-certificate
+	do_wget "$pdf_out" "$base_url$pdf_path" --no-check-certificate
     fi
 fi
 
