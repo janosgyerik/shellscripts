@@ -1,4 +1,4 @@
-!/bin/sh
+#!/bin/sh
 #
 # SCRIPT: download-lj.sh
 # AUTHOR: Janos Gyerik <janos.gyerik@gmail.com>
@@ -26,7 +26,7 @@ usage() {
     echo with the PDF download URL in it, which looks like this:
     echo
     echo http://download.linuxjournal.com/pdf/dl.php?key=gaNNNNNN
-    echo https://secure.linuxjournal.com/subs/dl/gaNNNNNN
+    #echo https://secure.linuxjournal.com/subs/dl/gaNNNNNN
     echo
     echo You should be able to find this URL in the digital subscribtion emails
     echo sent from Linux Journal every time a new issue is available.
@@ -98,22 +98,20 @@ do_wget() {
     test $verbose = on && ls -l "$dst"
 }
 
+test $verbose = on && wget_ops= || wget_ops=-q
+
 msg Downloading portal page ...
-do_wget "$portal_html" "$portal_url" --no-check-certificate -o "$portal_log"
+do_wget "$portal_html" "$portal_url" $wget_ops
 
 msg Parsing portal page ...
-base_url=$(grep ^Location: "$portal_log" | cut -f2 -d' ' | sed -e 's?/pdf/.*??')
+base_url=$(echo $portal_url | sed -e 's?^\(http://[^/]*\)/.*?\1?')
 pdf_path=$(sed -ne 's?^.*/pdf/?/pdf/? p' "$portal_html" | head -n 1 | sed -e 's/".*//' -e 's/&amp;/\&/g')
 pdf_fn=$(echo $pdf_path | sed -ne 's/.*\(dlj.*.pdf\).*/\1/ p')
 
 pdf_out="$outdir/$pdf_fn"
 if test ! -s "$pdf_out"; then
     msg Downloading $pdf_fn ...
-    if test $verbose = off; then
-	do_wget "$pdf_out" "$base_url$pdf_path" --no-check-certificate -q
-    else
-	do_wget "$pdf_out" "$base_url$pdf_path" --no-check-certificate
-    fi
+    do_wget "$pdf_out" "$base_url$pdf_path" $wget_ops
 fi
 
 # eof
