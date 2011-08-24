@@ -46,7 +46,7 @@ done
 
 eval "set -- $args"
 
-test $# = 0 && usage
+test $# -gt 0 || usage
 
 for i; do
     rar v "$i" | sed -ne '/^-/,/^-/ p' | sed -ne '2~2 p' | sed -e '/^-/ d' -e 's/ //' | \

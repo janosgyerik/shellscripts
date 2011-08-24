@@ -60,7 +60,7 @@ done
 
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 
 
-test $# = 0 && usage
+test $# -gt 0 || usage
 
 wget -c -H -k -K -p -P $dir --user "$username" --password "$password" "$1"
 

@@ -64,7 +64,7 @@ done
 
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 
 
-test $# = 0 && usage
+test $# -gt 0 || usage
 
 # params: cmd
 require_cmd() {

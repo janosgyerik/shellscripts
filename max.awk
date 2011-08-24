@@ -60,7 +60,7 @@ done
 
 eval "set -- $args"
 
-#test $# = 0 && usage
+#test $# -gt 0 || usage
 
 awk -v first=1 '
 /^[0-9.]/ { 

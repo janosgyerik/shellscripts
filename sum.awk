@@ -60,7 +60,7 @@ done
 
 eval "set -- $args"
 
-#test $# = 0 && usage
+#test $# -gt 0 || usage
 
 awk -v sum=0 '
 /^[0-9.]/ { sum += $0; }

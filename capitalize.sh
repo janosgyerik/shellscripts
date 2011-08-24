@@ -50,7 +50,7 @@ done
 
 eval "set -- $args"
 
-test $# = 0 && usage
+test $# -gt 0 || usage
 
 test $global = on && g=g || g=
 

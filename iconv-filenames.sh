@@ -67,7 +67,7 @@ test $list = on && { $program -l ; exit 0 ; }
 
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 
 
-test $# = 0 && usage
+test $# -gt 0 || usage
 
 test "$from" && from_op="-f $from" || from_op=
 test "$to" && to_op="-f $to" || to_op=
