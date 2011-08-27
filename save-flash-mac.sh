@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# SCRIPT: mac-save-flash-as.sh
+# SCRIPT: save-flash-mac.sh
 # AUTHOR: Janos Gyerik <info@titan2x.com>
 # DATE:   2011-08-24
 # REV:    1.0.D (Valid are A, B, D, T and P)
@@ -8,7 +8,7 @@
 #
 # PLATFORM: Mac only
 #
-# PURPOSE: Copy a flash movie (youtube.com, etc) saved by a browser in /private
+# PURPOSE: Locate and copy a flash movie (youtube.com, etc) cached by browsers.
 #
 # set -n   # Uncomment to check your syntax, without execution.
 #          # NOTE: Do not forget to put the comment back in or
@@ -56,10 +56,12 @@ eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@
 
 #test $# -gt 0 || usage
 
+searchdir='/private/var/folders'
+
 if test "$number"; then
-    file=$(find /private/var/folders 2>/dev/null | grep -i flash | sed -ne "$number p")
+    file=$(find "$searchdir" 2>/dev/null | grep -i flash | sed -ne "$number p")
 else
-    file=$(find /private/var/folders 2>/dev/null | grep -i flash | head -n 1)
+    file=$(find "$searchdir" 2>/dev/null | grep -i flash | head -n 1)
 fi
 
 if test -f "$file"; then
