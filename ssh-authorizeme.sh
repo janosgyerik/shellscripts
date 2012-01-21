@@ -55,14 +55,22 @@ eval "set -- $args"
 
 test -f "$file" || usage no such file: $file
 
+errors=
+
 for remote in "$@"; do
     echo '* 'adding $file to $remote:.ssh/authorized_keys ...
     if ssh $remote 'mkdir -p .ssh; cat >> .ssh/authorized_keys; chmod -R go-rwx .ssh' < $file; then
 	if ssh-add -L >/dev/null; then
 	    echo '* 'running ssh $remote "'date; hostname'" to verify ...
-	    ssh $remote 'date; hostname; uptime; uname -a'
+	    ssh $remote 'date; hostname; uptime; uname -a' || errors=yes
+	else
+	    errors=yes
 	fi
+    else
+	errors=yes
     fi
 done
+
+test ! $errors
 
 # eof
