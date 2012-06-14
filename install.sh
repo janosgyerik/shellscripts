@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# SCRIPT: __install.sh
+# SCRIPT: install.sh
 # AUTHOR: Janos Gyerik <info@titan2x.com>
 # DATE:   2011-08-24
 # REV:    1.0.D (Valid are A, B, D, T and P)
@@ -8,9 +8,9 @@
 #
 # PLATFORM: Not platform dependent
 #
-# PURPOSE: Install the scripts into the user's home directory.
-#	   If ~/bin exists, symlinks will be created in there.
-#	   Otherwise the target directory must be specified explicitly.
+# PURPOSE: Install the scripts into your ~/bin directory.
+#   If ~/bin exists, symlinks will be created in there.
+#   Otherwise the target directory must be specified explicitly.
 #
 # set -n   # Uncomment to check your syntax, without execution.
 #          # NOTE: Do not forget to put the comment back in or
@@ -22,7 +22,7 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
-    echo "Install the scripts into the user's home directory."
+    echo "Install the scripts into your ~/bin directory."
     echo
     echo Options:
     echo "  -d, --dir DIR  The target directory to install into, default = $dir"
@@ -65,26 +65,25 @@ eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@
 
 test "$dir" || dir=~/bin
 
-test -d "$dir" || usage 'Use -d DIR to specify target directory!'
-
+mkdir -p "$dir"
 absdir=$(cd "$dir"; pwd)
 
 cd $(dirname "$0")
 
-for f in *.sh *.pl *.awk; do
-    echo $f | grep ^_ >/dev/null && continue
+for script in bash/*.sh perl/*.pl awk/*.awk; do
+    echo $script | grep ^_ >/dev/null && continue
 
-    script=$PWD/$f
-    target=$absdir/$f
+    source=$PWD/$script
+    target=$absdir/$(basename "$script")
 
     test -f "$target" && echo rm -f $target && rm -f "$target"
 
     if test $link = on; then
-	echo link $target to $script
-	ln -snf "$script" "$target"
+        echo link $target to $source
+        ln -snf "$source" "$target"
     else
-	echo copy to $target from $script
-	cp "$target" "$script"
+        echo copy to $target from $source
+        cp "$target" "$source"
     fi
 done
 
