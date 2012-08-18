@@ -22,12 +22,13 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
-    echo "Install the scripts into your ~/bin directory."
+    echo "Install the scripts into your ~/bin directory"
     echo
     echo Options:
     echo "  -d, --dir DIR  The target directory to install into, default = $dir"
     echo "  -l, --link     Use symlinks, default = $link"
     echo "  -c, --copy     Copy instead of symlinks, default = ! $link"
+    echo "  -u, --update   Replace existing files, default = $update"
     echo
     echo "  -h, --help     Print this help"
     echo
@@ -40,6 +41,7 @@ args=
 #param=
 dir=
 link=on
+update=off
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
@@ -51,6 +53,8 @@ while [ $# != 0 ]; do
     --no-link) link=off ;;
     -c|--copy) link=off ;;
     --no-copy) link=on ;;
+    -u|--update) update=on ;;
+    --no-update) update=off ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -) usage "Unknown option: $1" ;;
     -?*) usage "Unknown option: $1" ;;
@@ -76,14 +80,16 @@ for script in bash/*.sh perl/*.pl awk/*.awk; do
     source=$PWD/$script
     target=$absdir/$(basename "$script")
 
-    test -f "$target" && echo rm -f $target && rm -f "$target"
+    test -f "$target" -a $update = on && echo rm -f $target && rm -f "$target"
 
-    if test $link = on; then
-        echo link $target to $source
-        ln -snf "$source" "$target"
-    else
-        echo copy to $target from $source
-        cp "$target" "$source"
+    if ! test -f "$target" -o -L "$target"; then
+        if test $link = on; then
+            echo link $target to $source
+            ln -snf "$source" "$target"
+        else
+            echo copy to $target from $source
+            cp "$target" "$source"
+        fi
     fi
 done
 
