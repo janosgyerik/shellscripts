@@ -22,11 +22,12 @@ usage() {
     echo "Generate a /bin/sh script template with a simple command line parser."
     echo
     echo Options:
-    echo "  -a, --author AUTHOR   Name of the author, default = $author"
-    echo "  -f, --flag FLAG       A parameter that takes no arguments"
-    echo "  -p, --param PARAM     A parameter that takes one argument"
+    echo "  -a, --author AUTHOR     Name of the author, default = $author"
+    echo "  -d, --description DESC  Description of the script, default = $description"
+    echo "  -f, --flag FLAG         A parameter that takes no arguments"
+    echo "  -p, --param PARAM       A parameter that takes one argument"
     echo
-    echo "  -h, --help            Print this help"
+    echo "  -h, --help              Print this help"
     echo
     exit 1
 }
@@ -39,7 +40,7 @@ set_longest() {
 #flag=off
 #param=
 #args=
-test "$AUTHOR" && author=$AUTHOR || author='AUTHOR <email@address.com>'
+test "$AUTHOR" && author=$AUTHOR || author="$(id -un) <$(id -un)@$(hostname)>"
 longest=5
 description='BRIEF DESCRIPTION OF THE SCRIPT'
 # options starting with "f" are flags, options starting with "p" are parameters.
@@ -92,7 +93,8 @@ cat << EOF > "$file"
 # PLATFORM: Linux only
 # PLATFORM: FreeBSD only
 #
-# PURPOSE: Give a clear, and if necessary, long, description of the
+# PURPOSE: $description
+#          Give a clear, and if necessary, long, description of the
 #          purpose of the shell script. This will also help you stay
 #          focused on the task at hand.
 #
