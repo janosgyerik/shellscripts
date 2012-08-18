@@ -68,7 +68,10 @@ done
 
 test "$file" || usage
 
-width=$(expr 8 + $longest + 1 + $longest - 2)
+#  -p, --param PARAM  A parameter that takes no arguments
+#^^^^^^^8^^^^L^^^^^L^^
+width=$(expr 8 + $longest + 1 + $longest)
+test $width -gt 40 && width=40
 
 if [ "$file" != "-" ]; then 
     test $(expr "$file" : '.*\.sh$') = 0 && file="$file.sh"
@@ -125,27 +128,28 @@ set_padding() {
 has_flags=no
 for i in $options; do 
     f=$(expr $i : '\(.\)')
-    name=$(expr $i : '.\(.*\)')
+    name=$(expr $i : '.\(.*\)' | tr _ -)
     first=$(expr $name : '\(.\)')
 
     if [ $f = f ]; then
 	# this is a flag
 	has_flags=yes
 	optionstring="  -$first, --$name"
-	echo "Adding flag -$first, --$name ..."
+	echo Adding flag: $optionstring
 	set_padding "$optionstring"
 	echo "    echo \"$optionstring$padding default = \$$name\"" >> "$file"
 	optionstring="      --no-$name"
-	echo "Adding flag --no-$name ..."
+	echo Adding flag: $optionstring
 	set_padding "$optionstring"
 	echo "    echo \"$optionstring$padding default = ! \$$name\"" >> "$file"
     else
 	# this is a param
-	pname=$(echo $name | tr a-z A-Z)
+	pname=$(echo $name | tr a-z- A-Z_)
+	dname=$(echo $name | tr - _)
 	optionstring="  -$first, --$name $pname"
-	echo "Adding param -$first, --$name ..."
+	echo Adding param: $optionstring
 	set_padding "$optionstring"
-	echo "    echo \"$optionstring$padding default = \$$name\"" >> "$file"
+	echo "    echo \"$optionstring$padding default = \$$dname\"" >> "$file"
     fi
 done
 
@@ -166,7 +170,7 @@ EOF
 
 for i in $options; do 
     f=$(expr $i : '\(.\)')
-    name=$(expr $i : '.\(.*\)')
+    name=$(expr $i : '.\(.*\)' | tr - _)
     test $f = f && echo "$name=off" >> "$file" || echo "$name=" >> "$file"
 done
 
@@ -185,15 +189,16 @@ echo "#    -p|--param) shift; param=\$1 ;;" >> "$file"
 
 for i in $options; do 
     f=$(expr $i : '\(.\)')
-    name=$(expr $i : '.\(.*\)')
+    name=$(expr $i : '.\(.*\)' | tr _ -)
+    vname=$(expr $i : '.\(.*\)' | tr - _)
     first=$(expr $name : '\(.\)')
     if [ $f = f ]; then
 	# this is a flag
-	echo "    -$first|--$name) $name=on ;;" >> "$file"
-	echo "    --no-$name) $name=off ;;" >> "$file"
+	echo "    -$first|--$name) $vname=on ;;" >> "$file"
+	echo "    --no-$name) $vname=off ;;" >> "$file"
     else
 	# this is a param
-	echo "    -$first|--$name) shift; $name=\$1 ;;" >> "$file"
+	echo "    -$first|--$name) shift; $vname=\$1 ;;" >> "$file"
     fi
 done
 
