@@ -1,8 +1,8 @@
-scripts-shell
+Shell scripts
 -------------
-My custom convenient bash, perl, awk scripts for everyday use.
+Convenient shell scripts for everyday use, written in bash, perl, awk, python.
 
-All scripts print a helpful usage message with -h or --help flag.
+All scripts print a helpful usage message when used with -h or --help
 
 
 * bash/add-stub-pl.sh
@@ -32,6 +32,10 @@ All scripts print a helpful usage message with -h or --help flag.
 * bash/capitalize.sh
 
     Capitalize words in filenames.
+
+* bash/col.sh
+
+    Extract the n-th column of stdin
 
 * bash/dos2unix.sh
 
@@ -179,7 +183,7 @@ All scripts print a helpful usage message with -h or --help flag.
 
 * perl/dbi-info.pl
 
-    TODO
+    Print the list of available DBI drivers and data sources.
 
 * perl/geoip-lookup.pl
 
@@ -204,4 +208,8 @@ All scripts print a helpful usage message with -h or --help flag.
 * awk/var.awk
 
     Compute the variance of numeric values in the input files or pipe.
+
+* python/pwgen.py
+
+    Generate random passwords
 

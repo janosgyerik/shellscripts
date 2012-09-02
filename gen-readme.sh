@@ -52,16 +52,16 @@ eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@
 
 readme=README.md
 cat <<EOF >$readme
-scripts-shell
--------------
-My custom convenient bash, perl, awk scripts for everyday use.
+Shell scripts
+=============
+Convenient shell scripts for everyday use, written in bash, perl, awk, python
 
-All scripts print a helpful usage message with -h or --help flag.
+All scripts print a helpful usage message when used with -h or --help
 
 
 EOF
 
-for script in bash/*.sh perl/*.pl awk/*.awk; do
+for script in bash/*.sh perl/*.pl awk/*.awk python/*.py; do
     usage=$(./$script -h | sed -ne '3 p')
     test "$usage" || usage=TODO
     cat <<EOF >>$readme
