@@ -74,13 +74,15 @@ absdir=$(cd "$dir"; pwd)
 
 cd $(dirname "$0")
 
-for script in bash/*.sh perl/*.pl awk/*.awk; do
+for script in bash/*.sh perl/*.pl awk/*.awk python/*.py; do
     echo $script | grep ^_ >/dev/null && continue
 
     source=$PWD/$script
     target=$absdir/$(basename "$script")
 
-    test -f "$target" -a $update = on && echo rm -f $target && rm -f "$target"
+    if test $update = on; then
+        test -f "$target" -o -L "$target" && echo rm -f "$target" && rm -f "$target"
+    fi
 
     if ! test -f "$target" -o -L "$target"; then
         if test $link = on; then
