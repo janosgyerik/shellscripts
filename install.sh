@@ -90,7 +90,7 @@ for script in bash/*.sh perl/*.pl awk/*.awk python/*.py; do
             ln -snf "$source" "$target"
         else
             echo copy to $target from $source
-            cp "$target" "$source"
+            cp "$source" "$target"
         fi
     fi
 done
