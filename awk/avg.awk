@@ -9,7 +9,6 @@
 # PLATFORM: Not platform dependent
 #
 # PURPOSE: Compute the average of numeric values in the input files or pipe. 
-#	   One number per line is expected in the input.
 #
 
 usage() {
@@ -17,18 +16,23 @@ usage() {
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
     echo Compute the average of numeric values in the input files or pipe. 
+    echo
+    echo Options:
+    echo "  -c, --col COL       Column to use, default=$col"
+    echo
+    echo '  -h, --help          Print this help'
     exit 1
 }
 
 args=
 #arg=
 #flag=off
-#param=
+col=1
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
 #    -f|--flag) flag=on ;;
-#    -p|--param) shift; param=$1 ;;
+    -c|--col) shift; col=$1 ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
@@ -40,10 +44,11 @@ done
 
 eval "set -- $args"
 
-#test -f "$1" || usage
+#test $# -gt 0 || usage
 
-awk -v sum=0 -v nr=0 '
-/^[0-9.]/ { sum += $0; ++nr; }
+#### tread carefully! this works in Solaris, but easy to break!
+awk "BEGIN {col=$col; sum=0; nr=0}"'
+$col ~ /^[0-9.]/ { sum += $col; ++nr; }
 END { print sum / nr; }
 ' $@
 
