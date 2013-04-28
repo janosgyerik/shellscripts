@@ -9,11 +9,11 @@
 # PLATFORM: Not platform dependent
 #
 # PURPOSE: Pad images with transparency to have equal width and height.
-#	   Requires ImageMagick ('convert', 'identify')
+#          Requires ImageMagick ('convert', 'identify')
 #
 # REV LIST:
-#        DATE:	DATE_of_REVISION
-#        BY:	AUTHOR_of_MODIFICATION   
+#        DATE:  DATE_of_REVISION
+#        BY:    AUTHOR_of_MODIFICATION   
 #        MODIFICATION: Describe what was modified, new features, etc-
 #
 #
@@ -92,48 +92,48 @@ for i in "$@"; do
     h=$2
     geom=
     if test "$width"; then
-	dim=$width
-	if test $w -gt $h; then
-	    if test $w -gt $dim; then
-		geom=$dim''x
-	    fi
-	elif test $w -lt $h; then
-	    if test $h -gt $dim; then
-		geom=x$dim
-	    fi
-	else
-	    if test $w = $dim; then
-		test $verbose = on && msg Image is already a square with width/height = $w, skipping ...
-		continue
-	    else
-		geom=x$dim
-	    fi
-	fi
+        dim=$width
+        if test $w -gt $h; then
+            if test $w -gt $dim; then
+                geom=$dim''x
+            fi
+        elif test $w -lt $h; then
+            if test $h -gt $dim; then
+                geom=x$dim
+            fi
+        else
+            if test $w = $dim; then
+                test $verbose = on && msg Image is already a square with width/height = $w, skipping ...
+                continue
+            else
+                geom=x$dim
+            fi
+        fi
     else
-	if test $w -gt $h; then
-	    dim=$w
-	elif test $w -lt $h; then
-	    dim=$h
-	else
-	    test $verbose = on && msg Image is already a square with width/height = $w, skipping ...
-	    continue
-	fi
+        if test $w -gt $h; then
+            dim=$w
+        elif test $w -lt $h; then
+            dim=$h
+        else
+            test $verbose = on && msg Image is already a square with width/height = $w, skipping ...
+            continue
+        fi
     fi
     if test "$outdir"; then
-	canvas=$outdir/$(basename "$i")-canvas.png
-	square=$outdir/$(basename "$i")-square.png
-	resized=$outdir/$(basename "$i")-resized.png
-	out=$outdir/$(basename "$i")
+        canvas=$outdir/$(basename "$i")-canvas.png
+        square=$outdir/$(basename "$i")-square.png
+        resized=$outdir/$(basename "$i")-resized.png
+        out=$outdir/$(basename "$i")
     else
-	canvas="$i"-canvas.png
-	square="$i"-square.png
-	resized="$i"-resized.png
-	out="$i"
+        canvas="$i"-canvas.png
+        square="$i"-square.png
+        resized="$i"-resized.png
+        out="$i"
     fi
     if test "$geom"; then
-	geometry="-geometry $geom"
+        geometry="-geometry $geom"
     else
-	geometry=
+        geometry=
     fi
     test $verbose = on && msg Creating temporary square image : $square
     composite -gravity center \( "$i" $geometry \) \( -size $dim''x$dim xc:$bg \) "$square"
