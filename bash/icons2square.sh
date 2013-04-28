@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 #
 # SCRIPT: icons2square.sh
 # AUTHOR: Janos Gyerik <janos.gyerik@gmail.com>
@@ -84,7 +84,7 @@ msg() {
 
 for i in "$@"; do
     test -f "$i" || continue
-    wxh=$(identify "$i" 2>/dev/null | grep -o '[0-9]*x[0-9]*' | head -n 1)
+    wxh=$(identify "$i" 2>/dev/null | sed -ne 's/.* \([0-9][0-9]*x[0-9][0-9]*\) .*/\1/ p' | head -n 1)
     test "$wxh" || continue
     msg Processing $i ...
     set -- $(echo $wxh | tr x ' ')
