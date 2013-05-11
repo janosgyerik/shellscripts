@@ -98,7 +98,7 @@ case $command in
                 warnings=
                 pending=
                 (cd $repo; git remote | grep -x origin >/dev/null) || warn 'origin not defined'
-                (cd $repo; grep remote.*=.*origin .git/config >/dev/null) || warn 'origin not set as upstream'
+                (cd $repo; grep remote.*=.*origin .git/config >/dev/null) || warn 'origin not set as upstream; git branch --set-upstream master origin/master'
                 (cd $repo; git symbolic-ref HEAD | grep -x refs/heads/master >/dev/null) || warn 'not on master branch'
                 (cd $repo; git status | grep 'Your branch is ahead of' >/dev/null) && warn 'ahead of tracked branch'
                 (cd $repo; git status | grep 'Changes to be committed' >/dev/null) && warn 'staged but uncommitted changes' && pending=1
