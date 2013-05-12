@@ -8,7 +8,7 @@
 #
 # PLATFORM: Not platform dependent
 #
-# PURPOSE: Take the screenshot of the entire screen or a window.
+# PURPOSE: Take a screenshot of the entire screen or a window.
 #
 # set -n   # Uncomment to check your syntax, without execution.
 #          # NOTE: Do not forget to put the comment back in or
@@ -18,16 +18,16 @@
 
 usage() {
     test "$1" && echo $@
-    echo "Usage: $0 [OPTION]... [ARG]..."
+    echo "Usage: $0 [OPTION]..."
     echo
-    echo Take the screenshot of the entire screen or a window.
+    echo Take a screenshot of the entire screen or a window.
     echo
     echo Options:
-    echo '  -o, --out OUT		Save screenshot to OUT, default = '$out
-    echo '  -w, --window		Take screenshot of a window'
-    echo '  -r, --root		Take screenshot of the entire screen'
+    echo '  -o, --out OUT       Save screenshot to OUT, default = '$out
+    echo '  -w, --window        Take screenshot of a window'
+    echo '  -r, --root          Take screenshot of the entire screen'
     echo
-    echo '  -h, --help		Print this help'
+    echo '  -h, --help          Print this help'
     exit 1
 }
 
@@ -68,9 +68,9 @@ xwd -out "$out" $xwd_param
 ext=$(echo $out | grep -o ...$)
 if test "$ext" != xwd; then
     if ! type mogrify >/dev/null 2>/dev/null; then
-	echo "Error: the program 'mogrify' is not installed or not in PATH"
-	echo To convert the screenshot file from XWD to other formats, install ImageMagick.
-	exit 1
+        echo "Error: the program 'mogrify' is not installed or not in PATH"
+        echo To convert the screenshot file from XWD to other formats, install ImageMagick.
+        exit 1
     fi
     mogrify $out
 fi
