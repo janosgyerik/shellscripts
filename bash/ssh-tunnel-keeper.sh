@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # SCRIPT: ssh-tunnel-keeper.sh
-# AUTHOR: Janos Gyerik <janos.gyerik@gmail.com>
+# AUTHOR: Janos Gyerik <info@janosgyerik.com>
 # DATE:   2005-08-17
 # REV:    1.0.D (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)

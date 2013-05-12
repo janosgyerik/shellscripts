@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # SCRIPT: template-sh.sh
-# AUTHOR: Janos Gyerik <janos.gyerik@gmail.com>
+# AUTHOR: Janos Gyerik <info@janosgyerik.com>
 # DATE:   2005-08-11
 # REV:    1.0.T (Valid are A, B, D, T and P)
 #

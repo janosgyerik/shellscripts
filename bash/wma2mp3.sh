@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # SCRIPT: wav2mp3.sh
-# AUTHOR: Janos Gyerik <janos.gyerik@gmail.com>
+# AUTHOR: Janos Gyerik <info@janosgyerik.com>
 # DATE:   2006-08-26
 # REV:    1.0.T (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)

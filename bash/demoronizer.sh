@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # SCRIPT: demoronizer.sh
-# AUTHOR: Janos Gyerik <info@titan2x.com>
+# AUTHOR: Janos Gyerik <info@janosgyerik.com>
 # DATE:   2012-11-01
 # REV:    1.0.D (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)

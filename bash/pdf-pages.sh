@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # SCRIPT: pdf-pages.sh
-# AUTHOR: Janos Gyerik <janos.gyerik@gmail.com>
+# AUTHOR: Janos Gyerik <info@janosgyerik.com>
 # DATE:   2008-07-07
 # REV:    1.0.D (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)

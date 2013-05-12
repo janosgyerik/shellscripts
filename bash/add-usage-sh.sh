@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # SCRIPT: add-usage-sh.sh
-# AUTHOR: Janos Gyerik <janos.gyerik@gmail.com>
+# AUTHOR: Janos Gyerik <info@janosgyerik.com>
 # DATE:   2005-08-23
 # REV:    1.0.T (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)
