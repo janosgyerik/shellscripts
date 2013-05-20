@@ -3,7 +3,6 @@
 from optparse import OptionParser
 import random
 import string
-import sys
 import re
 
 t_width = 80
