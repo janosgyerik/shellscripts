@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 '''
 todo:
-    handle ' - '
     correctly associate subtitle files with movies
     push.avi.srt sanitized as push avi ???
     --acr option to not rename specified acronyms
@@ -18,7 +17,7 @@ import os
 import re
 import argparse
 
-nameformat_re = re.compile(r'([A-Z0-9][\w,\-\']*)( [A-Z0-9][\w,\-\']*)*( \{\d\d\d\d\})?( CD\d)?$')
+nameformat_re = re.compile(r'([A-Z0-9][\w,\-\']*)(( -)|( [A-Z0-9][\w,\-\']*))*( \{\d\d\d\d\})?( CD\d)?$')
 year_re = re.compile(r'\b\d{4}\b')
 year_re = re.compile(r'\d{4}\b')
 remove_year_re = re.compile(r'\W*\d{4}\W*')
