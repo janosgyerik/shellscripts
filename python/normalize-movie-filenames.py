@@ -63,6 +63,7 @@ def sanitize(name):
         year = None
 
     name = name.replace('_', ' ')
+    name = name.replace('&', 'And')
     name = re.sub(r'[^\w,\-\']+', ' ', name).title().replace("'S", "'s")
 
     if year:
