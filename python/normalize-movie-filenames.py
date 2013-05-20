@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 '''
 todo:
-    correctly associate subtitle files with movies
     push.avi.srt sanitized as push avi ???
     --acr option to not rename specified acronyms
     work with single file args too not just dirs
@@ -46,7 +45,7 @@ blahdirs = (
     )
 
 # all lowercase!
-extensions = ('.avi', '.srt', '.mp4', '.mkv')
+extensions = ('.avi', '.srt', '.sub', '.mp4', '.mkv')
 
 unmatched = []
 
