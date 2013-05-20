@@ -139,6 +139,6 @@ for path in args.paths:
     sanitize_path(args, path)
 
 for path in unmatched:
-    print '#', path
+    print '# unmatched:', path
 
 # eof
