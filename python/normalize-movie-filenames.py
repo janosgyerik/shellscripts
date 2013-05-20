@@ -148,6 +148,7 @@ else:
 nameformat_re = re.compile(nameformat_re_str, nameformat_re_flags)
 
 for path in args.paths:
+    path = os.path.normpath(path)
     sanitize_path(args, path)
 
 for path in unmatched:
