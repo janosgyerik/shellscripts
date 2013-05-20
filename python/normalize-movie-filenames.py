@@ -96,7 +96,8 @@ def sanitize_path(args, path):
                         print
                 else:
                     sanitized_by_name = sanitize(basename)
-                    print '# sanitized by name:', sanitized_by_name
+                    if not args.quiet:
+                        print '# sanitized by name:', sanitized_by_name
 
                     dirname = os.path.basename(dirpath)
                     if cdformat_re.match(dirname):
@@ -107,7 +108,8 @@ def sanitize_path(args, path):
                     sanitized_by_dir = sanitize(dirname)
                     if cdname:
                         sanitized_by_dir += ' ' + cdname
-                    print '# sanitized by dir:', sanitized_by_dir
+                    if not args.quiet:
+                        print '# sanitized by dir:', sanitized_by_dir
 
                     if nameformat_re.match(sanitized_by_dir):
                         newname = sanitized_by_dir + ext.lower()
