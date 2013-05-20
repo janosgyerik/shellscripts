@@ -117,12 +117,12 @@ def sanitize_path(args, path):
                         newname = sanitized_by_dir + ext.lower()
                         print_rename(filepath, newname)
                         if dirpath != path:
-                            print_cleanup(filepath, newname)
+                            print_cleanup(dirpath)
                     elif nameformat_re.match(sanitized_by_name):
                         newname = sanitized_by_name + ext.lower()
                         print_rename(filepath, newname)
                         if dirpath != path:
-                            print_cleanup(filepath, newname)
+                            print_cleanup(dirpath)
                     else:
                         print '# ERROR: could not sanitize "%s"' % filepath
                         print '# -> "%s" ?' % sanitized_by_name
