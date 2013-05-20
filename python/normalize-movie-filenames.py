@@ -21,7 +21,7 @@ nameformat_re_str = r'([A-Z0-9][\w,\-\']*)(( -)|( [A-Z0-9][\w,\-\']*))*( \{\d\d\
 year_re = re.compile(r'\b\d{4}\b')
 year_re = re.compile(r'\d{4}\b')
 remove_year_re = re.compile(r'\W*\d{4}\W*')
-cdformat_re = re.compile(r'^cd[12]$', re.I)
+cdformat_re = re.compile(r'^cd[12]$', re.IGNORECASE)
 
 # all lowercase!
 garbages = (
@@ -53,7 +53,7 @@ unmatched = []
 
 def sanitize(name):
     for garbage in garbages:
-        name = re.sub('\W*%s.*' % garbage, '', name, flags=re.I)
+        name = re.sub('\W*%s.*' % garbage, '', name, flags=re.IGNORECASE)
 
     tmp = year_re.findall(name)
     if tmp:
@@ -137,7 +137,7 @@ parser.add_argument('--ignorecase', '-i', action='store_true')
 args = parser.parse_args()
 
 if args.ignorecase:
-    nameformat_re_flags = re.I
+    nameformat_re_flags = re.IGNORECASE
 else:
     nameformat_re_flags = 0
 nameformat_re = re.compile(nameformat_re_str, nameformat_re_flags)
