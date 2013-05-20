@@ -20,11 +20,10 @@ import os
 import re
 import argparse
 
-nameformat_re = re.compile(r'([A-Z0-9][\w]*)( [A-Z0-9][\w]*)*( \{\d\d\d\d\})?( CD\d)?$')
+nameformat_re = re.compile(r'([A-Z0-9][\w,\-\']*)( [A-Z0-9][\w,\-\']*)*( \{\d\d\d\d\})?( CD\d)?$')
 year_re = re.compile(r'\b\d{4}\b')
 year_re = re.compile(r'\d{4}\b')
 remove_year_re = re.compile(r'\W*\d{4}\W*')
-firstletter_re = re.compile(r'\b[a-z]')
 cdformat_re = re.compile(r'^cd[12]$', re.I)
 
 # all lowercase!
@@ -66,7 +65,7 @@ def sanitize(name):
     else:
         year = None
 
-    name = re.sub(r'\W+', ' ', name).title()
+    name = re.sub(r'[^\w,\-\']+', ' ', name).title().replace("'S", "'s")
 
     if year:
         return '%s {%s}' % (name, year)
