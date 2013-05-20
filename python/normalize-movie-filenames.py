@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 '''
 todo:
-    push.avi.srt sanitized as push avi ???
     --acr option to not rename specified acronyms
     work with single file args too not just dirs
     detect series = more than 3 movie files in a dir
@@ -45,7 +44,8 @@ blahdirs = (
     )
 
 # all lowercase!
-extensions = ('.avi', '.srt', '.sub', '.mp4', '.mkv')
+mov_extensions = ('.avi', '.mp4', '.mkv', )
+sub_extensions = ('.srt', '.sub', )
 
 unmatched = []
 
@@ -87,7 +87,11 @@ def sanitize_path(args, path):
         for filename in filenames:
             filepath = os.path.join(dirpath, filename)
             (basename, ext) = os.path.splitext(filename)
-            if ext.lower() in extensions:
+            if ext.lower() in mov_extensions + sub_extensions:
+                if ext.lower() in sub_extensions:
+                    (tmp_basename, tmp_ext) = os.path.splitext(basename)
+                    if tmp_ext.lower() in mov_extensions:
+                        basename = tmp_basename
                 oldname = basename + ext
                 if nameformat_re.match(basename):
                     if not args.quiet:
