@@ -1,19 +1,17 @@
 #!/usr/bin/env python
 '''
 todo:
-detect movies, with files that belong together
-detect series = more than 3 movie files
-for each file
-    strip extension
-    strip cdN
-    check the number of files with prefix to detect multi-cd and subtitles
-        if multi-cd, print the command to concatenate
-    normalize the name
-        of srt too
-        of multi-cd too
-        save the date if any
-        use date in the format {YYYY}
-        changes needed?
+    handle ' - '
+    correctly associate subtitle files with movies
+    push.avi.srt sanitized as push avi ???
+    --acr option to not rename specified acronyms
+    work with single file args too not just dirs
+    detect series = more than 3 movie files in a dir
+    fetch date if missing
+    detect duplicate files with date and no date
+    detect multicd files that have been concatenated
+    limit option for easier review
+    skip option for easier review
 '''
 
 import os
