@@ -2,6 +2,7 @@
 '''
 todo:
     --acr option to not rename specified acronyms
+    support for subtitle files in the same dir before cleaning up
     work with single file args too not just dirs
     detect series = more than 3 movie files in a dir
     fetch date if missing
@@ -61,6 +62,7 @@ def sanitize(name):
     else:
         year = None
 
+    name = name.replace('_', ' ')
     name = re.sub(r'[^\w,\-\']+', ' ', name).title().replace("'S", "'s")
 
     if year:
