@@ -17,7 +17,7 @@ import os
 import re
 import argparse
 
-nameformat_re = re.compile(r'([A-Z0-9][\w,\-\']*)(( -)|( [A-Z0-9][\w,\-\']*))*( \{\d\d\d\d\})?( CD\d)?$')
+nameformat_re_str = r'([A-Z0-9][\w,\-\']*)(( -)|( [A-Z0-9][\w,\-\']*))*( \{\d\d\d\d\})?( CD\d)?$'
 year_re = re.compile(r'\b\d{4}\b')
 year_re = re.compile(r'\d{4}\b')
 remove_year_re = re.compile(r'\W*\d{4}\W*')
@@ -132,8 +132,16 @@ def sanitize_path(args, path):
 parser = argparse.ArgumentParser(description='Normalize movie filenames')
 parser.add_argument('paths', nargs='+')
 parser.add_argument('--quiet', '-q', action='store_true')
+parser.add_argument('--ignorecase', '-i', action='store_true')
 
 args = parser.parse_args()
+
+if args.ignorecase:
+    nameformat_re_flags = re.I
+else:
+    nameformat_re_flags = 0
+nameformat_re = re.compile(nameformat_re_str, nameformat_re_flags)
+
 for path in args.paths:
     sanitize_path(args, path)
 
