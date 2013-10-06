@@ -9,7 +9,7 @@
 # PLATFORM: Not platform dependent
 #
 # PURPOSE: Compute the variance of numeric values in the input files or pipe. 
-#	   One number per line is expected in the input.
+#      One number per line is expected in the input.
 #
 
 usage() {
