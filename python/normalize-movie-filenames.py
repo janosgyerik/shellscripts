@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 '''
 todo:
+    fix files with date not in the right format
     --acr option to not rename specified acronyms
     support for subtitle files in the same dir before cleaning up
     work with single file args too not just dirs
