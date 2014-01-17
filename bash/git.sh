@@ -23,11 +23,14 @@ usage() {
     echo "Perform repository operations on a tree of Git repositories"
     echo
     echo "Options:"
+    echo "      --fetch                 do 'git fetch'"
+    echo
     echo "  -h, --help                  Print this help"
     echo
     echo "Commands:"
     echo "  list                        List repositories"
     echo "  pending                     Show repositories with possible pending changes"
+    echo "  outdated                    Show repositories that are out of date"
     echo
     exit 1
 }
@@ -44,11 +47,13 @@ normalpath() {
 args=
 #arg=
 #flag=off
+fetch=off
 #param=
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
 #    -f|--flag) flag=on ;;
+    --fetch) fetch=on ;;
 #    -p|--param) shift; param=$1 ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
@@ -106,6 +111,20 @@ case $command in
                 (cd $repo; git status | grep 'Untracked files' >/dev/null) && warn 'untracked files' && pending=1
                 test "$pending" || (cd $repo; git status | grep 'working directory clean' >/dev/null) || warn 'other (??) pending changes'
                 test "$printed_heading" && echo
+            done
+        done
+        ;;
+    outdated)
+        for dir; do
+            test -d "$dir" || continue
+            for repo in $(repolistcmd "$dir"); do
+                test $fetch = on && GIT_DIR=$repo/.git git fetch origin >/dev/null 2>/dev/null
+                behind=$(GIT_DIR=$repo/.git git status | sed -ne 's/.* behind .* by \([0-9]*\) commit.*/\1/p')
+                if test "$behind"; then
+                    echo Repo: $repo
+                    echo '  [W] behind by '$behind' commit(s)'
+                    echo
+                fi
             done
         done
         ;;
