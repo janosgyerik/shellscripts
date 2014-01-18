@@ -104,6 +104,10 @@ repo_end() {
     test "$printed_heading" && echo
 }
 
+_git() {
+    GIT_DIR="$repo"/.git GIT_WORK_TREE="$repo" git $*
+}
+
 case $command in
     list)
         repolist "$@"
@@ -112,14 +116,14 @@ case $command in
         repolist "$@" | while read repo; do
             repo_start
             pending=
-            (cd $repo; git remote | grep -x origin >/dev/null) || warn 'origin not defined'
-            (cd $repo; grep remote.*=.*origin .git/config >/dev/null) || warn 'origin not set as upstream; git branch --set-upstream-to origin/master'
-            (cd $repo; git symbolic-ref HEAD | grep -x -e refs/heads/master -e refs/heads/gh-pages >/dev/null) || warn 'not on master or gh-pages'
-            (cd $repo; git status | grep 'Your branch is ahead of' >/dev/null) && warn 'ahead of tracked branch'
-            (cd $repo; git status | grep 'Changes to be committed' >/dev/null) && warn 'staged but uncommitted changes' && pending=1
-            (cd $repo; git status | grep 'Changes not staged' >/dev/null) && warn 'unstaged pending changes' && pending=1
-            (cd $repo; git status | grep 'Untracked files' >/dev/null) && warn 'untracked files' && pending=1
-            test "$pending" || (cd $repo; git status | grep 'working directory clean' >/dev/null) || warn 'other (??) pending changes'
+            _git remote | grep -x origin >/dev/null || warn 'origin not defined'
+            #(cd $repo; grep remote.*=.*origin .git/config >/dev/null) || warn 'origin not set as upstream; git branch --set-upstream-to origin/master'
+            _git symbolic-ref HEAD | grep -x -e refs/heads/master -e refs/heads/gh-pages >/dev/null || warn 'not on master or gh-pages'
+            _git status | grep 'Your branch is ahead of' >/dev/null && warn 'ahead of tracked branch'
+            _git status | grep 'Changes to be committed' >/dev/null && warn 'staged but uncommitted changes' && pending=1
+            _git status | grep 'Changes not staged' >/dev/null && warn 'unstaged pending changes' && pending=1
+            _git status | grep 'Untracked files' >/dev/null && warn 'untracked files' && pending=1
+            test "$pending" || _git status | grep 'working directory clean' >/dev/null || warn 'other (??) pending changes'
             repo_end
         done
         ;;
@@ -127,7 +131,7 @@ case $command in
         repolist "$@" | while read repo; do
             repo_start
             test $fetch = on && GIT_DIR=$repo/.git git fetch origin >/dev/null 2>/dev/null
-            behind=$(GIT_DIR="$repo"/.git git status | sed -ne 's/.* behind .* by \([0-9]*\) commit.*/\1/p')
+            behind=$(_git status | sed -ne 's/.* behind .* by \([0-9]*\) commit.*/\1/p')
             test "$behind" && warn "behind by $behind commit(s)"
             repo_end
         done
