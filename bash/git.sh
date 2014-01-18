@@ -35,11 +35,6 @@ usage() {
     exit 1
 }
 
-fatal() {
-    echo Fatal: "$@"
-    exit 1
-}
-
 args=
 #arg=
 #flag=off
