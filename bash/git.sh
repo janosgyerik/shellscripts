@@ -30,6 +30,7 @@ usage() {
     echo "  pending                     Show repositories with possible pending changes"
     echo "  behind                      Show repositories that are behind"
     echo "  fetch                       Do 'git fetch origin'"
+    echo "  pull                        Do 'git pull'"
     echo
     exit 1
 }
