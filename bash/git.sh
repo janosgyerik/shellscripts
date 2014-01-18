@@ -30,7 +30,7 @@ usage() {
     echo "Commands:"
     echo "  list                        List repositories"
     echo "  pending                     Show repositories with possible pending changes"
-    echo "  outdated                    Show repositories that are out of date"
+    echo "  behind                      Show repositories that are behind"
     echo
     exit 1
 }
@@ -127,7 +127,7 @@ case $command in
             repo_end
         done
         ;;
-    outdated)
+    behind)
         repolist "$@" | while read repo; do
             repo_start
             test $fetch = on && GIT_DIR=$repo/.git git fetch origin >/dev/null 2>/dev/null
