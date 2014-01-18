@@ -40,10 +40,6 @@ fatal() {
     exit 1
 }
 
-normalpath() {
-    echo $1 | sed -e 's?//*?/?g' -e 's?/*$??'
-}
-
 args=
 #arg=
 #flag=off
