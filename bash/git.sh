@@ -23,14 +23,13 @@ usage() {
     echo "Perform repository operations on a tree of Git repositories"
     echo
     echo "Options:"
-    echo "      --fetch                 do 'git fetch'"
-    echo
     echo "  -h, --help                  Print this help"
     echo
     echo "Commands:"
     echo "  list                        List repositories"
     echo "  pending                     Show repositories with possible pending changes"
     echo "  behind                      Show repositories that are behind"
+    echo "  fetch                       Do 'git fetch origin'"
     echo
     exit 1
 }
@@ -47,13 +46,11 @@ normalpath() {
 args=
 #arg=
 #flag=off
-fetch=off
 #param=
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
 #    -f|--flag) flag=on ;;
-    --fetch) fetch=on ;;
 #    -p|--param) shift; param=$1 ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
@@ -127,10 +124,17 @@ case $command in
             repo_end
         done
         ;;
+    fetch)
+        repolist "$@" | while read repo; do
+            repo_start
+            print_heading
+            _git fetch origin >/dev/null 2>/dev/null
+            repo_end
+        done
+        ;;
     behind)
         repolist "$@" | while read repo; do
             repo_start
-            test $fetch = on && GIT_DIR=$repo/.git git fetch origin >/dev/null 2>/dev/null
             behind=$(_git status | sed -ne 's/.* behind .* by \([0-9]*\) commit.*/\1/p')
             test "$behind" && warn "behind by $behind commit(s)"
             repo_end
