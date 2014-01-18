@@ -132,6 +132,14 @@ case $command in
             repo_end
         done
         ;;
+    pull)
+        repolist "$@" | while read repo; do
+            repo_start
+            print_heading
+            (cd "$repo" && git pull)
+            repo_end
+        done
+        ;;
     behind)
         repolist "$@" | while read repo; do
             repo_start
