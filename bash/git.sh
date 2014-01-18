@@ -84,19 +84,24 @@ END
 
 command=$1; shift
 
+print_heading() {
+    if ! test "$printed_heading"; then
+        echo Repo: $repo
+        printed_heading=1
+    fi
+}
+
+warn() {
+    print_heading
+    warnings=1
+    echo '  [W]' $*
+}
+
 case $command in
     list)
         repolist "$@"
         ;;
     pending)
-        warn() {
-            if ! test "$printed_heading"; then
-                echo Repo: $repo
-                printed_heading=1
-            fi
-            warnings=1
-            echo '  [W]' $*
-        }
         for dir; do
             test -d "$dir" || continue
             for repo in $(repolist "$dir"); do
@@ -116,17 +121,12 @@ case $command in
         done
         ;;
     outdated)
-        for dir; do
-            test -d "$dir" || continue
-            for repo in $(repolist "$dir"); do
-                test $fetch = on && GIT_DIR=$repo/.git git fetch origin >/dev/null 2>/dev/null
-                behind=$(GIT_DIR=$repo/.git git status | sed -ne 's/.* behind .* by \([0-9]*\) commit.*/\1/p')
-                if test "$behind"; then
-                    echo Repo: $repo
-                    echo '  [W] behind by '$behind' commit(s)'
-                    echo
-                fi
-            done
+        repolist "$@" | while read repo; do
+            printed_heading=
+            test $fetch = on && GIT_DIR=$repo/.git git fetch origin >/dev/null 2>/dev/null
+            behind=$(GIT_DIR="$repo"/.git git status | sed -ne 's/.* behind .* by \([0-9]*\) commit.*/\1/p')
+            test "$behind" && warn "behind by $behind commit(s)"
+            test "$printed_heading" && echo
         done
         ;;
     *) usage ;;
