@@ -67,12 +67,16 @@ done
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@
 
 repolistcmd() {
-    python - <<END
-import os
-for path, dirs, files in os.walk('$1'):
-    if '.git' in dirs:
-        del dirs[:]
-        print path
+    dir="$1" perl <<"END"
+use File::Find;
+find(\&wanted, $ENV{dir});
+sub wanted {
+    if (-d "$_/.git") {
+        $File::Find::prune = 1;
+        print $File::Find::dir, "/$_\n";
+        return;
+    }
+}
 END
 }
 
