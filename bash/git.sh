@@ -71,8 +71,6 @@ END
     done
 }
 
-command=$1; shift
-
 repo_start() {
     repo_heading_printed=
 }
@@ -96,6 +94,8 @@ warn() {
 _git() {
     GIT_DIR="$repo"/.git GIT_WORK_TREE="$repo" git $*
 }
+
+command=$1; shift
 
 case $command in
     list)
