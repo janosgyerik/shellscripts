@@ -73,24 +73,24 @@ END
 
 command=$1; shift
 
-print_heading() {
-    if ! test "$printed_heading"; then
+repo_start() {
+    repo_heading_printed=
+}
+
+repo_end() {
+    test "$repo_heading_printed" && echo
+}
+
+repo_heading() {
+    if ! test "$repo_heading_printed"; then
         echo Repo: $repo
-        printed_heading=1
+        repo_heading_printed=1
     fi
 }
 
 warn() {
-    print_heading
+    repo_heading
     echo '  [W]' $*
-}
-
-repo_start() {
-    printed_heading=
-}
-
-repo_end() {
-    test "$printed_heading" && echo
 }
 
 _git() {
@@ -129,7 +129,7 @@ case $command in
     fetch)
         repolist "$@" | while read repo; do
             repo_start
-            print_heading
+            repo_heading
             _git fetch origin >/dev/null 2>/dev/null
             repo_end
         done
@@ -137,7 +137,7 @@ case $command in
     pull)
         repolist "$@" | while read repo; do
             repo_start
-            print_heading
+            repo_heading
             (cd "$repo" && git pull)
             repo_end
         done
