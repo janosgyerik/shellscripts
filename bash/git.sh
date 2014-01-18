@@ -124,6 +124,16 @@ case $command in
             repo_end
         done
         ;;
+    behind)
+        repolist "$@" | while read repo; do
+            repo_start
+            behind=$(_git status | sed -ne 's/.* behind .* by \([0-9]*\) commit.*/\1/p')
+            diverged=$(_git status | grep diverged)
+            test "$behind" && warn "behind by $behind commit(s)"
+            test "$diverged" && warn "diverged from origin"
+            repo_end
+        done
+        ;;
     fetch)
         repolist "$@" | while read repo; do
             repo_start
@@ -137,16 +147,6 @@ case $command in
             repo_start
             print_heading
             (cd "$repo" && git pull)
-            repo_end
-        done
-        ;;
-    behind)
-        repolist "$@" | while read repo; do
-            repo_start
-            behind=$(_git status | sed -ne 's/.* behind .* by \([0-9]*\) commit.*/\1/p')
-            diverged=$(_git status | grep diverged)
-            test "$behind" && warn "behind by $behind commit(s)"
-            test "$diverged" && warn "diverged from origin"
             repo_end
         done
         ;;
