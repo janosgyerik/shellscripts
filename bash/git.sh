@@ -66,7 +66,7 @@ done
 
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@
 
-repolistcmd() {
+repolist() {
     dir="$1" perl <<"END"
 use File::Find;
 find(\&wanted, $ENV{dir});
@@ -86,7 +86,7 @@ case $command in
     list)
         for dir; do
             test -d "$dir" || continue
-            for repo in $(repolistcmd "$dir"); do
+            for repo in $(repolist "$dir"); do
                 echo $repo
             done
         done
@@ -102,7 +102,7 @@ case $command in
         }
         for dir; do
             test -d "$dir" || continue
-            for repo in $(repolistcmd "$dir"); do
+            for repo in $(repolist "$dir"); do
                 printed_heading=
                 warnings=
                 pending=
@@ -121,7 +121,7 @@ case $command in
     outdated)
         for dir; do
             test -d "$dir" || continue
-            for repo in $(repolistcmd "$dir"); do
+            for repo in $(repolist "$dir"); do
                 test $fetch = on && GIT_DIR=$repo/.git git fetch origin >/dev/null 2>/dev/null
                 behind=$(GIT_DIR=$repo/.git git status | sed -ne 's/.* behind .* by \([0-9]*\) commit.*/\1/p')
                 if test "$behind"; then
