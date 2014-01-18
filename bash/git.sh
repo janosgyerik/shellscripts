@@ -67,7 +67,8 @@ done
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@
 
 repolist() {
-    dir="$1" perl <<"END"
+    for dir; do
+        dir="$dir" perl << "END"
 use File::Find;
 find(\&wanted, $ENV{dir});
 sub wanted {
@@ -78,18 +79,14 @@ sub wanted {
     }
 }
 END
+    done
 }
 
 command=$1; shift
 
 case $command in
     list)
-        for dir; do
-            test -d "$dir" || continue
-            for repo in $(repolist "$dir"); do
-                echo $repo
-            done
-        done
+        repolist "$@"
         ;;
     pending)
         warn() {
