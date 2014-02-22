@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 #
 # SCRIPT: bak.sh
 # AUTHOR: Janos Gyerik <janos.gyerik@gmail.com>
@@ -23,7 +23,7 @@
 #          
 
 usage() {
-    test $# = 0 || echo $@
+    test $# = 0 || echo "$@"
     echo "Usage: $0 [OPTION]..."
     echo
     echo "Move or copy files and directories with .bak or .YYYYMMDD suffix"
