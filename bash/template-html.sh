@@ -17,7 +17,7 @@
 #
 
 usage() {
-    test $# = 0 || echo $@
+    test $# = 0 || echo "$@"
     echo "Usage: $0 [OPTION]... FILENAME"
     echo
     echo "Create a standards compliant HTML skeleton."
