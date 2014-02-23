@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # SCRIPT: template-sh.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
@@ -16,7 +16,7 @@
 #          
 
 usage() {
-    test $# = 0 || echo $@
+    test $# = 0 || echo "$@"
     echo "Usage: $0 [OPTION]... FILENAME"
     echo
     echo "Generate a /bin/sh script template with a simple command line parser."
@@ -33,8 +33,8 @@ usage() {
 }
 
 set_longest() {
-    l=$(echo $1 | wc -c)
-    test $l -gt $longest && longest=$l
+    len=${#1}
+    test $len -gt $longest && longest=$len
 }
 
 #flag=off
@@ -43,10 +43,10 @@ set_longest() {
 test "$AUTHOR" && author=$AUTHOR || author="$(id -un) <$(id -un)@$(hostname)>"
 longest=5
 description='BRIEF DESCRIPTION OF THE SCRIPT'
-# options starting with "f" are flags, options starting with "p" are parameters.
+# options starting with "f" are flags, "p" are parameters.
 options=
 file=
-while [ $# != 0 ]; do
+while test $# != 0; do
     case $1 in
     -h|--help) usage ;;
 #    -f|--flag) flag=on ;;
@@ -56,7 +56,7 @@ while [ $# != 0 ]; do
     -d|--description) shift; description="$1" ;;
     -f|--flag) shift; options="$options f$1"; set_longest $1 ;;
     -p|--param) shift; options="$options p$1"; set_longest $1 ;;
-#    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
+#    --) shift; while test $# != 0; do args="$args \"$1\""; shift; done; break ;;
 #    -) usage "Unknown option: $1" ;;
     -?*) usage "Unknown option: $1" ;;
 #    *) args="$args \"$1\"" ;;  # script that takes multiple arguments
@@ -70,11 +70,11 @@ test "$file" || usage
 
 #  -p, --param PARAM  A parameter that takes no arguments
 #^^^^^^^8^^^^L^^^^^L^^
-width=$(expr 8 + $longest + 1 + $longest)
+width=$((8 + longest + 2 + longest))
 test $width -gt 40 && width=40
 
-if [ "$file" != "-" ]; then 
-    test $(expr "$file" : '.*\.sh$') = 0 && file="$file.sh"
+if test "$file" != "-"; then
+    [[ "$file" == *.sh ]] || file="$file".sh
 else
     file=/tmp/.template-sh.$$
     test=1
@@ -84,7 +84,7 @@ echo "Creating \"$file\" ..."
 trap 'rm -f "$file"; exit 1' 1 2 3 15
 
 cat << EOF > "$file"
-#!/bin/sh
+#!/bin/sh -e
 #
 # SCRIPT: $(basename "$file")
 # AUTHOR: $author
@@ -108,7 +108,7 @@ cat << EOF > "$file"
 #
 
 usage() {
-    test \$# = 0 || echo \$@
+    test \$# = 0 || echo "\$@"
     echo "Usage: \$0 [OPTION]... [ARG]..."
     echo
     echo $description
@@ -117,39 +117,34 @@ usage() {
 EOF
 
 set_padding() {
-    padding=
-    j=$(echo "$1" | wc -c)
-    while [ $j -lt $width ]; do
-	padding="$padding "
-	j=$(expr $j + 1)
-    done
+    len=${#1}
+    padding=$(printf %$((width - len))s '')
 }
 
-has_flags=no
 for i in $options; do 
-    f=$(expr $i : '\(.\)')
-    name=$(expr $i : '.\(.*\)' | tr _ -)
-    first=$(expr $name : '\(.\)')
+    f=${i:0:1}
+    name=${i:1}
+    vname=${name//-/_}
+    oname=${name//_/-}
+    first=${name:0:1}
 
-    if [ $f = f ]; then
-	# this is a flag
-	has_flags=yes
-	optionstring="  -$first, --$name"
-	echo Adding flag: $optionstring
-	set_padding "$optionstring"
-	echo "    echo \"$optionstring$padding default = \$$name\"" >> "$file"
-	optionstring="      --no-$name"
-	echo Adding flag: $optionstring
-	set_padding "$optionstring"
-	echo "    echo \"$optionstring$padding default = ! \$$name\"" >> "$file"
+    if test $f = f; then
+        # this is a flag
+        optionstring="  -$first, --$oname"
+        echo Adding flag: $optionstring
+        set_padding "$optionstring"
+        echo "    echo \"$optionstring$padding default = \$$vname\"" >> "$file"
+        optionstring="      --no-$oname"
+        echo Adding flag: $optionstring
+        set_padding "$optionstring"
+        echo "    echo \"$optionstring$padding default = ! \$$vname\"" >> "$file"
     else
-	# this is a param
-	pname=$(echo $name | tr a-z- A-Z_)
-	dname=$(echo $name | tr - _)
-	optionstring="  -$first, --$name $pname"
-	echo Adding param: $optionstring
-	set_padding "$optionstring"
-	echo "    echo \"$optionstring$padding default = \$$dname\"" >> "$file"
+        # this is a param
+        pname=$(echo $oname | tr a-z- A-Z_)
+        optionstring="  -$first, --$oname $pname"
+        echo Adding param: $optionstring
+        set_padding "$optionstring"
+        echo "    echo \"$optionstring$padding default = \$$vname\"" >> "$file"
     fi
 done
 
@@ -169,14 +164,15 @@ args=
 EOF
 
 for i in $options; do 
-    f=$(expr $i : '\(.\)')
-    name=$(expr $i : '.\(.*\)' | tr - _)
-    test $f = f && echo "$name=off" >> "$file" || echo "$name=" >> "$file"
+    f=${i:0:1}
+    name=${i:1}
+    vname=${name//-/_}
+    oname=${name//_/-}
+    test $f = f && echo "$vname=off" >> "$file" || echo "$vname=" >> "$file"
 done
 
-test $has_flags = yes && ttmp="" || ttmp="#"
 cat << EOF >> "$file"
-while [ \$# != 0 ]; do
+while test \$# != 0; do
     case \$1 in
     -h|--help) usage ;;
 EOF
@@ -188,22 +184,23 @@ echo "#    --no-flag) flag=off ;;" >> "$file"
 echo "#    -p|--param) shift; param=\$1 ;;" >> "$file"
 
 for i in $options; do 
-    f=$(expr $i : '\(.\)')
-    name=$(expr $i : '.\(.*\)' | tr _ -)
-    vname=$(expr $i : '.\(.*\)' | tr - _)
-    first=$(expr $name : '\(.\)')
-    if [ $f = f ]; then
-	# this is a flag
-	echo "    -$first|--$name) $vname=on ;;" >> "$file"
-	echo "    --no-$name) $vname=off ;;" >> "$file"
+    f=${i:0:1}
+    name=${i:1}
+    vname=${name//-/_}
+    oname=${name//_/-}
+    first=${name:0:1}
+    if test $f = f; then
+        # this is a flag
+        echo "    -$first|--$oname) $vname=on ;;" >> "$file"
+        echo "    --no-$oname) $vname=off ;;" >> "$file"
     else
-	# this is a param
-	echo "    -$first|--$name) shift; $vname=\$1 ;;" >> "$file"
+        # this is a param
+        echo "    -$first|--$oname) shift; $vname=\$1 ;;" >> "$file"
     fi
 done
 
 cat << "EOF" >> "$file"
-#    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
+#    --) shift; while test $# != 0; do args="$args \"$1\""; shift; done; break ;;
     -) usage "Unknown option: $1" ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
