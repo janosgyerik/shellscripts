@@ -1,5 +1,7 @@
 script optimization checklist
 -----------------------------
+* passes http://www.shellcheck.net/#
+
 * stub
 
     * correct and up to date information
