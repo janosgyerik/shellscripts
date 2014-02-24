@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# SCRIPT: ip.sh
+# SCRIPT: my-ip.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
 # DATE:   2010-05-25
 # REV:    1.0.T (Valid are A, B, D, T and P)
@@ -17,10 +17,10 @@
 #          
 
 usage() {
-    test "$1" && echo $@
+    test "$1" && echo "$@"
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
-    echo Print the IP address of the local host
+    echo Print my local IP address
     echo
     echo Options:
     echo '  -4, --ip4     Get IPv4 address'
@@ -60,14 +60,16 @@ eval "set -- $args"
 
 #test -f "$1" || usage
 
+ifconfig=/sbin/ifconfig
+
 if test $all = on; then
-    ifconfig | grep $inet' ' | sed -e "s/.*$inet //" -e 's/^addr: *//' -e 's/ .*//'
-elif test "$1"; then
-    for iface in "$@"; do
-	ifconfig $iface | grep $inet' ' | sed -n -e "s/.*$inet //" -e 's/^addr: *//' -e 's/ .*//' -e '1 p'
+    $ifconfig | sed -ne "s/.*$inet addr: *\([0-9.]\+\).*/\1/p"
+elif test $# -gt 0; then
+    for iface; do
+        $ifconfig $iface | sed -ne "s/.*$inet addr: *\([0-9.]\+\).*/\1/p"
     done
 else
-    ifconfig | grep $inet' ' | sed -n -e "s/.*$inet //" -e 's/^addr: *//' -e 's/ .*//' -e '1 p'
+    $ifconfig | sed -ne '/127.0.0.1/d' -e "s/.*$inet addr: *\([0-9.]\+\).*/\1/p" | head -n 1
 fi
 
 # eof
