@@ -54,7 +54,7 @@ readme=README.md
 cat <<EOF >$readme
 Shell scripts
 =============
-Convenient shell scripts for everyday use, written in bash, perl, awk, python
+Convenient shell scripts for everyday use, written in bash, perl, awk, python.
 
 All scripts print a helpful usage message when used with -h or --help
 

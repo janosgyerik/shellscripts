@@ -1,5 +1,5 @@
 Shell scripts
--------------
+=============
 Convenient shell scripts for everyday use, written in bash, perl, awk, python.
 
 All scripts print a helpful usage message when used with -h or --help
@@ -25,6 +25,10 @@ All scripts print a helpful usage message when used with -h or --help
 
     Archive files under BASE/sources/{daily,weekly,monthly}
 
+* bash/bak.sh
+
+    Move or copy files and directories with .bak or .YYYYMMDD suffix
+
 * bash/bzr.sh
 
     Perform repository operations on a tree of bzr repositories
@@ -36,6 +40,14 @@ All scripts print a helpful usage message when used with -h or --help
 * bash/col.sh
 
     Extract the n-th column of stdin
+
+* bash/cp-replace.sh
+
+    Replace regex patterns in filenames.
+
+* bash/demoronizer.sh
+
+    Convert non-ascii characters to ascii (rough) equivalents
 
 * bash/dos2unix.sh
 
@@ -53,9 +65,17 @@ All scripts print a helpful usage message when used with -h or --help
 
     Extract an icon image from a platter of icon images.
 
+* bash/find-recent.sh
+
+    Find and sort files by atime/ctime/mtime
+
 * bash/flac2mp3.sh
 
     Convert FLAC files to MP3 using flac and lame
+
+* bash/git.sh
+
+    Perform repository operations on a tree of Git repositories
 
 * bash/icons2dim.sh
 
@@ -72,10 +92,6 @@ All scripts print a helpful usage message when used with -h or --help
 * bash/id3tag.sh
 
     Set id3 v2 tag on mp3 files in the current directory and rename nicely.
-
-* bash/ip.sh
-
-    Print the IP address of the local host
 
 * bash/ipod2local.sh
 
@@ -96,6 +112,10 @@ All scripts print a helpful usage message when used with -h or --help
 * bash/mv-replace.sh
 
     Replace regex patterns in filenames.
+
+* bash/my-ip.sh
+
+    Print my local IP address
 
 * bash/pdf-pages.sh
 
@@ -123,7 +143,7 @@ All scripts print a helpful usage message when used with -h or --help
 
 * bash/screenshot.sh
 
-    Take the screenshot of the entire screen or a window.
+    Take a screenshot of the entire screen or a window.
 
 * bash/ssh-authorizeme.sh
 
@@ -175,7 +195,7 @@ All scripts print a helpful usage message when used with -h or --help
 
 * perl/FreeBSD.pl
 
-    A package manager for FreeBSD emulating some of the functionality of apt-get.
+    TODO
 
 * perl/base642ascii.pl
 
@@ -209,7 +229,27 @@ All scripts print a helpful usage message when used with -h or --help
 
     Compute the variance of numeric values in the input files or pipe.
 
+* python/free.py
+
+    TODO
+
+* python/paste.py
+
+    merge corresponding or subsequent lines of files
+
 * python/pwgen.py
 
     Generate random passwords
+
+* python/reorder.py
+
+    Add numeric prefix to filenames to match order specified in a list file
+
+* python/transpose.py
+
+    TODO
+
+* python/xpath.py
+
+    Test on an XML file an XPATH expression
 
