@@ -2,8 +2,10 @@ Shell scripts
 =============
 Convenient shell scripts for everyday use, written in bash, perl, awk, python.
 
-All scripts print a helpful usage message when used with -h or --help
+All scripts print a helpful usage message when used with `-h` or `--help`
 
+
+## Bash
 
 * bash/add-stub-pl.sh
 
@@ -193,6 +195,8 @@ All scripts print a helpful usage message when used with -h or --help
 
     Convert WAV files to MP3 using mplayer, and bladeenc or lame
 
+## Perl
+
 * perl/FreeBSD.pl
 
     A package manager for FreeBSD emulating some of the functionality of apt-get.
@@ -208,6 +212,8 @@ All scripts print a helpful usage message when used with -h or --help
 * perl/geoip-lookup.pl
 
     Find the country of a hostname or IP address using Geo::IPfree
+
+## Awk
 
 * awk/avg.awk
 
@@ -228,6 +234,8 @@ All scripts print a helpful usage message when used with -h or --help
 * awk/var.awk
 
     Compute the variance of numeric values in the input files or pipe.
+
+## Python
 
 * python/free.py
 

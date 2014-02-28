@@ -51,26 +51,35 @@ done
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 
 
 readme=README.md
-cat <<EOF >$readme
+cat <<"EOF" >$readme
 Shell scripts
 =============
 Convenient shell scripts for everyday use, written in bash, perl, awk, python.
 
-All scripts print a helpful usage message when used with -h or --help
+All scripts print a helpful usage message when used with `-h` or `--help`
 
 
 EOF
 
-for script in bash/*.sh perl/*.pl awk/*.awk python/*.py; do
-    echo "* $script ..."
-    usage=$(./"$script" -h | sed -ne 3p)
-    test "$usage" || usage=TODO
-    cat <<EOF >>$readme
+print_section() {
+    printf "## $1\n\n" >> $readme
+    shift
+    for script; do
+        echo "* $script ..."
+        usage=$(./"$script" -h | sed -ne 3p)
+        test "$usage" || usage=TODO
+        cat <<EOF >>$readme
 * $script
 
     $usage
 
 EOF
-done
+    done
+}
+
+print_section Bash bash/*.sh
+print_section Perl perl/*.pl
+print_section Awk awk/*.awk
+print_section Python python/*.py
 
 # eof
