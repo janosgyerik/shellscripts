@@ -17,7 +17,7 @@
 #
 
 usage() {
-    test $# = 0 || echo $@
+    test $# = 0 || echo "$@"
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
     echo "Generate README.md file from the usage messages."
@@ -62,7 +62,8 @@ All scripts print a helpful usage message when used with -h or --help
 EOF
 
 for script in bash/*.sh perl/*.pl awk/*.awk python/*.py; do
-    usage=$(./$script -h | sed -ne '3 p')
+    echo "* $script ..."
+    usage=$(./"$script" -h | sed -ne 3p)
     test "$usage" || usage=TODO
     cat <<EOF >>$readme
 * $script
