@@ -31,19 +31,6 @@ if (! -w "$FILES") {
 
 &usage() unless @ARGV;
 
-die 'Set $ENV{URL_FREEBSD} to the base URL of package files,
-so that $ENV{URL_FREEBSD}/INDEX and $ENV{URL_FREEBSD}/All make sense.
-For example:
-export URL_FREEBSD=ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/9.2-RELEASE/packages
-' unless exists($ENV{URL_FREEBSD});
-my $URL_FREEBSD = $ENV{URL_FREEBSD};
-my $URL_INDEX = $URL_FREEBSD."/INDEX";
-my $URL_PACKAGES = $URL_FREEBSD."/All";
-
-# extension of package filenames (tgz for <= 4.x, tbz for >= 5.x)
-$URL_FREEBSD =~ m/(\d+)\.\d+-RELEASE/;
-my $EXT = $+ ? ($+ >= 5 ? "tbz" : "tgz") : "tgz";
-
 my @args;
 my $match = "BOTH";
 my $action = "";
@@ -65,6 +52,19 @@ OUTER: while (@ARGV) {
         push(@args, $_);
     }
 }
+
+die 'Set $ENV{URL_FREEBSD} to the base URL of package files,
+so that $ENV{URL_FREEBSD}/INDEX and $ENV{URL_FREEBSD}/All make sense.
+For example:
+export URL_FREEBSD=ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/9.2-RELEASE/packages
+' unless exists($ENV{URL_FREEBSD});
+my $URL_FREEBSD = $ENV{URL_FREEBSD};
+my $URL_INDEX = $URL_FREEBSD."/INDEX";
+my $URL_PACKAGES = $URL_FREEBSD."/All";
+
+# extension of package filenames (tgz for <= 4.x, tbz for >= 5.x)
+$URL_FREEBSD =~ m/(\d+)\.\d+-RELEASE/;
+my $EXT = $+ ? ($+ >= 5 ? "tbz" : "tgz") : "tgz";
 
 sub usage {
     $0 =~ m|[^/]+$|;

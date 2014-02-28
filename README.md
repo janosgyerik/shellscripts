@@ -195,7 +195,7 @@ All scripts print a helpful usage message when used with -h or --help
 
 * perl/FreeBSD.pl
 
-    TODO
+    A package manager for FreeBSD emulating some of the functionality of apt-get.
 
 * perl/base642ascii.pl
 
