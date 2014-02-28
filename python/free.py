@@ -2,6 +2,11 @@
 
 import subprocess
 import re
+import sys
+
+if 'linux' in sys.platform:
+    sys.stderr.write('This tool is intended for Mac OS X only. In linux use simply "free"!\n')
+    sys.exit(1)
 
 # Get process info
 ps = subprocess.Popen(['ps', '-caxm', '-orss,comm'], stdout=subprocess.PIPE).communicate()[0]
