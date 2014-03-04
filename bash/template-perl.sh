@@ -80,7 +80,7 @@ echo Creating \"$file\" ...
 trap 'rm -f "$file"; exit 1' 1 2 3 15
 
 cat << EOF > "$file"
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #
 # SCRIPT: `basename "$file"`
 # AUTHOR: $author
