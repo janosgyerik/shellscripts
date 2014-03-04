@@ -37,6 +37,11 @@ set_longest() {
     test $len -gt $longest && longest=$len
 }
 
+set_padding() {
+    len=${#1}
+    padding=$(printf %$((width - len))s '')
+}
+
 #flag=off
 #param=
 #args=
@@ -115,11 +120,6 @@ usage() {
     echo
     echo Options:
 EOF
-
-set_padding() {
-    len=${#1}
-    padding=$(printf %$((width - len))s '')
-}
 
 for i in $options; do 
     f=${i:0:1}
