@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # SCRIPT: template-pl.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
@@ -7,10 +7,8 @@
 #
 # PLATFORM: Not platform dependent
 #
-# PURPOSE: Generate the skeleton of a shell script, with the capability to
-#          process "flags" and "params". Here, "flag" means option without
-#          arguments, and "param" means option with one argument.
-#          Note: the program (intentionally) does not handle flags/params
+# PURPOSE: Generate a Perl script template with a simple command line parser.
+#          Note: the program intentionally doesn't handle flags/params
 #          with funny characters in them. You should make simple, easy to use
 #          flags/params anyway.
 #
@@ -21,42 +19,53 @@
 #          
 
 usage() {
-    test $# = 0 || echo $@
+    test $# = 0 || echo "$@"
     echo "Usage: $0 [OPTION]... FILENAME"
     echo
-    echo "Generate the template of a Bourne shell script that can parse simple parameters."
+    echo "Generate a Perl script template with a simple command line parser."
     echo
-    echo "  -a, --author AUTHOR   Name of the author, default = $author"
-    echo "  -f, --flag FLAG       A parameter that takes no arguments"
-    echo "  -p, --param PARAM     A parameter that takes one argument"
+    echo Options:
+    echo "  -a, --author AUTHOR     Name of the author, default = $author"
+    echo "  -d, --description DESC  Description of the script, default = $description"
+    echo "  -f, --flag FLAG         A parameter that takes no arguments"
+    echo "  -p, --param PARAM       A parameter that takes one argument"
     echo
-    echo "  -h, --help            Print this help"
+    echo "  -h, --help              Print this help"
     echo
     exit 1
 }
 
 set_longest() {
-    l=`echo $1 | wc -c`
-    test $l -gt $longest && longest=$l
+    len=${#1}
+    test $len -gt $longest && longest=$len
+}
+
+set_padding() {
+    len=${#1}
+    padding=$(printf %$((width - len))s '')
 }
 
 #flag=off
 #param=
 #args=
-test "$AUTHOR" && author=$AUTHOR || author='AUTHOR <email@address.com>'
+test "$AUTHOR" && author=$AUTHOR || author="$(id -un) <$(id -un)@$(hostname)>"
 longest=5
-# options starting with "f" are flags, options starting with "p" are parameters.
+description='BRIEF DESCRIPTION OF THE SCRIPT'
+# options starting with "f" are flags, "p" are parameters.
 options=
 file=
-while [ $# != 0 ]; do
+while test $# != 0; do
     case $1 in
     -h|--help) usage ;;
 #    -f|--flag) flag=on ;;
+#    --no-flag) flag=off ;;
 #    -p|--param) shift; param=$1 ;;
     -a|--author) shift; author=$1 ;;
+    -d|--description) shift; description="$1" ;;
     -f|--flag) shift; options="$options f$1"; set_longest $1 ;;
     -p|--param) shift; options="$options p$1"; set_longest $1 ;;
-#    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
+#    --) shift; while test $# != 0; do args="$args \"$1\""; shift; done; break ;;
+#    -) usage "Unknown option: $1" ;;
     -?*) usage "Unknown option: $1" ;;
 #    *) args="$args \"$1\"" ;;  # script that takes multiple arguments
 #    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
@@ -67,24 +76,27 @@ done
 
 test "$file" || usage
 
-width=`expr 8 + $longest + 1 + $longest - 2`
+#  -p, --param PARAM  A parameter that takes no arguments
+#^^^^^^^8^^^^L^^^^^L^^
+width=$((8 + longest + 2 + longest))
+test $width -gt 40 && width=40
 
-if [ "$file" != "-" ]; then 
-    test `expr "$file" : '.*\.pl$'` = 0 && file="$file.pl"
+if test "$file" != "-"; then
+    [[ "$file" == *.pl ]] || file="$file".pl
 else
     file=/tmp/.template-perl.$$
     test=1
 fi
-echo Creating \"$file\" ...
+echo "Creating \"$file\" ..."
 
 trap 'rm -f "$file"; exit 1' 1 2 3 15
 
 cat << EOF > "$file"
 #!/usr/bin/env perl
 #
-# SCRIPT: `basename "$file"`
+# SCRIPT: $(basename "$file")
 # AUTHOR: $author
-# DATE:   `date +%F`
+# DATE:   $(date +%F)
 # REV:    1.0.D (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)
 #
@@ -92,7 +104,8 @@ cat << EOF > "$file"
 # PLATFORM: Linux only
 # PLATFORM: FreeBSD only
 #
-# PURPOSE: Give a clear, and if necessary, long, description of the
+# PURPOSE: $description
+#          Give a clear, and if necessary, long, description of the
 #          purpose of the shell script. This will also help you stay
 #          focused on the task at hand.
 #
@@ -106,15 +119,15 @@ my @args;
 #my $param = '';
 EOF
 
-has_flags=no
 for i in $options; do 
-    f=`expr $i : '\(.\)'`
-    name=`expr $i : '.\(.*\)'`
-    test $f = f && has_flags=yes && echo "my \$$name = '';" >> "$file" || echo "my \$$name = '';" >> "$file"
+    f=${i:0:1}
+    name=${i:1}
+    vname=${name//-/_}
+    oname=${name//_/-}
+    test $f = f && echo "my \$$vname = '';" >> "$file" || echo "my \$$vname = '';" >> "$file"
 done
 
-test $has_flags = yes && ttmp="" || ttmp="#"
-cat << EOF >> $file
+cat << EOF >> "$file"
 
 OUTER: while (@ARGV) {
     for (shift(@ARGV)) {
@@ -127,15 +140,18 @@ echo "#        (\$_ eq '-f' || \$_ eq '--flag') && do { \$flag = 1; last; };" >>
 echo "#        (\$_ eq '-p' || \$_ eq '--param') && do { \$param = shift(@ARGV); last; };" >> "$file"
 
 for i in $options; do 
-    f=`expr $i : '\(.\)'`
-    name=`expr $i : '.\(.*\)'`
-    first=`expr $name : '\(.\)'`
-    if [ $f = f ]; then
-	# this is a flag
-	echo "        (\$_ eq '-$first' || \$_ eq '--$name') && do { \$$name = 1; last; };" >> "$file"
+    f=${i:0:1}
+    name=${i:1}
+    vname=${name//-/_}
+    oname=${name//_/-}
+    first=${name:0:1}
+    if test $f = f; then
+        # this is a flag
+        echo "        (\$_ eq '-$first' || \$_ eq '--$oname') && do { \$$vname = 1; last; };" >> "$file"
+        echo "        (\$_ eq '--no-$oname') && do { \$$vname = ''; last; };" >> "$file"
     else
-	# this is a param
-	echo "        (\$_ eq '-$first' || \$_ eq '--$name') && do { \$$name = shift(@ARGV); last; };" >> "$file"
+        # this is a param
+        echo "        (\$_ eq '-$first' || \$_ eq '--$oname') && do { \$$vname = shift(@ARGV); last; };" >> "$file"
     fi
 done
 
@@ -143,45 +159,48 @@ cat << "EOF" >> "$file"
         ($_ eq '--') && do { push(@args, @ARGV); undef @ARGV; last; };
         ($_ =~ m/^-.+/) && do { &usage("Unknown option: $_"); };
         push(@args, $_);  # script that takes multiple arguments
-#	$arg ? $arg = $_ : &usage();  # strict with excess arguments
-#	$arg = $_;  # forgiving with excess arguments
+#   $arg ? $arg = $_ : &usage();  # strict with excess arguments
+#   $arg = $_;  # forgiving with excess arguments
     }
+}
+
+sub bool2string() {
+    return $_[0] ? "true" : "false";
 }
 
 sub usage() {
     print @_, "\n" if @_;
     $0 =~ m/[^\/]+$/;
-    print "Usage: $& [OPTION]... [ARG]...\n";
+    print "Usage: $& [OPTION]... [ARG]...\n\n";
     print "BRIEF DESCRIPTION OF THE SCRIPT\n";
-    print "\n";
+    print "\nOptions:\n";
 EOF
 
-set_padding() {
-    padding=
-    j=`echo $1 | wc -c`
-    while [ $j -lt $width ]; do
-	padding="$padding "
-	j=`expr $j + 1`
-    done
-}
-
 for i in $options; do 
-    f=`expr $i : '\(.\)'`
-    name=`expr $i : '.\(.*\)'`
-    first=`expr $name : '\(.\)'`
+    f=${i:0:1}
+    name=${i:1}
+    vname=${name//-/_}
+    oname=${name//_/-}
+    first=${name:0:1}
 
-    if [ $f = f ]; then
-	# this is a flag
-	optionstring="  -$first, --$name"
-	echo "Adding flag -$first, --$name ..."
+    if test $f = f; then
+        # this is a flag
+        optionstring="  -$first, --$oname"
+        echo Adding flag: $optionstring
+        set_padding "$optionstring"
+        echo "    print \"$optionstring$padding default = \".&bool2string(\$$vname).\"\n\";" >> "$file"
+        optionstring="      --no-$oname"
+        echo Adding flag: $optionstring
+        set_padding "$optionstring"
+        echo "    print \"$optionstring$padding default = ! \".&bool2string(\$$vname).\"\n\";" >> "$file"
     else
-	# this is a param
-	pname=`echo $name | tr a-z A-Z`
-	optionstring="  -$first, --$name $pname"
-	echo "Adding param -$first, --$name ..."
+        # this is a param
+        pname=$(echo $oname | tr a-z- A-Z_)
+        optionstring="  -$first, --$oname $pname"
+        echo Adding param: $optionstring
+        set_padding "$optionstring"
+        echo "    print \"$optionstring$padding default = \$$vname\n\";" >> "$file"
     fi
-    set_padding "$optionstring"
-    echo "    print \"$optionstring$padding default = \$$name\\n\";" >> "$file"
 done
 
 helpstring="  -h, --help"
