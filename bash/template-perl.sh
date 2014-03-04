@@ -105,9 +105,6 @@ cat << EOF > "$file"
 # PLATFORM: FreeBSD only
 #
 # PURPOSE: $description
-#          Give a clear, and if necessary, long, description of the
-#          purpose of the shell script. This will also help you stay
-#          focused on the task at hand.
 #
 
 use strict;
@@ -172,7 +169,9 @@ sub usage() {
     print @_, "\n" if @_;
     $0 =~ m/[^\/]+$/;
     print "Usage: $& [OPTION]... [ARG]...\n\n";
-    print "BRIEF DESCRIPTION OF THE SCRIPT\n";
+EOF
+cat << EOF >> "$file"
+    print "$description\n";
     print "\nOptions:\n";
 EOF
 
