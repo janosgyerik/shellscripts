@@ -132,9 +132,9 @@ OUTER: while (@ARGV) {
 EOF
 
 # an example entry to illustrate parsing a flag
-echo "#        (\$_ eq '-f' || \$_ eq '--flag') && do { \$flag = 1; last; };" >> "$file"
+echo "        # (\$_ eq '-f' || \$_ eq '--flag') && do { \$flag = 1; last; };" >> "$file"
 # an example entry to illustrate parsing a param
-echo "#        (\$_ eq '-p' || \$_ eq '--param') && do { \$param = shift(@ARGV); last; };" >> "$file"
+echo "        # (\$_ eq '-p' || \$_ eq '--param') && do { \$param = shift(@ARGV); last; };" >> "$file"
 
 for i in $options; do 
     f=${i:0:1}
@@ -156,8 +156,8 @@ cat << "EOF" >> "$file"
         ($_ eq '--') && do { push(@args, @ARGV); undef @ARGV; last; };
         ($_ =~ m/^-.+/) && do { &usage("Unknown option: $_"); };
         push(@args, $_);  # script that takes multiple arguments
-#   $arg ? $arg = $_ : &usage();  # strict with excess arguments
-#   $arg = $_;  # forgiving with excess arguments
+        # $arg ? $arg = $_ : &usage();  # strict with excess arguments
+        # $arg = $_;  # forgiving with excess arguments
     }
 }
 
