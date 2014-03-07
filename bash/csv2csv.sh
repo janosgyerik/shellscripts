@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 #
 # SCRIPT: csv2csv.sh
 # AUTHOR: janos <janos@axiom>
