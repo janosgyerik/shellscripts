@@ -104,7 +104,7 @@ test $global = on && s_flags=g || s_flags=
 test $testonly = off && msg= || msg='test: '
 
 for from in "$@"; do
-    to=`echo $from | sed -e "s/$pattern/$replacement/$s_flags"`
+    to=$(echo $from | sed -e "s/$pattern/$replacement/$s_flags")
     if test "$from" != "$to"; then
 	echo $msg "\`$from' -> \`$to'"
 	test $testonly = off && mv $mv_ops -- "$from" "$to"
