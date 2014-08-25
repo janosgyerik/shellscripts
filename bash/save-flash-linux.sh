@@ -65,7 +65,7 @@ if test "$files"; then
 	cp "$file" "$1" && echo "cp $file $1" && file "$1"
     else
 	# Print the filesizes beside the flash streams when listing
-	wc -c $files | awk '{ bar = $2 ; foo = $1 / 1024 / 1024 ; printf bar " (" ; printf( "%3.1f", foo ); printf "MB)\n" }'
+	wc -c $files | awk '{ filesize = $1 / 1024 / 1024; filepath = $2; printf (filepath " (" "%3.1f MB)\n", filesize) }'
 	# ls -1 $files
     fi
 fi
