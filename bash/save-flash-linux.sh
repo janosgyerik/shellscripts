@@ -64,7 +64,9 @@ if test "$files"; then
 	file=$(ls $files | sed -ne "$number p")
 	cp "$file" "$1" && echo "cp $file $1" && file "$1"
     else
-	ls -1 $files
+	# Print the filesizes beside the flash streams when listing
+	wc -c $files | awk '{ bar = $2 ; foo = $1 / 1024 / 1024 ; printf bar " (" ; printf( "%3.1f", foo ); printf "MB)\n" }'
+	# ls -1 $files
     fi
 fi
 
