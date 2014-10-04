@@ -1,6 +1,6 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #
-# SCRIPT: base642ascii.pl
+# SCRIPT: base64.pl
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
 # DATE:   2005-07-14
 # REV:    1.0.D (Valid are A, B, D, T and P)
