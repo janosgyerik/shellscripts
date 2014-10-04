@@ -8,7 +8,7 @@
 #
 # PLATFORM: Not platform dependent
 #
-# PURPOSE: Convert Base64 strings to ASCII
+# PURPOSE: Encode (= default) or decode Base64
 #
 
 use strict;
@@ -17,10 +17,12 @@ use warnings;
 &usage() unless @ARGV;
 
 my @args;
+my $encode = 1;
 
 while (@ARGV) {
     for (shift(@ARGV)) {
         ($_ eq '-h' || $_ eq '--help') && do { &usage(); };
+        ($_ eq '-D' || $_ eq '--decode') && do { $encode = ! $encode; last; };
         ($_ eq '--') && do { push(@args, @ARGV); undef @ARGV; last; };
         ($_ =~ m/^-.+/) && do { print "Unknown option: $_\n"; &usage(); };
         push(@args, $_);
@@ -29,11 +31,15 @@ while (@ARGV) {
 
 sub usage {
     $0 =~ m|[^/]+$|;
-    print "Usage: $& [-h|--help]\n";
+    print "Usage: $& [-h|--help] [-D|--decode]\n";
     print "\n";
-    print "Convert a Base64 string to ASCII\n";
+    print "Encode (= default) or decode Base64\n";
     exit 1;
 }
 
 use MIME::Base64;
-print map(&MIME::Base64::decode_base64($_), @args);
+if ($encode) {
+    print map(&MIME::Base64::encode_base64($_), @args);
+} else {
+    print map(&MIME::Base64::decode_base64($_), @args);
+}
