@@ -37,9 +37,6 @@ sub usage {
     exit 1;
 }
 
-use MIME::Base64;
-if ($encode) {
-    print map(&MIME::Base64::encode_base64($_), @args);
-} else {
-    print map(&MIME::Base64::decode_base64($_), @args);
-}
+use MIME::Base64 qw/encode_base64 decode_base64/;
+my $converter = $encode ? \&encode_base64 : \&decode_base64;
+print map($converter->($_), @args);
