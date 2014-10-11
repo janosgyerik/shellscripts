@@ -14,17 +14,17 @@
 use strict;
 use warnings;
 
-&usage() unless @ARGV;
+usage() unless @ARGV;
 
 my @args;
 my $encode = 1;
 
 while (@ARGV) {
     local $_ = shift @ARGV;
-    ($_ eq '-h' || $_ eq '--help') && do { &usage(); };
+    ($_ eq '-h' || $_ eq '--help') && do { usage(); };
     ($_ eq '-D' || $_ eq '--decode') && do { $encode = ! $encode; next; };
     ($_ eq '--') && do { push(@args, @ARGV); undef @ARGV; next; };
-    ($_ =~ m/^-/) && do { print "Unknown option: $_\n"; &usage(); };
+    ($_ =~ m/^-/) && do { print "Unknown option: $_\n"; usage(); };
     push(@args, $_);
 }
 
