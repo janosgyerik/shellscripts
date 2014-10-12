@@ -14,26 +14,31 @@
 use strict;
 use warnings;
 
-usage() unless @ARGV;
+exit usage(1) unless @ARGV;
 
 my @args;
 my $encode = 1;
 
 while (@ARGV) {
     local $_ = shift @ARGV;
-    ($_ eq '-h' || $_ eq '--help') && do { usage(); };
+    ($_ eq '-h' || $_ eq '--help') && do { exit usage(0); };
     ($_ eq '-D' || $_ eq '--decode') && do { $encode = ! $encode; next; };
     ($_ eq '--') && do { push(@args, @ARGV); undef @ARGV; next; };
-    ($_ =~ m/^-/) && do { print "Unknown option: $_\n"; usage(); };
+    ($_ =~ m/^-/) && do { print "Unknown option: $_\n"; exit usage(1); };
     push(@args, $_);
 }
 
 sub usage {
+    my ($status) = @_;
+    my $old_fh = select STDERR if $status;
+
     $0 =~ m|[^/]+$|;
     print "Usage: $& [-h|--help] [-D|--decode]\n";
     print "\n";
     print "Encode (= default) or decode Base64\n";
-    exit 1;
+
+    select $old_fh if $old_fh;
+    return $status;
 }
 
 use MIME::Base64 qw/encode_base64 decode_base64/;
