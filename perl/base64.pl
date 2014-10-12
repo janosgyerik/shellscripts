@@ -21,11 +21,19 @@ my $encode = 1;
 
 while (@ARGV) {
     local $_ = shift @ARGV;
-    ($_ eq '-h' || $_ eq '--help') && do { exit usage(0); };
-    ($_ eq '-D' || $_ eq '--decode') && do { $encode = 0; next; };
-    ($_ eq '--') && do { push(@args, @ARGV); undef @ARGV; next; };
-    ($_ =~ m/^-/) && do { print "Unknown option: $_\n"; exit usage(1); };
-    push(@args, $_);
+    if ($_ eq '-h' || $_ eq '--help') {
+        exit usage(0);
+    } elsif ($_ eq '-D' || $_ eq '--decode') {
+        $encode = 0;
+    } elsif ($_ eq '--') {
+        push(@args, @ARGV);
+        undef @ARGV;
+    } elsif ($_ =~ m/^-/) {
+        print "Unknown option: $_\n";
+        exit usage(1);
+    } else {
+        push(@args, $_);
+    }
 }
 
 sub usage {
