@@ -9,9 +9,6 @@ cd $(dirname "$0")
 # E501 line too long > 79 characters
 echo '### pep8'
 pep8 . | grep -v \
-    -e E121 \
-    -e E123 \
-    -e E126 \
     -e E128 \
     -e E501
 echo
