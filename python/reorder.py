@@ -22,12 +22,10 @@ def reorder(path, listfile):
     patterns = [x.strip() for x in listfile.readlines()]
     i = 0
     for pattern in patterns:
-        print '# %s -> ...' % pattern
         for name in matching(files, pattern):
             if os.path.exists(name):
                 i += 1
-                print 'mv "%s" "%s"' % (name, newname(name, i))
-        print
+                print('mv "%s" "%s"' % (name, newname(name, i)))
 
 
 def main():
