@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from optparse import OptionParser
+from argparse import ArgumentParser
 import os
 
 
@@ -24,21 +24,18 @@ def reorder(listfile):
 
 
 def main():
-    parser = OptionParser()
-    parser.set_usage('%prog [options] LISTFILE...')
-    '''
-    parser.add_option('-r', '--regex', action='store_true', default=False,
-            help='use regular expressions to find matching files')
-    '''
-    parser.set_description('Add numeric prefix to filenames to match order specified in a list file')
-    (options, args) = parser.parse_args()
+    parser = ArgumentParser(
+        description='Add numeric prefix to filenames '
+                    'to match the order specified in a list file')
+    parser.add_argument('listfile',
+                        help='file containing filenames in the desired order')
+    args = parser.parse_args()
 
-    if args:
-        for listfile in args:
-            if os.path.isfile(listfile):
-                reorder(listfile)
+    if os.path.isfile(args.listfile):
+        reorder(args.listfile)
     else:
         parser.print_help()
+
 
 if __name__ == '__main__':
     main()
