@@ -5,11 +5,13 @@ import re
 import sys
 
 if sys.platform != 'darwin':
-    sys.stderr.write('This tool is intended for Mac OS X only. In Linux use simply "free"!\n')
+    sys.stderr.write('This tool is intended for Mac OS X only. '
+                     'In Linux use simply "free"!\n')
     sys.exit(1)
 
 # Get process info
-ps = subprocess.Popen(['ps', '-caxm', '-orss,comm'], stdout=subprocess.PIPE).communicate()[0]
+ps = subprocess.Popen(['ps', '-caxm', '-orss,comm'],
+                      stdout=subprocess.PIPE).communicate()[0]
 vm = subprocess.Popen(['vm_stat'], stdout=subprocess.PIPE).communicate()[0]
 
 # Iterate processes
