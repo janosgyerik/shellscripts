@@ -21,11 +21,9 @@ rssTotal = 0  # kB
 for row in range(1, len(processLines)):
     rowText = processLines[row].strip()
     rowElements = sep.split(rowText)
-    try:
+    if rowElements[0]:
         rss = float(rowElements[0]) * 1024
-    except:
-        rss = 0  # ignore...
-    rssTotal += rss
+        rssTotal += rss
 
 # Process vm_stat
 vmLines = vm.split('\n')
