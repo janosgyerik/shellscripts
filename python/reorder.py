@@ -8,14 +8,19 @@ def newname(name, i):
     return '%02d-%s' % (i, name)
 
 
-def reorder(listfile):
-    i = 0
+def iter_filenames(listfile):
     with open(listfile) as fh:
         for line in fh:
             filename = line.strip()
             if os.path.exists(filename):
-                i += 1
-                print('mv "%s" "%s"' % (filename, newname(filename, i)))
+                yield filename
+
+
+def reorder(listfile):
+    i = 0
+    for filename in iter_filenames(listfile):
+        i += 1
+        print('mv "%s" "%s"' % (filename, newname(filename, i)))
 
 
 def main():
