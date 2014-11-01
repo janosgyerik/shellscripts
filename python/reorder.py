@@ -2,7 +2,7 @@
 
 from optparse import OptionParser
 import os
-#import re
+# import re
 
 
 def newname(name, i):
@@ -13,8 +13,8 @@ def newname(name, i):
 def matching(files, pattern):
     # todo: matching logic control: regex, case insensitive
     return [x for x in files if x == pattern]
-    #return [x for x in files if x.endswith(pattern)]
-    #return [x for x in files if re.search(pattern, x)]
+    # return [x for x in files if x.endswith(pattern)]
+    # return [x for x in files if re.search(pattern, x)]
 
 
 def reorder(path, listfile):
@@ -30,7 +30,7 @@ def reorder(path, listfile):
         print
 
 
-if __name__ == '__main__':
+def main():
     parser = OptionParser()
     parser.set_usage('%prog [options] LISTFILE...')
     '''
@@ -47,4 +47,5 @@ if __name__ == '__main__':
     else:
         parser.print_help()
 
-# eof
+if __name__ == '__main__':
+    main()
