@@ -34,8 +34,16 @@ for row in range(1, len(vmLines) - 2):
     rowElements = sep.split(rowText)
     vmStats[(rowElements[0])] = int(rowElements[1].strip('\.')) * 4096
 
-print 'Wired Memory:\t\t%d MB' % (vmStats["Pages wired down"] / 1024 / 1024)
-print 'Active Memory:\t\t%d MB' % (vmStats["Pages active"] / 1024 / 1024)
-print 'Inactive Memory:\t%d MB' % (vmStats["Pages inactive"] / 1024 / 1024)
-print 'Free Memory:\t\t%d MB' % (vmStats["Pages free"] / 1024 / 1024)
-print 'Real Mem Total (ps):\t%.3f MB' % (rssTotal / 1024 / 1024)
+
+def print_item(label, value):
+    print('{:24}{} MB'.format(label + ':', value))
+
+
+def print_vmstat_item(label, key):
+    print_item(label, vmStats[key] / 1024 / 1024)
+
+print_vmstat_item('Wired Memory', 'Pages wired down')
+print_vmstat_item('Active Memory', 'Pages active')
+print_vmstat_item('Inactive Memory', 'Pages inactive')
+print_vmstat_item('Free Memory', 'Pages free')
+print_item('Real Mem Total (ps)', '{:.3f}'.format(rssTotal / 1024 / 1024))
