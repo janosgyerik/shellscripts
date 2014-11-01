@@ -36,14 +36,14 @@ garbages = (
     'readnfo',
     'xvid',
     '^sparks-',
-    )
+)
 
 # all lowercase!
 blahdirs = (
     '.unwanted',
     'sample',
     'subs',
-    )
+)
 
 # all lowercase!
 mov_extensions = ('.avi', '.mp4', '.mkv', )
@@ -135,6 +135,7 @@ def sanitize_path(args, path):
                     print
             else:
                 unmatched.append(filepath)
+
 
 parser = argparse.ArgumentParser(description='Normalize movie filenames')
 parser.add_argument('paths', nargs='+')
