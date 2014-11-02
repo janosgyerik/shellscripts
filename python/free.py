@@ -38,19 +38,20 @@ def print_item(label, value):
     print('{:24}{} MB'.format(label + ':', value))
 
 
-def print_vmstat_item(vmstats, label, key):
-    print_item(label, vmstats[key] / 1024 / 1024)
-
-
 def main():
     vmstats = get_vmstats()
-    print_vmstat_item(vmstats, 'Wired Memory', 'Pages wired down')
-    print_vmstat_item(vmstats, 'Active Memory', 'Pages active')
-    print_vmstat_item(vmstats, 'Inactive Memory', 'Pages inactive')
-    print_vmstat_item(vmstats, 'Free Memory', 'Pages free')
+
+    def print_vmstat_item(label, key):
+        print_item(label, vmstats[key] / 1024 / 1024)
+
+    print_vmstat_item('Wired Memory', 'Pages wired down')
+    print_vmstat_item('Active Memory', 'Pages active')
+    print_vmstat_item('Inactive Memory', 'Pages inactive')
+    print_vmstat_item('Free Memory', 'Pages free')
     rss_total = get_rss_total()
     vmstats['total'] = rss_total
-    print_vmstat_item(vmstats, 'Real Mem Total (ps)', 'total')
+    print_vmstat_item('Real Mem Total (ps)', 'total')
+
 
 if __name__ == '__main__':
     main()
