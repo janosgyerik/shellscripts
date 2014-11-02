@@ -15,10 +15,10 @@ def get_rss_total():
     ps_out = ps_proc.communicate()[0]
     re_digits_only = re.compile(r'\D+')
     rss_total = 0  # kB
-    for line in ps_out.split('\n')[1:]:
+    for line in ps_out.split('\n'):
         rss = re_digits_only.sub('', line)
         if rss:
-            rss_total += float(rss) * 1024
+            rss_total += int(rss) * 1024
     return rss_total
 
 
@@ -27,9 +27,9 @@ def get_vmstats():
     re_key_value = re.compile(r'([^:]+).*?(\d+)')
     vmstats = {}
     for line in vmstat_out.split('\n'):
-        m = re_key_value.match(line)
-        if m:
-            key, value = m.groups()
+        match = re_key_value.match(line)
+        if match:
+            key, value = match.groups()
             vmstats[key] = int(value) * 4096
     return vmstats
 
@@ -48,9 +48,9 @@ def main():
     print_vmstat_item(vmstats, 'Active Memory', 'Pages active')
     print_vmstat_item(vmstats, 'Inactive Memory', 'Pages inactive')
     print_vmstat_item(vmstats, 'Free Memory', 'Pages free')
-    print_vmstat_item(vmstats, 'Swapins', 'Swapouts')
     rss_total = get_rss_total()
-    print_item('Real Mem Total (ps)', '{:.3f}'.format(rss_total / 1024 / 1024))
+    vmstats['total'] = rss_total
+    print_vmstat_item(vmstats, 'Real Mem Total (ps)', 'total')
 
 if __name__ == '__main__':
     main()
