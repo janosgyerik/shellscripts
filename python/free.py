@@ -34,15 +34,11 @@ def get_vmstats():
     return vmstats
 
 
-def print_item(label, value):
-    print('{:24}{} MB'.format(label + ':', value))
-
-
 def main():
     vmstats = get_vmstats()
 
     def print_vmstat_item(label, key):
-        print_item(label, vmstats[key] / 1024 / 1024)
+        print('{:24}{} MB'.format(label + ':', vmstats[key] / 1024 / 1024))
 
     print_vmstat_item('Wired Memory', 'Pages wired down')
     print_vmstat_item('Active Memory', 'Pages active')
