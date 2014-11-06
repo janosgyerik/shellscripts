@@ -5,7 +5,12 @@ import argparse
 
 def seq(last, first=1, incr=1):
     for num in range(first, last + 1, incr):
-        print(str(num))
+        yield str(num)
+
+
+def print_seq(*args, **kwargs):
+    for item in seq(*args, **kwargs):
+        print(item)
 
 
 def main():
@@ -15,7 +20,7 @@ def main():
     parser.add_argument('last', type=int)
 
     args = parser.parse_args()
-    seq(args.last, args.first, args.incr)
+    print_seq(args.last, first=args.first, incr=args.incr)
 
 
 if __name__ == '__main__':
