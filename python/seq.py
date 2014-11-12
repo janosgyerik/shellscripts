@@ -3,9 +3,13 @@
 import argparse
 
 
-def seq(last, first=1, incr=1):
+def seq(last, first=1, incr=1, equalize_widths=False):
+    if equalize_widths:
+        template = '{:0%dd}' % len(str(last))
+    else:
+        template = '{}'
     for num in range(first, last + 1, incr):
-        yield str(num)
+        yield template.format(num)
 
 
 def print_seq(*args, **kwargs):

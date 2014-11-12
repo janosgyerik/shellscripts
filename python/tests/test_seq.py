@@ -18,6 +18,9 @@ class TestSeq(unittest.TestCase):
     def test_3_to_10_by_2(self):
         self.assertEqual(self.str([3, 5, 7, 9]), list(seq(10, first=3, incr=2)))
 
+    def test_equalize_widths(self):
+        self.assertEqual(['09', '10'], list(seq(10, first=9, equalize_widths=True)))
+
 
 if __name__ == '__main__':
     unittest.main()
