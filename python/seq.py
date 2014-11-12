@@ -22,9 +22,10 @@ def main():
     parser.add_argument('first', nargs='?', default=1, type=int)
     parser.add_argument('incr', nargs='?', default=1, type=int)
     parser.add_argument('last', type=int)
+    parser.add_argument('-w', dest='equalize_widths', help='Equalize widths', action='store_true', default=False)
 
     args = parser.parse_args()
-    print_seq(args.last, first=args.first, incr=args.incr)
+    print_seq(args.last, first=args.first, incr=args.incr, equalize_widths=args.equalize_widths)
 
 
 if __name__ == '__main__':
