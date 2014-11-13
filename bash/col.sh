@@ -54,5 +54,3 @@ eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@
 test $# -gt 0 || usage
 
 awk '{print $'$(echo $* | sed -e 's/ /,$/g')'}'
-
-# eof

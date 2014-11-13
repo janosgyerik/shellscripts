@@ -135,5 +135,3 @@ for i in $(ls $dir_s); do
 	done
     fi
 done
-
-# eof

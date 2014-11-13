@@ -108,5 +108,3 @@ while :; do
     # give time to ssh child to restart
     sleep $delay_tester
 done
-
-# eof

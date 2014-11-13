@@ -74,5 +74,3 @@ $program_batch $dev_op
 if type eject >/dev/null 2>&1; then
     eject $device
 fi
-
-# eof

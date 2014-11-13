@@ -65,5 +65,3 @@ for file; do
         -e 's/…/\&hellip;/g' \
         $file
 done
-
-# eof

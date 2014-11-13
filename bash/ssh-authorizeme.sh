@@ -72,5 +72,3 @@ for remote in "$@"; do
 done
 
 test ! $errors
-
-# eof

@@ -202,5 +202,3 @@ echo "* things to check:"
 echo "  * audio quality and language of the output file"
 echo "  * there is no black border around the movie"
 echo "  * dimensions of the output file"
-
-# eof

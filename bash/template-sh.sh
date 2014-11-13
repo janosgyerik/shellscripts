@@ -213,11 +213,7 @@ done
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 
 
 test $# -gt 0 || usage
-
-# eof
 EOF
 
 chmod +x "$file"
 test "$test" && cat "$file"
-
-# eof

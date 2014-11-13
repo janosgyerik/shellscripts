@@ -69,5 +69,3 @@ if test "$files"; then
 	# ls -1 $files
     fi
 fi
-
-# eof

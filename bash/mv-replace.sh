@@ -110,5 +110,3 @@ for from in "$@"; do
 	test $testonly = off && mv $mv_ops -- "$from" "$to"
     fi
 done
-
-# eof

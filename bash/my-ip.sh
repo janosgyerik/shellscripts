@@ -71,5 +71,3 @@ elif test $# -gt 0; then
 else
     $ifconfig | sed -ne '/127.0.0.1/d' -e "s/.*$inet addr: *\([0-9.]\+\).*/\1/p" | head -n 1
 fi
-
-# eof

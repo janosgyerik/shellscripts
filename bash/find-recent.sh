@@ -94,5 +94,3 @@ test $verbose = on && echo "# find . $op_find | xargs -0 $cmd"
 for i; do
     find $i $op_find | xargs -0 $cmd
 done
-
-# eof

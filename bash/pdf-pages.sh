@@ -64,5 +64,3 @@ for i in "$@"; do
     pdftops -f $first -l $last "$i" - | ps2pdf - "$out"
     echo '* done'
 done
-
-# eof

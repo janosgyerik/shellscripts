@@ -69,5 +69,3 @@ for i; do
     j=${i%%/}
     $cmd "$i" "$j$suffix"
 done
-
-# eof

@@ -116,5 +116,3 @@ sed -ne 's/.*"\([0-9][0-9]*\/Linux_Magazine_Issue_[0-9][0-9]*.*\.pdf\).*/\1/ p' 
 done
 
 msg Done
-
-# eof

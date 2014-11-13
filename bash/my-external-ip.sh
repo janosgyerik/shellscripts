@@ -58,5 +58,3 @@ if which dig >/dev/null; then
 elif which curl >/dev/null; then
     curl ipecho.net/plain
 fi
-
-# eof

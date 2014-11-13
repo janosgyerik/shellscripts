@@ -70,5 +70,3 @@ if test $# -gt 0; then
 else
     csv2csv
 fi
-
-# eof

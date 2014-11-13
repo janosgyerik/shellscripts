@@ -94,5 +94,3 @@ b rest
 " "$i" > "$tmp2" && cp "$tmp2" "$i"
     rm -f $tmp1 $tmp2
 done
-
-# eof

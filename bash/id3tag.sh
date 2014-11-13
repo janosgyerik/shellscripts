@@ -173,5 +173,3 @@ else
     echo
     echo Edit $configfile file by hand, and run $0 again.
 fi
-
-# eof

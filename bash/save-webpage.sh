@@ -72,5 +72,3 @@ grep -ro 'url(.*)' $dir | sort | uniq | while read line; do
     mkdir -p $(dirname $out)
     wget -c -O $out $url
 done
-
-# eof

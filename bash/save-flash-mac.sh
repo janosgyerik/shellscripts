@@ -67,5 +67,3 @@ fi
 if test -f "$file"; then
     test "$1" && cp "$file" "$1" && echo "cp $file $1" || echo $file
 fi
-
-# eof

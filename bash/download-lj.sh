@@ -113,5 +113,3 @@ if test ! -s "$pdf_out"; then
     msg Downloading $pdf_fn ...
     do_wget "$pdf_out" "$base_url$pdf_path" $wget_ops
 fi
-
-# eof

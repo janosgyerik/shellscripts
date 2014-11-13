@@ -93,5 +93,3 @@ for i in "$@"; do
     echo $converter $bitrate_op "$i" "$n"
     $converter $bitrate_op "$i" "$n"
 done
-
-# eof

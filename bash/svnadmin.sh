@@ -137,5 +137,3 @@ elif test $load = on; then
 else
     usage 'You must specify some action to take, such as dump or load!'
 fi
-
-# eof

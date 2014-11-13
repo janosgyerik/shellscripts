@@ -65,5 +65,3 @@ words() {
 }
 
 words $@
-
-# eof

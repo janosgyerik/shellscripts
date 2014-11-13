@@ -74,5 +74,3 @@ for i in "$@"; do
 	rm "$i".unix
     fi
 done
-
-# eof

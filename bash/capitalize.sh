@@ -62,5 +62,3 @@ for i in "$@"; do
     new="$dir/$capitalized"
     test "$new" != "$old" && echo "\`$i' -> \`$new'" && mv -i -- "$i" "$new"
 done
-
-# eof

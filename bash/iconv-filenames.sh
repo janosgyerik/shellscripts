@@ -81,5 +81,3 @@ for i in "$@"; do
 	mv -i "$i" "$newname"
     fi
 done
-
-# eof

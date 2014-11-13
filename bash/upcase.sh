@@ -58,5 +58,3 @@ for i in "$@"; do
     new="$dir/$upcased"
     test "$new" != "$old" && echo "\`$i' -> \`$new'" && mv -i -- "$i" "$new"
 done
-
-# eof

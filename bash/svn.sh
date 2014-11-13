@@ -211,5 +211,3 @@ case "$1" in
 esac
 
 rm -f $workfile
-    
-# eof

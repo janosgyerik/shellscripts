@@ -110,5 +110,3 @@ $dtd
   </body>
 </html>
 EOF
-
-# eof

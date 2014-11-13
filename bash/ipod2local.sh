@@ -130,5 +130,3 @@ find "$source" -type f | while read f; do
 	    ;;
     esac
 done
-
-# eof

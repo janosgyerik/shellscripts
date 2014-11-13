@@ -110,5 +110,3 @@ for from in "$@"; do
         test $testonly = off && cp $cp_ops -- "$from" "$to"
     fi
 done
-
-# eof

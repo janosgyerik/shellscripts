@@ -47,5 +47,3 @@ eval "set -- $args"
 #test -f "$1" || usage
 
 echo -ne "\a"
-
-# eof

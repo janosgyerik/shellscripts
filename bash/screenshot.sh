@@ -74,5 +74,3 @@ if test "$ext" != xwd; then
     fi
     mogrify $out
 fi
-
-# eof

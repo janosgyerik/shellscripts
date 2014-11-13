@@ -196,5 +196,3 @@ for chain in INPUT FORWARD; do
     # log to kern.info
     $iptables -A $chain -j LOG --log-prefix "$log_prefix" --log-level info
 done
-
-# eof

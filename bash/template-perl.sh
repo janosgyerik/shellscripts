@@ -212,11 +212,7 @@ cat << EOF >> "$file"
 }
 
 &usage() unless @args;
-
-# eof
 EOF
 
 chmod +x "$file"
 test "$test" && cat "$file"
-
-# eof

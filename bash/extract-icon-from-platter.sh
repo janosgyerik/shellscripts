@@ -99,5 +99,3 @@ offy=$(expr $marginy + $unitheight \* \( $y - 1 \) + $offsety)
 
 convert -crop $width''x$height+$offx+$offy "$platterfile" "$outfile"
 test $border = on && convert -border 2x2 -bordercolor '#ff0000' "$outfile" "$outfile"
-
-# eof

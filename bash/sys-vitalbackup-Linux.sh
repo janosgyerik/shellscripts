@@ -96,5 +96,3 @@ echo "* cleaning up ..."
 rm -fr $tmpdir
 
 echo "* done."
-
-# eof

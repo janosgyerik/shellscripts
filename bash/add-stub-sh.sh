@@ -79,5 +79,3 @@ EOF
     cp "$tmp" "$i"
     rm -f "$tmp"
 done
-
-# eof

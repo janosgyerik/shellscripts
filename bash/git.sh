@@ -144,5 +144,3 @@ case $command in
         ;;
     *) usage ;;
 esac
-    
-# eof
