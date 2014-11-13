@@ -18,7 +18,7 @@
 #
 
 usage() {
-    test $# = 0 || echo $@
+    test $# = 0 || echo "$@"
     echo "Usage: $0 [OPTION]... FILE..."
     echo
     echo "Rename files to all lowercase letters."
@@ -32,20 +32,13 @@ usage() {
 
 args=
 dryrun=off
-#arg=
-#flag=off
-#param=
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-#    -f|--flag) flag=on ;;
     -n|--dry-run) dryrun=on ;;
-#    -p|--param) shift; param=$1 ;;
     --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
-#    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
-#    *) arg=$1 ;;  # forgiving with excess arguments
     esac
     shift
 done
@@ -54,12 +47,14 @@ eval "set -- $args"
 
 test $# -gt 0 || usage
 
-for i; do
-    file=$(basename "$i")
-    dir=$(dirname "$i")
-    lowcased=$(tr '[:upper:]' '[:lower:]' <<< $file)
-    old=$dir/$file
-    new=$dir/$lowcased
-    test "$new" != "$old" && echo "$i -> $new" || continue
-    test $dryrun = on || mv -i -- "$i" "$new"
+for path; do
+    test -e "$path" || continue
+    origfile=$(basename "$path")
+    newfile=$(tr '[:upper:]' '[:lower:]' <<< "$origfile")
+    origdir=$(dirname "$path")
+    origpath=$origdir/$origfile
+    newpath=$origdir/$newfile
+    test "$newpath" != "$origpath" || continue
+    echo "$path -> $newpath"
+    test $dryrun = on || mv -i -- "$path" "$newpath"
 done
