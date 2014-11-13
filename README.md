@@ -265,7 +265,7 @@ directory. It will not overwrite any existing files.
 
 * python/free.py
 
-    Inactive Memory:             513 MB
+    Display amount of free and used memory in the system
 
 * python/paste.py
 

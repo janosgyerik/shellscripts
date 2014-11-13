@@ -3,6 +3,7 @@
 import subprocess
 import re
 import sys
+import argparse
 
 if sys.platform != 'darwin':
     sys.stderr.write('This tool is intended for Mac OS X only. '
@@ -34,7 +35,7 @@ def get_vmstats():
     return vmstats
 
 
-def main():
+def print_free_stats():
     vmstats = get_vmstats()
 
     def print_vmstat_item(label, key):
@@ -48,6 +49,11 @@ def main():
     vmstats['total'] = rss_total
     print_vmstat_item('Real Mem Total (ps)', 'total')
 
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Display amount of free and used memory in the system')
+    parser.parse_args()
 
 if __name__ == '__main__':
     main()
