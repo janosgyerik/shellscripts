@@ -38,7 +38,7 @@ while [ $# != 0 ]; do
     -n|--dry-run) dryrun=on ;;
     --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
-    *) args="$args \"$1\"" ;;  # script that takes multiple arguments
+    *) args="$args \"$1\"" ;;
     esac
     shift
 done
