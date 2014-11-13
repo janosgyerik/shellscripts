@@ -54,7 +54,7 @@ for path; do
     origdir=$(dirname "$path")
     origpath=$origdir/$origfile
     newpath=$origdir/$newfile
-    test "$newpath" != "$origpath" || continue
+    test "$origpath" != "$newpath" || continue
     echo "$path -> $newpath"
     test $dryrun = on || mv -i -- "$path" "$newpath"
 done
