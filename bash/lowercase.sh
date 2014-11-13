@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 #
-# SCRIPT: lowcase.sh
+# SCRIPT: lowercase.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
 # DATE:   2004-12-23
 # REV:    1.0.T (Valid are A, B, D, T and P)
@@ -23,12 +23,15 @@ usage() {
     echo
     echo "Rename files to all lowercase letters."
     echo
+    echo "  -n, --dry-run         Dry run, show what would happen"
+    echo
     echo "  -h, --help            Print this help"
     echo
     exit 1
 }
 
 args=
+dryrun=off
 #arg=
 #flag=off
 #param=
@@ -36,6 +39,7 @@ while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
 #    -f|--flag) flag=on ;;
+    -n|--dry-run) dryrun=on ;;
 #    -p|--param) shift; param=$1 ;;
     --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
@@ -50,11 +54,12 @@ eval "set -- $args"
 
 test $# -gt 0 || usage
 
-for i in "$@"; do
-    file=`basename "$i"`
-    dir=`dirname "$i"`
-    lowcased=`echo "$file" | tr A-Z a-z`
-    old="$dir/$file"
-    new="$dir/$lowcased"
-    test "$new" != "$old" && echo "\`$i' -> \`$new'" && mv -i -- "$i" "$new"
+for i; do
+    file=$(basename "$i")
+    dir=$(dirname "$i")
+    lowcased=$(tr '[:upper:]' '[:lower:]' <<< $file)
+    old=$dir/$file
+    new=$dir/$lowcased
+    test "$new" != "$old" && echo "$i -> $new" || continue
+    test $dryrun = on || mv -i -- "$i" "$new"
 done
