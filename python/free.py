@@ -12,7 +12,8 @@ if sys.platform != 'darwin':
 
 
 def get_rss_total():
-    ps_proc = subprocess.Popen(['ps', '-caxm', '-orss,comm'], stdout=subprocess.PIPE)
+    ps_proc = subprocess.Popen(
+        ['ps', '-caxm', '-orss,comm'], stdout=subprocess.PIPE)
     ps_out = ps_proc.communicate()[0]
     re_digits_only = re.compile(r'\D+')
     rss_total = 0  # kB
@@ -24,7 +25,8 @@ def get_rss_total():
 
 
 def get_vmstats():
-    vmstat_out = subprocess.Popen(['vm_stat'], stdout=subprocess.PIPE).communicate()[0]
+    vmstat_out = subprocess.Popen(
+        ['vm_stat'], stdout=subprocess.PIPE).communicate()[0]
     re_key_value = re.compile(r'([^:]+).*?(\d+)')
     vmstats = {}
     for line in vmstat_out.split('\n'):
