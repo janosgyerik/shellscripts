@@ -47,6 +47,10 @@ All scripts print a helpful usage message when used with `-h` or `--help`
 
     Replace regex patterns in filenames.
 
+* bash/csv2csv.sh
+
+    Convert CSV to CSV using specified locale
+
 * bash/demoronizer.sh
 
     Convert non-ascii characters to ascii (rough) equivalents
@@ -74,6 +78,10 @@ All scripts print a helpful usage message when used with `-h` or `--help`
 * bash/flac2mp3.sh
 
     Convert FLAC files to MP3 using flac and lame
+
+* bash/get-checklists.sh
+
+    Get checklists from Code Complete
 
 * bash/git.sh
 
@@ -103,7 +111,7 @@ All scripts print a helpful usage message when used with `-h` or `--help`
 
     Configure a very simple firewall using iptables.
 
-* bash/lowcase.sh
+* bash/lowercase.sh
 
     Rename files to all lowercase letters.
 
@@ -115,6 +123,10 @@ All scripts print a helpful usage message when used with `-h` or `--help`
 
     Replace regex patterns in filenames.
 
+* bash/my-external-ip.sh
+
+    Find my external IP address
+
 * bash/my-ip.sh
 
     Print my local IP address
@@ -122,6 +134,10 @@ All scripts print a helpful usage message when used with `-h` or `--help`
 * bash/pdf-pages.sh
 
     Cut out a range of pages from PDF files.
+
+* bash/quote.sh
+
+    Enclose each line of input within quotes
 
 * bash/rip-audiocd.sh
 
@@ -173,7 +189,7 @@ All scripts print a helpful usage message when used with `-h` or `--help`
 
 * bash/template-perl.sh
 
-    Generate the template of a Bourne shell script that can parse simple parameters.
+    Generate a Perl script template with a simple command line parser.
 
 * bash/template-sh.sh
 
@@ -183,7 +199,7 @@ All scripts print a helpful usage message when used with `-h` or `--help`
 
     Properly unrar files in directories containing spaces in their names.
 
-* bash/upcase.sh
+* bash/uppercase.sh
 
     Rename files to all uppercase letters.
 
@@ -195,15 +211,23 @@ All scripts print a helpful usage message when used with `-h` or `--help`
 
     Convert WAV files to MP3 using mplayer, and bladeenc or lame
 
+* bash/words.sh
+
+    Find words in specified files or directories
+
 ## Perl
 
 * perl/FreeBSD.pl
 
     A package manager for FreeBSD emulating some of the functionality of apt-get.
 
-* perl/base642ascii.pl
+* perl/atime.pl
 
-    Convert a Base64 string to ASCII
+    Print access time of specified files.
+
+* perl/base64.pl
+
+    Encode (= default) or decode Base64
 
 * perl/dbi-info.pl
 
@@ -239,19 +263,23 @@ All scripts print a helpful usage message when used with `-h` or `--help`
 
 * python/free.py
 
-    TODO
+    Inactive Memory:             508 MB
 
 * python/paste.py
 
-    merge corresponding or subsequent lines of files
+    TODO
 
 * python/pwgen.py
 
-    Generate random passwords
+    TODO
 
 * python/reorder.py
 
-    Add numeric prefix to filenames to match order specified in a list file
+    Add numeric prefix to filenames to match the order specified in a list file
+
+* python/seq.py
+
+    Print sequences of numbers, imitating the seq tool
 
 * python/transpose.py
 
@@ -259,5 +287,5 @@ All scripts print a helpful usage message when used with `-h` or `--help`
 
 * python/xpath.py
 
-    Test on an XML file an XPATH expression
+    TODO
 
