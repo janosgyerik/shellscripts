@@ -18,6 +18,18 @@ def do_rename(old_path, new_path):
 
 
 def get_new_path(old_path):
+    """ Get the new path, titlecased and (a little bit) sanitized.
+    - Only operate on the basename:
+        + don't touch parent directories
+        + don't touch the extension
+    - Sanitize:
+        + replace junk characters with space
+        + replace multiple spaces with single space
+        + trim extra spaces at start and end
+
+    :param old_path: the path to rename
+    :return: titlecased and a little bit sanitized new path
+    """
     dirpart, filepart = os.path.split(old_path)
     if filepart.startswith('.'):
         return old_path
@@ -27,7 +39,7 @@ def get_new_path(old_path):
     base = re_spaces.sub(' ', base).strip()
     if not base:
         return old_path
-    
+
     return os.path.join(dirpart, base.title() + ext)
 
 
