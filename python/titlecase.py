@@ -21,11 +21,13 @@ def get_new_path(old_path):
     dirpart, filepart = os.path.split(old_path)
     if filepart.startswith('.'):
         return old_path
+
     base, ext = os.path.splitext(filepart)
     base = re_junk.sub(' ', base)
     base = re_spaces.sub(' ', base).strip()
     if not base:
         return old_path
+    
     return os.path.join(dirpart, base.title() + ext)
 
 
