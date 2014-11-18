@@ -12,7 +12,7 @@ def print_rename(old_filename, new_filename):
     print('{} -> {}'.format(old_filename, new_filename))
 
 
-def do_rename(old_path, new_path):
+def print_and_rename(old_path, new_path):
     print_rename(old_path, new_path)
     os.rename(old_path, new_path)
 
@@ -60,7 +60,7 @@ def main():
     parser.add_argument('paths', nargs='+')
 
     args = parser.parse_args()
-    rename_function = print_rename if args.dry_run else do_rename
+    rename_function = print_rename if args.dry_run else print_and_rename
 
     for path in args.paths:
         titlecase(path, rename_function)
