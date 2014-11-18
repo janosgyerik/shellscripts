@@ -43,7 +43,7 @@ def get_new_path(old_path):
     return os.path.join(dirpart, base.title() + ext)
 
 
-def titlecase(old_path, fun):
+def titlecase(old_path, rename_function):
     if not os.path.exists(old_path):
         return
 
@@ -51,7 +51,7 @@ def titlecase(old_path, fun):
     if old_path == new_path:
         return
 
-    fun(old_path, new_path)
+    rename_function(old_path, new_path)
 
 
 def main():
@@ -60,10 +60,10 @@ def main():
     parser.add_argument('paths', nargs='+')
 
     args = parser.parse_args()
-    fun = print_rename if args.dry_run else do_rename
+    rename_function = print_rename if args.dry_run else do_rename
 
     for path in args.paths:
-        titlecase(path, fun)
+        titlecase(path, rename_function)
 
 
 if __name__ == '__main__':
