@@ -16,6 +16,7 @@ todo:
 import os
 import re
 import argparse
+import requests
 
 nameformat_re_str = r'([A-Z0-9][\w,\-\']*)(( -)|( [A-Z0-9][\w,\-\']*))*( \{\d\d\d\d\})?( CD\d)?$'
 year_re = re.compile(r'\b\d{4}\b')
@@ -138,6 +139,53 @@ def sanitize_path(args, path):
                 unmatched.append(filepath)
 
 
+def find_movies_and_fix_year(path):
+    baseurl = 'http://pipes.yahoo.com/pipes/pipe.run?_id=0e4ed39f5a532c032a27a61016a50aaa&_render=json&name='
+    for dirpath, dirnames, filenames in os.walk(path):
+        for filename in filenames:
+            oldpath = os.path.join(dirpath, filename)
+            work_name, ext = os.path.splitext(filename)
+            match = re.search(r'\d{4}', work_name)
+            work_name = re.sub(r'[^a-zA-Z]', ' ', work_name)
+            work_name = re.sub(r'  +', ' ', work_name)
+            title = work_name.strip()
+
+            if title:
+                if match:
+                    year = match.group(0)
+                    newpath = os.path.join(dirpath, '{} [{}]{}'.format(title, year, ext))
+                    if oldpath != newpath:
+                        print('mv "{}" "{}"'.format(oldpath, newpath))
+                    continue
+                print('* looking up', title, '...')
+                result = requests.get(baseurl + str(title)).json()
+                if result['count'] == 0:
+                    print('  -> not found')
+                    continue
+                ''' looks like this:
+                x = {'count': 4, 'value': {'callback': '', 'title': 'Get TheMovieDB movie info',
+                                           'description': 'Find movies by name on themoviedb.org and extract basic movie info such as exact title and year.',
+                                           'link': 'http://pipes.yahoo.com/pipes/pipe.info?_id=0e4ed39f5a532c032a27a61016a50aaa',
+                                           'items': [
+                                               {'year': '2013', 'title': 'Ip Man: The Final Fight', 'year_sane': 'true', 'description': None},
+                                               {'year': '2010', 'title': 'Ip Man 2', 'year_sane': 'true', 'description': None},
+                                               {'year': '2010', 'title': 'The Legend Is Born: Ip Man', 'year_sane': 'true', 'description': None},
+                                               {'year': '2008', 'title': 'Ip Man', 'year_sane': 'true', 'description': None}
+                                           ], 'generator': 'http://pipes.yahoo.com/pipes/', 'pubDate': 'Wed, 19 Nov 2014 19:05:24 +0000'}}
+                '''
+                items = result['value']['items']
+                comment = '' if len(items) == 1 else '# '
+                for item in items[:4]:
+                    print_item(item)
+                    year = item['year']
+                    newpath = os.path.join(dirpath, '{} [{}]{}'.format(title, year, ext))
+                    print('{}mv "{}" "{}"'.format(comment, oldpath, newpath))
+
+
+def print_item(item):
+    print('  {} [{}]'.format(item['title'], item['year']))
+
+
 def main():
     parser = argparse.ArgumentParser(description='Normalize movie filenames')
     parser.add_argument('paths', nargs='+')
@@ -147,7 +195,8 @@ def main():
 
     for path in args.paths:
         path = os.path.normpath(path)
-        sanitize_path(args, path)
+        # sanitize_path(args, path)
+        find_movies_and_fix_year(path)
 
     for path in unmatched:
         print('# unmatched:', path)
