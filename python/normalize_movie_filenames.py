@@ -22,6 +22,7 @@ year_re = re.compile(r'\b\d{4}\b')
 year_re = re.compile(r'\d{4}\b')
 remove_year_re = re.compile(r'\W*\d{4}\W*')
 cdformat_re = re.compile(r'^cd[12]$', re.IGNORECASE)
+nameformat_re = re.compile(nameformat_re_str, re.IGNORECASE)
 
 # all lowercase!
 garbages = (
@@ -73,12 +74,12 @@ def sanitize(name):
 
 
 def print_rename(filepath, newname):
-    print 'mv "%s" "%s"' % (filepath, newname)
+    print('mv "%s" "%s"' % (filepath, newname))
 
 
 def print_cleanup(dirpath):
-    print 'rm -f "%s"/*' % dirpath
-    print 'rmdir "%s"' % dirpath
+    print('rm -f "%s"/*' % dirpath)
+    print('rmdir "%s"' % dirpath)
 
 
 def sanitize_path(args, path):
@@ -86,8 +87,8 @@ def sanitize_path(args, path):
         for dirname in dirnames:
             if dirname.lower() in blahdirs:
                 dirnames.remove(dirname)
-                print 'rm -fr "%s/%s"' % (dirpath, dirname)
-                print
+                print('rm -fr "%s/%s"' % (dirpath, dirname))
+                print('')
         for filename in filenames:
             filepath = os.path.join(dirpath, filename)
             (basename, ext) = os.path.splitext(filename)
@@ -99,12 +100,12 @@ def sanitize_path(args, path):
                 oldname = basename + ext
                 if nameformat_re.match(basename):
                     if not args.quiet:
-                        print '# %s' % oldname
-                        print
+                        print('# %s' % oldname)
+                        print()
                 else:
                     sanitized_by_name = sanitize(basename)
                     if not args.quiet:
-                        print '# sanitized by name:', sanitized_by_name
+                        print('# sanitized by name:', sanitized_by_name)
 
                     dirname = os.path.basename(dirpath)
                     if cdformat_re.match(dirname):
@@ -116,7 +117,7 @@ def sanitize_path(args, path):
                     if cdname:
                         sanitized_by_dir += ' ' + cdname
                     if not args.quiet:
-                        print '# sanitized by dir:', sanitized_by_dir
+                        print('# sanitized by dir:', sanitized_by_dir)
 
                     if nameformat_re.match(sanitized_by_dir):
                         newname = sanitized_by_dir + ext.lower()
@@ -129,32 +130,27 @@ def sanitize_path(args, path):
                         if dirpath != path:
                             print_cleanup(dirpath)
                     else:
-                        print '# ERROR: could not sanitize "%s"' % filepath
-                        print '# -> "%s" ?' % sanitized_by_name
-                        print '# -> "%s" ?' % sanitized_by_dir
-                    print
+                        print('# ERROR: could not sanitize "%s"' % filepath)
+                        print('# -> "%s" ?' % sanitized_by_name)
+                        print('# -> "%s" ?' % sanitized_by_dir)
+                    print('')
             else:
                 unmatched.append(filepath)
 
 
-parser = argparse.ArgumentParser(description='Normalize movie filenames')
-parser.add_argument('paths', nargs='+')
-parser.add_argument('--quiet', '-q', action='store_true')
-parser.add_argument('--ignorecase', '-i', action='store_true')
+def main():
+    parser = argparse.ArgumentParser(description='Normalize movie filenames')
+    parser.add_argument('paths', nargs='+')
+    parser.add_argument('--quiet', '-q', action='store_true')
 
-args = parser.parse_args()
+    args = parser.parse_args()
 
-if args.ignorecase:
-    nameformat_re_flags = re.IGNORECASE
-else:
-    nameformat_re_flags = 0
-nameformat_re = re.compile(nameformat_re_str, nameformat_re_flags)
+    for path in args.paths:
+        path = os.path.normpath(path)
+        sanitize_path(args, path)
 
-for path in args.paths:
-    path = os.path.normpath(path)
-    sanitize_path(args, path)
+    for path in unmatched:
+        print('# unmatched:', path)
 
-for path in unmatched:
-    print '# unmatched:', path
-
-# eof
+if __name__ == '__main__':
+    main()
