@@ -146,7 +146,8 @@ def find_movies_and_fix_year(path):
             oldpath = os.path.join(dirpath, filename)
             work_name, ext = os.path.splitext(filename)
             match = re.search(r'\d{4}', work_name)
-            work_name = re.sub(r'[^a-zA-Z]', ' ', work_name)
+            work_name = re.sub(r'\d{4}', '', work_name)
+            work_name = re.sub(r'[^a-zA-Z0-9\',-]', ' ', work_name)
             work_name = re.sub(r'  +', ' ', work_name)
             title = work_name.strip()
 
