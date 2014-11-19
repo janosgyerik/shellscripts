@@ -141,7 +141,7 @@ def sanitize_path(args, path):
 def main():
     parser = argparse.ArgumentParser(description='Normalize movie filenames')
     parser.add_argument('paths', nargs='+')
-    parser.add_argument('--quiet', '-q', action='store_true')
+    parser.add_argument('-n', '--dry-run', '-q', action='store_true')
 
     args = parser.parse_args()
 
