@@ -13,6 +13,8 @@ todo:
     skip option for easier review
 '''
 
+from __future__ import print_function
+
 import os
 import re
 import argparse
@@ -184,7 +186,10 @@ def find_movies_and_fix_year(path):
 
 
 def print_item(item):
-    print('  {} [{}]'.format(item['title'], item['year']))
+    try:
+        print('  {} [{}]'.format(item['title'], item['year']))
+    except UnicodeEncodeError:
+        print('  ??? UnicodeEncodeError')
 
 
 def main():
