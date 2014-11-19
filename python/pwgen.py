@@ -45,7 +45,7 @@ def pwgen(alphabet, easy, length=16):
         print()
 
 
-if __name__ == '__main__':
+def main():
     parser = OptionParser()
     parser.add_option('-a', '--alphabet',
                       help='override the default alphabet')
@@ -74,4 +74,5 @@ if __name__ == '__main__':
 
     pwgen(alphabet, easy, length)
 
-# eof
+if __name__ == '__main__':
+    main()
