@@ -21,7 +21,7 @@ double_letter = re.compile(r'(.)\1')
 
 
 def randomstring(alphabet, length=16):
-    return ''.join(random.choice(alphabet) for i in range(length))
+    return ''.join(random.choice(alphabet) for _ in range(length))
 
 
 def has_double_letter(word):
@@ -36,8 +36,8 @@ def easy_to_type_randomstring(alphabet, length=16):
 
 
 def pwgen(alphabet, easy, length=16):
-    for i in range(t_height - 3):
-        for j in range(t_width // (length + 1)):
+    for _ in range(t_height - 3):
+        for _ in range(t_width // (length + 1)):
             if easy:
                 print(easy_to_type_randomstring(alphabet, length), end=' ')
             else:
