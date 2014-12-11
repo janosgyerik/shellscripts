@@ -6,7 +6,7 @@ import random
 import string
 import re
 
-from optparse import OptionParser
+from argparse import ArgumentParser
 
 t_width = 80
 t_height = 25
@@ -46,21 +46,20 @@ def pwgen(alphabet, easy, length=16):
 
 
 def main():
-    parser = OptionParser()
-    parser.add_option('-a', '--alphabet',
-                      help='override the default alphabet')
-    parser.add_option('--complex', action='store_true', default=False,
-                      help='use a very complex default alphabet', dest='complex_')
-    parser.add_option('--easy', action='store_true', default=False,
-                      help='use a simple default alphabet, with ambiguous characters removed and no doubled letters')
-    parser.add_option('-l', '--length', type=int, default=default_length)
-    parser.set_description('Generate random passwords')
-    (options, args) = parser.parse_args()
+    parser = ArgumentParser(description='Generate random passwords')
+    parser.add_argument('-a', '--alphabet',
+                        help='override the default alphabet')
+    parser.add_argument('--complex', action='store_true', default=False,
+                        help='use a very complex default alphabet', dest='complex_')
+    parser.add_argument('--easy', action='store_true', default=False,
+                        help='use a simple default alphabet, with ambiguous characters removed and no doubled letters')
+    parser.add_argument('-l', '--length', type=int, default=default_length)
+    args = parser.parse_args()
 
-    alphabet = options.alphabet
-    complex_ = options.complex_
-    easy = options.easy
-    length = options.length
+    alphabet = args.alphabet
+    complex_ = args.complex_
+    easy = args.easy
+    length = args.length
 
     if alphabet is None:
         if complex_:
@@ -73,6 +72,7 @@ def main():
         length = len(alphabet)
 
     pwgen(alphabet, easy, length)
+
 
 if __name__ == '__main__':
     main()
