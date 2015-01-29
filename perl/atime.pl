@@ -60,5 +60,3 @@ foreach my $fn (@args) {
         $atime,$mtime,$ctime,$blksize,$blocks) = stat($fn);
     print $fn, "\t", scalar localtime $atime, "\n";
 }
-
-# eof

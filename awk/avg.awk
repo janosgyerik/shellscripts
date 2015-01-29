@@ -51,5 +51,3 @@ awk "BEGIN {col=$col; sum=0; nr=0}"'
 $col ~ /^[0-9.]/ { sum += $col; ++nr; }
 END { print sum / nr; }
 ' $@
-
-# eof

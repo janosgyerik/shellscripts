@@ -94,5 +94,3 @@ for script in bash/*.sh perl/*.pl awk/*.awk python/*.py; do
         fi
     fi
 done
-
-# eof

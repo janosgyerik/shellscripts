@@ -41,5 +41,3 @@ my $GeoIP = Geo::IPfree::new();
 foreach my $host (@args) {
     print join("\t", $GeoIP->LookUp($host)), "\n";
 }
-
-# eof

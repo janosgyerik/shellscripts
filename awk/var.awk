@@ -69,5 +69,3 @@ END {
     print sqsum / nr - avg * avg;
 }
 ' $@
-
-# eof

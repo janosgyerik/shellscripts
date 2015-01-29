@@ -255,5 +255,3 @@ sub do_fetch {
         }
     }
 }
-
-# eof

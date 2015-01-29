@@ -59,5 +59,3 @@ $col ~ /^[0-9.]/ {
 }
 END { print max; }
 ' $@
-
-# eof

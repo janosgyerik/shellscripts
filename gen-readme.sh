@@ -83,5 +83,3 @@ print_section Bash bash/*.sh
 print_section Perl perl/*.pl
 print_section Awk awk/*.awk
 print_section Python python/*.py
-
-# eof

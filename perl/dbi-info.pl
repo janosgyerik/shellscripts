@@ -49,5 +49,3 @@ foreach my $driver (@args) {
     eval { @sources = DBI->data_sources($driver) };
     print map("  $_\n", grep($_, @sources));
 }
-
-# eof
