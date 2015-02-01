@@ -8,8 +8,8 @@ import re
 
 from argparse import ArgumentParser
 
-t_width = 80
-t_height = 25
+terminal_width = 80
+terminal_height = 25
 
 default_length = 12
 
@@ -36,8 +36,8 @@ def easy_to_type_randomstring(alphabet, length=16):
 
 
 def pwgen(alphabet, easy, length=16):
-    for _ in range(t_height - 3):
-        for _ in range(t_width // (length + 1)):
+    for _ in range(terminal_height - 3):
+        for _ in range(terminal_width // (length + 1)):
             if easy:
                 print(easy_to_type_randomstring(alphabet, length), end=' ')
             else:
