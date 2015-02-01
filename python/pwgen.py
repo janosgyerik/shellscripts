@@ -52,7 +52,7 @@ def main():
     parser.add_argument('--complex', action='store_true', default=False,
                         help='use a very complex default alphabet', dest='complex_')
     parser.add_argument('--easy', action='store_true', default=False,
-                        help='use a simple default alphabet, with ambiguous characters removed and no doubled letters')
+                        help='use a simple default alphabet, without ambiguous or doubled characters')
     parser.add_argument('-l', '--length', type=int, default=default_length)
     args = parser.parse_args()
 
