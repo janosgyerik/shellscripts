@@ -68,8 +68,6 @@ def main():
             alphabet = ALPHABET_EASY
         else:
             alphabet = ALPHABET_DEFAULT
-    elif len(alphabet) < length:
-        length = len(alphabet)
 
     pwgen(alphabet, easy, length)
 
