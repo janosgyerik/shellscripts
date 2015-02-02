@@ -8,16 +8,16 @@ import re
 
 from argparse import ArgumentParser
 
-terminal_width = 80
-terminal_height = 25
+TERMINAL_WIDTH = 80
+TERMINAL_HEIGHT = 25
 
-default_length = 12
+DEFAULT_LENGTH = 12
 
-alphabet_default = string.ascii_letters + string.digits
-alphabet_complex = alphabet_default + '`~!@#$%^&*()_+-={}[];:<>?,./'
-alphabet_easy = re.sub(r'[l1ioO0Z2I]', '', alphabet_default)
+ALPHABET_DEFAULT = string.ascii_letters + string.digits
+ALPHABET_COMPLEX = ALPHABET_DEFAULT + '`~!@#$%^&*()_+-={}[];:<>?,./'
+ALPHABET_EASY = re.sub(r'[l1ioO0Z2I]', '', ALPHABET_DEFAULT)
 
-double_letter = re.compile(r'(.)\1')
+DOUBLE_LETTER = re.compile(r'(.)\1')
 
 
 def randomstring(alphabet, length=16):
@@ -25,7 +25,7 @@ def randomstring(alphabet, length=16):
 
 
 def has_double_letter(word):
-    return double_letter.search(word) is not None
+    return DOUBLE_LETTER.search(word) is not None
 
 
 def easy_to_type_randomstring(alphabet, length=16):
@@ -36,8 +36,8 @@ def easy_to_type_randomstring(alphabet, length=16):
 
 
 def pwgen(alphabet, easy, length=16):
-    for _ in range(terminal_height - 3):
-        for _ in range(terminal_width // (length + 1)):
+    for _ in range(TERMINAL_HEIGHT - 3):
+        for _ in range(TERMINAL_WIDTH // (length + 1)):
             if easy:
                 print(easy_to_type_randomstring(alphabet, length), end=' ')
             else:
@@ -53,7 +53,7 @@ def main():
                         help='use a very complex default alphabet', dest='complex_')
     parser.add_argument('--easy', action='store_true', default=False,
                         help='use a simple default alphabet, without ambiguous or doubled characters')
-    parser.add_argument('-l', '--length', type=int, default=default_length)
+    parser.add_argument('-l', '--length', type=int, default=DEFAULT_LENGTH)
     args = parser.parse_args()
 
     alphabet = args.alphabet
@@ -63,11 +63,11 @@ def main():
 
     if alphabet is None:
         if complex_:
-            alphabet = alphabet_complex
+            alphabet = ALPHABET_COMPLEX
         elif easy:
-            alphabet = alphabet_easy
+            alphabet = ALPHABET_EASY
         else:
-            alphabet = alphabet_default
+            alphabet = ALPHABET_DEFAULT
     elif len(alphabet) < length:
         length = len(alphabet)
 
