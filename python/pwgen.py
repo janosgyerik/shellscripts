@@ -36,13 +36,10 @@ def easy_to_type_randomstring(alphabet, length=16):
 
 
 def pwgen(alphabet, easy, length=16):
+    get_string = easy_to_type_randomstring if easy else randomstring
     for _ in range(TERMINAL_HEIGHT - 3):
-        for _ in range(TERMINAL_WIDTH // (length + 1)):
-            if easy:
-                print(easy_to_type_randomstring(alphabet, length), end=' ')
-            else:
-                print(randomstring(alphabet, length), end=' ')
-        print()
+        print(' '.join(get_string(alphabet, length)
+                       for _ in range(TERMINAL_WIDTH // (length + 1))))
 
 
 def main():
