@@ -2,6 +2,7 @@
 #
 # SCRIPT: save-flash-linux.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
+#         with additions by David Bobb <zeroangelmk1@gmail.com>
 # DATE:   2011-08-24
 # REV:    1.1.D (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)
