@@ -2,8 +2,9 @@
 #
 # SCRIPT: save-flash-linux.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
+#         with additions by David Bobb <zeroangelmk1@gmail.com>
 # DATE:   2011-08-24
-# REV:    1.0.D (Valid are A, B, D, T and P)
+# REV:    1.1.D (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)
 #
 # PLATFORM: Linux only
@@ -25,7 +26,10 @@ usage() {
     echo Options:
     echo "  -n, --number NUMBER default = $number"
     echo
-    echo "  -h, --help         Print this help"
+    echo "  -a, --audio         Save as MP3 File (requires ffmpeg)"
+    # Note: Audio is hardcoded to FFMPEG Quality 2 for now
+    echo
+    echo "  -h, --help          Print this help"
     echo
     exit 1
 }
@@ -35,6 +39,7 @@ args=
 #flag=off
 #param=
 number=
+aquality=
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
@@ -42,6 +47,7 @@ while [ $# != 0 ]; do
 #    --no-flag) flag=off ;;
 #    -p|--param) shift; param=$1 ;;
     -n|--number) shift; number=$1 ;;
+    -a|--audio) aquality=2 ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -) usage "Unknown option: $1" ;;
     -?*) usage "Unknown option: $1" ;;
@@ -60,12 +66,16 @@ files=$(file /proc/*/fd/* 2>/dev/null | grep Flash | cut -f1 -d:)
 
 if test "$files"; then
     if test "$1"; then
-	test "$number" || number=1
-	file=$(ls $files | sed -ne "$number p")
-	cp "$file" "$1" && echo "cp $file $1" && file "$1"
+        test "$number" || number=1
+        file=$(ls $files | sed -ne "$number p")
+        if test "$aquality"; then
+            ffmpeg -i "$file" -q:a $aquality -vn "$1"
+        else
+            cp "$file" "$1" && echo "cp $file $1" && file "$1"
+        fi
     else
-	# Print the filesizes beside the flash streams when listing
-	wc -c $files | awk '{ filesize = $1 / 1024 / 1024; filepath = $2; printf("%s (%3.1f MB)\n", filepath, filesize) }'
-	# ls -1 $files
+        # Print the filesizes beside the flash streams when listing
+        wc -c $files | awk '{ filesize = $1 / 1024 / 1024; filepath = $2; printf("%s (%3.1f MB)\n", filepath, filesize) }'
+        # ls -1 $files
     fi
 fi
