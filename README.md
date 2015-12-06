@@ -69,6 +69,10 @@ directory. It will not overwrite any existing files.
 
     Download Linux Magazine PDFs from your digital subscription
 
+* bash/eggtimer.sh
+
+    TODO
+
 * bash/extract-icon-from-platter.sh
 
     Extract an icon image from a platter of icon images.
@@ -112,6 +116,14 @@ directory. It will not overwrite any existing files.
 * bash/iptables-simple.sh
 
     Configure a very simple firewall using iptables.
+
+* bash/jar-manifest-classpath.sh
+
+    TODO
+
+* bash/java-io-tmpdir.sh
+
+    TODO
 
 * bash/lowercase.sh
 
@@ -263,17 +275,29 @@ directory. It will not overwrite any existing files.
 
 ## Python
 
+* python/fakedate.py
+
+    Print the current date but with specified values overridden
+
 * python/free.py
 
     Display amount of free and used memory in the system
+
+* python/iconv.py
+
+    Convert the character encoding of files
 
 * python/paste.py
 
     TODO
 
+* python/pp.py
+
+    Pretty-print JSON
+
 * python/pwgen.py
 
-    TODO
+    Generate random passwords
 
 * python/reorder.py
 
@@ -282,6 +306,10 @@ directory. It will not overwrite any existing files.
 * python/seq.py
 
     Print sequences of numbers, imitating the seq tool
+
+* python/titlecase.py
+
+    Rename files to "titlecased" and "sanitized".
 
 * python/transpose.py
 
