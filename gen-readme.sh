@@ -50,6 +50,8 @@ done
 
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 
 
+cd $(dirname "$0")
+
 readme=README.md
 cat <<"EOF" >$readme
 Shell scripts
