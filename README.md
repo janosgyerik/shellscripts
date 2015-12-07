@@ -313,7 +313,7 @@ directory. It will not overwrite any existing files.
 
 * python/transpose.py
 
-    TODO
+    convert columns to lines or lines to columns
 
 * python/xpath.py
 

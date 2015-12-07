@@ -1,78 +1,72 @@
 #!/usr/bin/env python
 
-import os
 import argparse
+from itertools import chain
+from sys import stdin
+
 import re
 
-default_ifs = r'\s+'
-default_ofs = r' '
-
-parser = argparse.ArgumentParser(description='transpose columns to lines or lines to columns')
-parser.add_argument('files', nargs='+')
-parser.add_argument('--ifs', default=default_ifs, help='input field separator')
-parser.add_argument('--ofs', default=default_ofs, help='output field separator')
-parser.add_argument('--to-cols', action='store_true', help='lines to columns')
-parser.add_argument('--lines', type=int, help='number lines to group into columns')
-
-args = parser.parse_args()
-ifs = re.compile(args.ifs)
-ofs = args.ofs
+DEFAULT_IFS = r'\s+'
+DEFAULT_OFS = '\t'
 
 
-def for_each_line(fh, fun):
-    while True:
-        line = fh.readline()
-        if not line:
-            break
-        line = line.strip()
-        fun(line)
+def transpose(buffer):
+    """
+    >>> transpose([])
+    []
+    >>> transpose([['a', 'b', 'c']])
+    [['a'], ['b'], ['c']]
+    >>> transpose([['a'], ['b'], ['c']])
+    [['a', 'b', 'c']]
+
+    :param buffer: the data to transpose
+    :return: transposed buffer: columns converted to lines or lines converted to columns
+    """
+    if not buffer:
+        return buffer
+
+    if len(buffer) > 1:
+        return [list(chain.from_iterable(buffer))]
+
+    return [[line] for line in buffer[0]]
 
 
-def columns_to_lines(fh):
-    def fun(line):
-        for col in ifs.split(line):
-            print(col)
-
-    for_each_line(fh, fun)
+def parse_content(fh, ifs):
+    return [ifs.split(line.strip()) for line in fh]
 
 
-def lines_to_columns(fh):
-    lineno = 0
-    needsep = False
-    from sys import stdout
-    while True:
-        line = fh.readline()
-        if not line:
-            break
-        line = line.strip()
-        lineno += 1
-        if needsep:
-            stdout.write(ofs)
-        stdout.write(line)
-        if lineno % args.lines == 0:
-            needsep = False
-            stdout.write("\n")
-        else:
-            needsep = True
-    if lineno % args.lines != 0:
-        stdout.write("\n")
-
-
-if args.to_cols:
-    fun = lines_to_columns
-else:
-    fun = columns_to_lines
-
-for path in args.files:
+def read_content(path, ifs):
     if path == '-':
-        from sys import stdin as fh
+        return parse_content(stdin, ifs)
     else:
-        if not os.path.exists(path):
-            print("Path does not exist, skipping: " + path)
-            continue
-        if not os.path.isfile(path):
-            print("Path is not a file, skipping: " + path)
-            continue
-        fh = open(path)
+        with open(path) as fh:
+            return parse_content(fh, ifs)
 
-    fun(fh)
+
+def print_content(buffer, ofs):
+    if not buffer:
+        return
+
+    if len(buffer) > 1:
+        for line in chain.from_iterable(buffer):
+            print(line)
+    else:
+        print(ofs.join(buffer[0]))
+
+
+def main():
+    parser = argparse.ArgumentParser(description='convert columns to lines or lines to columns')
+    parser.add_argument('path')
+    parser.add_argument('--ifs', default=DEFAULT_IFS, help='input field separator (used to extract columns)')
+    parser.add_argument('--ofs', default=DEFAULT_OFS, help='output field separator (used to print columns)')
+    parser.add_argument('--lines', type=int, help='number lines to group into columns')
+
+    args = parser.parse_args()
+    path = args.path
+    ifs = re.compile(args.ifs)
+    ofs = args.ofs
+
+    print_content(transpose(read_content(path, ifs)), ofs)
+
+if __name__ == '__main__':
+    main()
