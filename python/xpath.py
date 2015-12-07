@@ -22,7 +22,7 @@ parser.add_argument('--example', help='print an example', action='store_true')
 args = parser.parse_args()
 
 if args.example:
-    print example
+    print(example)
     parser.exit()
 
 xmlfile = args.file
@@ -30,6 +30,6 @@ path = args.path
 
 doc = libxml2.parseFile(xmlfile)
 ctx = doc.xpathNewContext()
-print '# path:', path
+print('# path:', path)
 for match in ctx.xpathEval(path):
-    print match
+    print(match)

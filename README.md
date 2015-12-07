@@ -289,7 +289,7 @@ directory. It will not overwrite any existing files.
 
 * python/paste.py
 
-    TODO
+    merge corresponding or subsequent lines of files
 
 * python/pp.py
 

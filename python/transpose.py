@@ -31,7 +31,8 @@ def for_each_line(fh, fun):
 def columns_to_lines(fh):
     def fun(line):
         for col in ifs.split(line):
-            print col
+            print(col)
+
     for_each_line(fh, fun)
 
 
@@ -67,10 +68,10 @@ for path in args.files:
         from sys import stdin as fh
     else:
         if not os.path.exists(path):
-            print "Path does not exist, skipping: " + path
+            print("Path does not exist, skipping: " + path)
             continue
         if not os.path.isfile(path):
-            print "Path is not a file, skipping: " + path
+            print("Path is not a file, skipping: " + path)
             continue
         fh = open(path)
 

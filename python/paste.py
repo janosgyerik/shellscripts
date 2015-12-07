@@ -22,7 +22,7 @@ while True:
         if not line:
             reached_eof += 1
         cols.append(line.strip())
-    print args.sep.join(cols)
+    print(args.sep.join(cols))
     if reached_eof == len(streams):
         break
 
