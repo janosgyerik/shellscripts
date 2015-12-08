@@ -48,13 +48,15 @@ description='BRIEF DESCRIPTION OF THE SCRIPT'
 # options starting with "f" are flags, "p" are parameters.
 options=
 file=
+flags=
+params=
 while test $# != 0; do
     case $1 in
     -h|--help) usage ;;
     -a|--author) shift; author=$1 ;;
     -d|--description) shift; description="$1" ;;
-    -f|--flag) shift; options="$options f$1"; set_longest $1 ;;
-    -p|--param) shift; options="$options p$1"; set_longest $1 ;;
+    -f|--flag) shift; options="$options f$1"; set_longest $1; flags=1 ;;
+    -p|--param) shift; options="$options p$1"; set_longest $1; params=1 ;;
 #    --) shift; while test $# != 0; do args="$args \"$1\""; shift; done; break ;;
     -|-?*) usage "Unknown option: $1" ;;
 #    *) args="$args \"$1\"" ;;  # script that takes multiple arguments
@@ -145,9 +147,10 @@ cat << EOF >> "$file"
 }
 
 args=
-#flag=off
-#param=
 EOF
+
+test "$flags" || echo '#flag=off' >> "$file"
+test "$params" || echo '#param=' >> "$file"
 
 for i in $options; do 
     f=${i:0:1}
@@ -163,11 +166,15 @@ while test \$# != 0; do
     -h|--help) usage ;;
 EOF
 
-# an example entry to illustrate parsing a flag
-echo "#    -f|--flag) flag=on ;;" >> "$file"
-echo "#    --no-flag) flag=off ;;" >> "$file"
-# an example entry to illustrate parsing a param
-echo "#    -p|--param) shift; param=\$1 ;;" >> "$file"
+if ! test "$flags"; then
+    # an example entry to illustrate parsing a flag
+    echo "#    -f|--flag) flag=on ;;" >> "$file"
+    echo "#    --no-flag) flag=off ;;" >> "$file"
+fi
+if ! test "$params"; then
+    # an example entry to illustrate parsing a param
+    echo "#    -p|--param) shift; param=\$1 ;;" >> "$file"
+fi
 
 for i in $options; do 
     f=${i:0:1}
