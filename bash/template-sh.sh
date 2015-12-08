@@ -56,8 +56,7 @@ while test $# != 0; do
     -f|--flag) shift; options="$options f$1"; set_longest $1 ;;
     -p|--param) shift; options="$options p$1"; set_longest $1 ;;
 #    --) shift; while test $# != 0; do args="$args \"$1\""; shift; done; break ;;
-#    -) usage "Unknown option: $1" ;;
-    -?*) usage "Unknown option: $1" ;;
+    -|-?*) usage "Unknown option: $1" ;;
 #    *) args="$args \"$1\"" ;;  # script that takes multiple arguments
     *) test "$file" && usage || file=$1 ;;
     esac
@@ -188,8 +187,7 @@ done
 
 cat << "EOF" >> "$file"
 #    --) shift; while test $# != 0; do args="$args \"$1\""; shift; done; break ;;
-    -) usage "Unknown option: $1" ;;
-    -?*) usage "Unknown option: $1" ;;
+    -|-?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
     esac
     shift
