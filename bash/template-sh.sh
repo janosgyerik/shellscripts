@@ -59,8 +59,7 @@ while test $# != 0; do
 #    -) usage "Unknown option: $1" ;;
     -?*) usage "Unknown option: $1" ;;
 #    *) args="$args \"$1\"" ;;  # script that takes multiple arguments
-#    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
-    *) file=$1 ;;  # forgiving with excess arguments
+    *) test "$file" && usage || file=$1 ;;
     esac
     shift
 done
