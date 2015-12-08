@@ -42,9 +42,6 @@ set_padding() {
     padding=$(printf %$((width - len))s '')
 }
 
-#flag=off
-#param=
-#args=
 test "$AUTHOR" && author=$AUTHOR || author="$(id -un) <$(id -un)@$(hostname)>"
 longest=5
 description='BRIEF DESCRIPTION OF THE SCRIPT'
@@ -54,9 +51,6 @@ file=
 while test $# != 0; do
     case $1 in
     -h|--help) usage ;;
-#    -f|--flag) flag=on ;;
-#    --no-flag) flag=off ;;
-#    -p|--param) shift; param=$1 ;;
     -a|--author) shift; author=$1 ;;
     -d|--description) shift; description="$1" ;;
     -f|--flag) shift; options="$options f$1"; set_longest $1 ;;
@@ -106,11 +100,6 @@ cat << EOF > "$file"
 #          purpose of the shell script. This will also help you stay
 #          focused on the task at hand.
 #
-# set -n   # Uncomment to check your syntax, without execution.
-#          # NOTE: Do not forget to put the comment back in or
-#          #       the shell script will not execute!
-# set -x   # Uncomment to debug this shell script (Korn shell only)
-#
 
 usage() {
     test \$# = 0 || echo "\$@"
@@ -158,7 +147,6 @@ cat << EOF >> "$file"
 }
 
 args=
-#arg=
 #flag=off
 #param=
 EOF
@@ -204,8 +192,6 @@ cat << "EOF" >> "$file"
     -) usage "Unknown option: $1" ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
-#    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
-#    *) arg=$1 ;;  # forgiving with excess arguments
     esac
     shift
 done
