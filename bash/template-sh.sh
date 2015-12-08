@@ -19,7 +19,7 @@ usage() {
     test $# = 0 || echo "$@"
     echo "Usage: $0 [OPTION]... FILENAME"
     echo
-    echo "Generate a /bin/sh script template with a simple command line parser."
+    echo Generate a /bin/sh script template with a simple argument parser
     echo
     echo Options:
     echo "  -a, --author AUTHOR     Name of the author, default = $author"

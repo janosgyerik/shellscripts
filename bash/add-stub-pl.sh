@@ -20,7 +20,7 @@ usage() {
     test "$1" && echo $@
     echo "Usage: $0 [OPTION]... [FILE]..."
     echo
-    echo "Insert a script header after the first line of a perl script."
+    echo Insert a script header after the first line of a perl script
     exit 1
 }
 

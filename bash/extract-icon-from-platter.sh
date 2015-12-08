@@ -23,7 +23,7 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... PLATTERFILE OUTFILE"
     echo
-    echo Extract an icon image from a platter of icon images.
+    echo Extract an icon image from a platter of icon images
     echo
     echo "      --mx MARGINX     default = $marginx"
     echo "      --my MARGINY     default = $marginy"

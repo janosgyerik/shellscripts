@@ -55,7 +55,7 @@ def titlecase(old_path, rename_function):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Rename files to "titlecased" and "sanitized".')
+    parser = argparse.ArgumentParser(description='Rename files to "titlecased" and "sanitized"')
     parser.add_argument('-n', '--dry-run', action='store_true', help='Print what would happen, don\'t rename')
     parser.add_argument('paths', nargs='+')
 

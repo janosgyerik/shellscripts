@@ -44,7 +44,7 @@ sub usage() {
     print @_, "\n" if @_;
     $0 =~ m/[^\/]+$/;
     print "Usage: $& [OPTION]... [ARG]...\n\n";
-    print "Print access time of specified files.\n";
+    print "Print access time of specified files\n";
     print "\nOptions:\n";
     print "  -f, --format FORMAT  default = $format\n";
     print "\n";

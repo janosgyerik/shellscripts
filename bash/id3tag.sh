@@ -43,7 +43,7 @@ trap 'rm -f $id3v2_list_tmpfile' 1 2 3 15
 usage() {
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
-    echo Set id3 v2 tag on mp3 files in the current directory and rename nicely.
+    echo Set id3 v2 tag on mp3 files in the current directory and rename nicely
     echo
     echo The first run creates a configuration in the file $configfile.
     echo Edit $configfile and run the script again to apply the id3 values.

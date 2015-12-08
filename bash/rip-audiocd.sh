@@ -20,7 +20,7 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... DIR"
     echo
-    echo "Copy titles in an audio CD to wav files in the specified directory."
+    echo Copy titles in an audio CD to wav files in the specified directory
     echo
     echo "  -d, --device DEV      CDROM device to rip from"
     echo

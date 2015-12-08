@@ -16,7 +16,7 @@ usage() {
     test "$1" && echo $@
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
-    echo Compute the variance of numeric values in the input files or pipe. 
+    echo Compute the variance of numeric values in the input files or pipe
     exit 1
 }
 

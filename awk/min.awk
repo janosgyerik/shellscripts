@@ -15,7 +15,7 @@ usage() {
     test "$1" && echo $@
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
-    echo Find the minimum numeric value in the input files or pipe. 
+    echo Find the minimum numeric value in the input files or pipe
     echo
     echo Options:
     echo "  -c, --col COL       Column to use, default=$col"

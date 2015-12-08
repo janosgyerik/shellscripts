@@ -27,7 +27,7 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
-    echo "Convert the encoding of filenames (if possible)."
+    echo "Convert the encoding of filenames (if possible)"
     echo
     echo "  -f, --from ENCODING  "
     echo "  -t, --to ENCODING    "

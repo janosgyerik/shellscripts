@@ -24,7 +24,7 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
-    echo "Resize icon images to have specified width and height."
+    echo Resize icon images to have specified width and height
     echo
     echo "  -w, --width WIDTH    default = $width"
     echo "  -H, --height HEIGHT  default = $height"

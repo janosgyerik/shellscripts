@@ -24,7 +24,7 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]..."
     echo
-    echo "Configure a very simple firewall using iptables."
+    echo Configure a very simple firewall using iptables
     echo
     echo Options:
     echo "      --init         Set default policies and flush chains/tables"

@@ -20,7 +20,7 @@ usage() {
     test "$1" && echo Error: $@
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
-    echo Add a public key to the authorized_keys file on a remote server.
+    echo Add a public key to the authorized_keys file on a remote server
     echo
     echo Options:
     echo '  -f, --file FILE     Public key file to use, default = '$file

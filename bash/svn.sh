@@ -28,7 +28,7 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... cmd"
     echo
-    echo "Check out all projects in a Subversion repository into the specified directory."
+    echo Perform repository operations on a tree of svn repositories
     echo
     echo "Options:"
     echo "      --ssh SVNHOST SVNROOT   Set the ssh host and svnroot, default = $svnhost $svnroot"

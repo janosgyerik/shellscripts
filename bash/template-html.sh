@@ -20,7 +20,7 @@ usage() {
     test $# = 0 || echo "$@"
     echo "Usage: $0 [OPTION]... FILENAME"
     echo
-    echo "Create a standards compliant HTML skeleton."
+    echo Create a standards compliant HTML skeleton
     echo
     echo "      --dtd transitonal | strict | html4   default = $dtd"
     echo "  -c, --charset CHARSET            default = $charset"

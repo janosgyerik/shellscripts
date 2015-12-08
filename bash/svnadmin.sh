@@ -38,7 +38,7 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
-    echo "Subversion repository tool based on svnadmin."
+    echo Subversion repository tool based on svnadmin
     echo
     echo "  -s, --source SOURCE  default = $source"
     echo "  -t, --target TARGET  default = $target"

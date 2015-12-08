@@ -20,7 +20,7 @@ usage() {
     test "$1" && echo $@
     echo "Usage: $0 [OPTION]... [FILE]..."
     echo
-    echo "Add a usage() function after the first blank line of a shell script."
+    echo "Add a usage() function after the first blank line of a shell script"
     exit 1
 }
 

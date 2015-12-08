@@ -20,7 +20,7 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
-    echo Remove carriage return from files.
+    echo Remove carriage return from files
     echo
     echo Options:
     echo "  -o, --outdir OUTDIR  default = $outdir"

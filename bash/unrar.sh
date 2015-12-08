@@ -19,7 +19,7 @@
 usage () {
     echo "Usage: $0 [OPTION]... [FILE]..."
     echo
-    echo "Properly unrar files in directories containing spaces in their names."
+    echo Properly unrar files in directories containing spaces in their names
     echo
     echo "  -h, --help       Print this help"
     echo "  -v, --verbose    "

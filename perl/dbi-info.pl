@@ -33,7 +33,7 @@ sub usage {
     $0 =~ m|[^/]+$|;
     print "Usage: $& [-h|--help] [-a|--all]\n";
     print "\n";
-    print "Print the list of available DBI drivers and data sources.\n";
+    print "Print the list of available DBI drivers and data sources\n";
     exit 1;
 }
 

@@ -22,7 +22,7 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... PATTERN [[REPLACEMENT] [FILE]...]"
     echo
-    echo Replace regex patterns in filenames.
+    echo Replace regex patterns in filenames
     echo
     echo "Rename specified files (or files in the current directory) by replacing"
     echo "PATTERN with (possibly empty) REPLACEMENT."

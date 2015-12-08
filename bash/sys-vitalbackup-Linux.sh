@@ -21,7 +21,7 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]..."
     echo
-    echo "Backup most vital system files and most relevant system information."
+    echo Backup most vital system files and most relevant system information
     echo
     echo "  -f, --file FILE       Save tarball in FILE"
     echo "      --light           Save less information, default = $light"

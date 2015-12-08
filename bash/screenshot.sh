@@ -20,7 +20,7 @@ usage() {
     test "$1" && echo $@
     echo "Usage: $0 [OPTION]..."
     echo
-    echo Take a screenshot of the entire screen or a window.
+    echo Take a screenshot of the entire screen or a window
     echo
     echo Options:
     echo '  -o, --out OUT       Save screenshot to OUT, default = '$out

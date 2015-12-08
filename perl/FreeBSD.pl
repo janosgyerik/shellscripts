@@ -71,7 +71,7 @@ sub usage {
     print <<EOF
 Usage: $& [OPTION]... ARG...
 
-A package manager for FreeBSD emulating some of the functionality of apt-get.
+A package manager for FreeBSD emulating some of the functionality of apt-get
 
 Options:
   -i, --install      Install matching package files

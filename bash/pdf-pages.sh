@@ -21,7 +21,7 @@ usage() {
     test $# = 0 || echo $@
     echo "Usage: $0 [OPTION]... [pdf-file]..."
     echo
-    echo "Cut out a range of pages from PDF files."
+    echo Cut out a range of pages from PDF files
     echo
     echo "  -f, --first FIRST  default = $first"
     echo "  -l, --last LAST    default = $last"
