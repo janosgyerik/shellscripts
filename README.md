@@ -123,7 +123,7 @@ directory. It will not overwrite any existing files.
 
 * bash/java-io-tmpdir.sh
 
-    TODO
+    Print the value of java.io.tmpdir
 
 * bash/lowercase.sh
 
