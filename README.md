@@ -71,7 +71,7 @@ directory. It will not overwrite any existing files.
 
 * bash/eggtimer.sh
 
-    TODO
+    Countdown from specified minutes and seconds
 
 * bash/extract-icon-from-platter.sh
 

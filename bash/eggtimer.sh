@@ -1,7 +1,9 @@
 #!/bin/bash
 
 if test $# -lt 2; then
-    echo "usage: $0 minutes seconds [message]"
+    echo "Usage: $0 minutes seconds [message]"
+    echo
+    echo Countdown from specified minutes and seconds
     exit 1
 fi
 
