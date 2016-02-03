@@ -33,9 +33,6 @@ usage() {
 }
 
 args=
-#arg=
-#flag=off
-#param=
 left=1
 right=1
 path=off
@@ -47,7 +44,6 @@ while [ $# != 0 ]; do
     -p|--path) path=on ;;
     --dos) dos=on ;;
     --unix) unix=on ;;
-#    -p|--param) shift; param=$1 ;;
     -l|--left) shift; left=$1 ;;
     -r|--right) shift; right=$1 ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
@@ -60,9 +56,7 @@ while [ $# != 0 ]; do
     shift
 done
 
-eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 
-
-#test $# -gt 0 || usage
+#eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 
 
 if test $path = on; then
     echo $PATH | perl -ne 'chomp; print map { "$_\n" } split(/:/)'
