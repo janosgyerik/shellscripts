@@ -23,11 +23,11 @@ usage() {
     echo Transform the display of path strings
     echo
     echo Options:
-    echo "  -p, --path               Print elements of \$PATH"
+    echo "  -p, --path               Print elements of \$PATH, default = $path"
     echo "  -l, --left COUNT         Print $left path segments at the left"
     echo "  -r, --right COUNT        Print $right path segments at the right"
-    echo "      --dos                Convert paths to DOS format"
-    echo "  -u, --unix               Convert paths to UNIX format"
+    echo "      --dos                Convert paths to DOS format, default = $dos"
+    echo "  -u, --unix               Convert paths to UNIX format, default = $unix"
     echo
     echo "  -h, --help               Print this help"
     echo
@@ -45,7 +45,7 @@ while [ $# != 0 ]; do
     -h|--help) usage ;;
     -p|--path) path=on ;;
     --dos) dos=on ;;
-    --unix) unix=on ;;
+    -u|--unix) unix=on ;;
     -l|--left) shift; left=$1 ;;
     -r|--right) shift; right=$1 ;;
 #    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
