@@ -39,12 +39,14 @@ args=
 left=1
 right=1
 path=off
+dos=off
+unix=off
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
     -p|--path) path=on ;;
-#    -f|--flag) flag=on ;;
-#    --no-flag) flag=off ;;
+    --dos) dos=on ;;
+    --unix) unix=on ;;
 #    -p|--param) shift; param=$1 ;;
     -l|--left) shift; left=$1 ;;
     -r|--right) shift; right=$1 ;;
@@ -64,6 +66,10 @@ eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@
 
 if test $path = on; then
     echo $PATH | perl -ne 'chomp; print map { "$_\n" } split(/:/)'
+elif test $dos = on; then
+    tr / \\
+elif test $unix = on; then
+    tr \\ /
 else
     awk -v left=$left -v right=$right -F/ '{
         if (NF == 1) {
