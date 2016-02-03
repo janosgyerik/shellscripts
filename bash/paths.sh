@@ -26,6 +26,8 @@ usage() {
     echo "  -p, --path               Print elements of \$PATH"
     echo "  -l, --left COUNT         Print $left path segments at the left"
     echo "  -r, --right COUNT        Print $right path segments at the right"
+    echo "      --dos                Convert paths to DOS format"
+    echo "  -u, --unix               Convert paths to UNIX format"
     echo
     echo "  -h, --help               Print this help"
     echo
