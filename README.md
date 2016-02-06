@@ -145,6 +145,10 @@ directory. It will not overwrite any existing files.
 
     Print my local IP address
 
+* bash/paths.sh
+
+    Transform the display of path strings
+
 * bash/pdf-pages.sh
 
     Cut out a range of pages from PDF files
