@@ -119,7 +119,7 @@ directory. It will not overwrite any existing files.
 
 * bash/jar-manifest-classpath.sh
 
-    TODO
+    Print the classpath entries of the manifest of JAR files
 
 * bash/java-io-tmpdir.sh
 

@@ -1,5 +1,14 @@
 #!/bin/bash
 
+case "$1" in
+    -h|--help)
+        echo Usage: $0 JAR...
+        echo
+        echo Print the classpath entries of the manifest of JAR files
+        exit 1
+        ;;
+esac
+
 if test -d "$TMPDIR"; then
     :
 elif test -d "$TMP"; then
