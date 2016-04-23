@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # SCRIPT: find-recent.sh
-# AUTHOR: Janos Gyerik <janos@axiom>
+# AUTHOR: Janos Gyerik <info@janosgyerik.com>
 # DATE:   2013-09-13
 # REV:    1.0.D (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)

@@ -1,7 +1,7 @@
 #!/bin/sh -e
 #
 # SCRIPT: gen-index.sh
-# AUTHOR: Janos Gyerik <janos@kronos>
+# AUTHOR: Janos Gyerik <info@janosgyerik.com>
 # DATE:   2016-04-23
 # REV:    1.0.D (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)
