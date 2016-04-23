@@ -88,6 +88,7 @@ gen_indexhtml_cwd() {
     {
         gen_header
         for path; do
+            test "$path" != index.html || continue
             gen_link "$path"
         done
         gen_footer
