@@ -80,6 +80,7 @@ EOF
 gen_link() {
     name=${1#./}
     name=${name%/}
+    test -d "$name" && name="$name/"
     printf '        <p><a href="%s">%s</a></p>\n' "$name" "$name"
 }
 
