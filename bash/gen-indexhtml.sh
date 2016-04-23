@@ -87,7 +87,7 @@ gen_indexhtml_cwd() {
     {
         gen_header
         for path; do
-            gen_link $path
+            gen_link "$path"
         done
         gen_footer
     } | output
