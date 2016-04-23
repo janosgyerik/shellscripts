@@ -1,7 +1,7 @@
 #!/bin/bash -e
 #
 # SCRIPT: csv2csv.sh
-# AUTHOR: janos <janos@axiom>
+# AUTHOR: Janos Gyerik <janos@axiom>
 # DATE:   2014-03-06
 # REV:    1.0.D (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)

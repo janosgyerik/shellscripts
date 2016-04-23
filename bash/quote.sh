@@ -1,7 +1,7 @@
 #!/bin/sh -e
 #
 # SCRIPT: quote.sh
-# AUTHOR: janos <janos@kronos>
+# AUTHOR: Janos Gyerik <janos@kronos>
 # DATE:   2014-07-05
 # REV:    1.0.D (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)

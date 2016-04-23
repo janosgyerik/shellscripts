@@ -1,7 +1,7 @@
 #!/bin/sh -e
 #
 # SCRIPT: get-checklists.sh
-# AUTHOR: janos <janos@kronos>
+# AUTHOR: Janos Gyerik <janos@kronos>
 # DATE:   2014-08-24
 # REV:    1.0.D (Valid are A, B, D, T and P)
 #               (For Alpha, Beta, Dev, Test and Production)
