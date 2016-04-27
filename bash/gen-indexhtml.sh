@@ -80,6 +80,7 @@ EOF
 gen_link() {
     name=${1#./}
     name=${name%/}
+    test "$name" == index.html && return
     test -d "$name" && name="$name/"
     printf '        <p><a href="%s">%s</a></p>\n' "$name" "$name"
 }
@@ -88,7 +89,6 @@ gen_indexhtml_cwd() {
     {
         gen_header
         for path; do
-            test "$path" != index.html || continue
             gen_link "$path"
         done
         gen_footer
