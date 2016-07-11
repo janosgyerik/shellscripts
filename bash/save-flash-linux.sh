@@ -26,8 +26,11 @@ usage() {
     echo Options:
     echo "  -n, --number NUMBER default = $number"
     echo
-    echo "  -a, --audio         Save as MP3 File (requires ffmpeg)"
-    # Note: Audio is hardcoded to FFMPEG Quality 2 for now
+# Hardcode to FFMPEG Quality 2 MP3 (old method)
+#    echo "  -a, --audio         Save as MP3 File (requires ffmpeg)"
+#
+# Demux to AAC
+    echo "  -a --audio          Save audio only (aac format) (requires ffmpeg)"
     echo
     echo "  -h, --help          Print this help"
     echo
@@ -69,7 +72,10 @@ if test "$files"; then
         test "$number" || number=1
         file=$(ls $files | sed -ne "$number p")
         if test "$aquality"; then
-            ffmpeg -i "$file" -q:a $aquality -vn "$1"
+#            == AUDIO RIP METHOD (old) ==
+#            ffmpeg -i "$file" -q:a $aquality -vn "$1"
+#            == AUDIO DEMUX (SPLIT FROM VIDEO) METHOD ==
+              ffmpeg -i "$file" -acodec copy -vn "$1"
         else
             cp "$file" "$1" && echo "cp $file $1" && file "$1"
         fi
