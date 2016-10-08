@@ -142,5 +142,3 @@ for i in "$@"; do
     cp "$square" "$out"
     rm -f "$square"
 done
-
-exit
