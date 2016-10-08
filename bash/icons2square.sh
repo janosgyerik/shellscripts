@@ -82,7 +82,7 @@ msg() {
     echo '* '$*
 }
 
-for i in "$@"; do
+for i; do
     test -f "$i" || continue
     wxh=$(identify "$i" 2>/dev/null | sed -ne 's/.* \([0-9][0-9]*x[0-9][0-9]*\) .*/\1/ p' | head -n 1)
     test "$wxh" || continue
