@@ -38,7 +38,7 @@ for jar; do
     (
         cd "$workdir" || exit 1
         jar xf "$jar" $manifest_relpath
-        sed -ne '/^Class-Path:/,/^[^ ]/p' $manifest_relpath | sed -e 's/^Class-Path: //' -e '$s/^[^ ].*//' -e 's/^ //' | tr -d '\r\n' | tr ' ' '\n'
+        awk 'cp && /^[^ ]/ { exit } /^Class-Path/ { cp = $0 } cp { cp = cp $0 } END { $0 = cp; gsub("\r", ""); sub(/^Class-Path: */, ""); print }' $manifest_relpath
     )
 done
 
