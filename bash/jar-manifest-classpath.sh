@@ -27,6 +27,8 @@ cleanup() {
 mkdir -p "$workdir"
 trap 'cleanup' 1 2 3 15 
 
+manifest_relpath=META-INF/MANIFEST.MF
+
 for jar; do
     if ! test -f $jar; then
         echo warning: not a file: $jar
@@ -35,8 +37,8 @@ for jar; do
     [[ $jar = /* ]] || jar=$PWD/$jar
     (
         cd "$workdir" || exit 1
-        jar xf "$jar"
-        sed -ne '/^Class-Path:/,$p' META-INF/MANIFEST.MF | sed -e 's/^Class-Path: //' -e 's/^ //' | tr -d '\n' | tr ' ' '\n'
+        jar xf "$jar" $manifest_relpath
+        sed -ne '/^Class-Path:/,$p' $manifest_relpath | sed -e 's/^Class-Path: //' -e 's/^ //' | tr -d '\n' | tr ' ' '\n'
     )
 done
 
