@@ -38,7 +38,7 @@ for jar; do
     (
         cd "$workdir" || exit 1
         jar xf "$jar" $manifest_relpath
-        sed -ne '/^Class-Path:/,$p' $manifest_relpath | sed -e 's/^Class-Path: //' -e 's/^ //' | tr -d '\n' | tr ' ' '\n'
+        sed -ne '/^Class-Path:/,/^[^ ]/p' $manifest_relpath | sed -e 's/^Class-Path: //' -e '$s/^[^ ].*//' -e 's/^ //' | tr -d '\r\n' | tr ' ' '\n'
     )
 done
 
