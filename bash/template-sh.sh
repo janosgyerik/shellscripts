@@ -83,7 +83,7 @@ echo "Creating \"$file\" ..."
 trap 'rm -f "$file"; exit 1' 1 2 3 15
 
 cat << EOF > "$file"
-#!/bin/sh -e
+#!/bin/sh
 #
 # SCRIPT: $(basename "$file")
 # AUTHOR: $author
@@ -100,6 +100,8 @@ cat << EOF > "$file"
 #          purpose of the shell script. This will also help you stay
 #          focused on the task at hand.
 #
+
+set -e
 
 usage() {
     test \$# = 0 || echo "\$@"
