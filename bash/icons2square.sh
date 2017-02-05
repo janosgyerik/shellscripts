@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 #
 # SCRIPT: icons2square.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
@@ -22,6 +22,8 @@
 #          #       the shell script will not execute!
 # set -x   # Uncomment to debug this shell script (Korn shell only)
 #
+
+set -e
 
 usage() {
     test $# = 0 || echo $@

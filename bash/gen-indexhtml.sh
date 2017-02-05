@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 #
 # SCRIPT: gen-index.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
@@ -13,6 +13,8 @@
 #          purpose of the shell script. This will also help you stay
 #          focused on the task at hand.
 #
+
+set -e
 
 usage() {
     test $# = 0 || echo "$@"
