@@ -7,4 +7,4 @@ if test "$@"; then
     exit 1
 fi
 
-java -XshowSettings 2>&1 | sed -ne 's/.*java.io.tmpdir = //p' | sed -ne 1p
+java -XshowSettings 2>&1 | awk '/java.io.tmpdir *=/ { sub(/^[^=]+=[ \t]*/, ""); print; exit }'
