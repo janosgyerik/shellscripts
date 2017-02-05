@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # SCRIPT: id3tag.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>

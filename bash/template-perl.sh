@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # SCRIPT: template-pl.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 reset_db_vars() {
     DB_NAME=

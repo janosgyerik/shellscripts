@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if test $# -lt 2; then
     echo "Usage: $0 minutes seconds [message]"

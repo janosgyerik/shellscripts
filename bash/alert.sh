@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # SCRIPT: alert.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>

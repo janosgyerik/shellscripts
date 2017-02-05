@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # SCRIPT: uppercase.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
