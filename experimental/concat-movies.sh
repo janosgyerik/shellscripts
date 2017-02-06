@@ -52,8 +52,8 @@ done
 set -- "${args[@]}"  # save arguments in $@. Use "$@" in for loops, not $@ 
 
 percent() {
-    num=$1
-    target=$2
+    local num=$1
+    local target=$2
     echo $((100 * num / target))
 }
 
@@ -69,7 +69,6 @@ write_test_file() {
     > "$path"
     ((step = size / 10))
     for ((i = 0; i < 10; i++)); do
-        echo writing $step bytes ...
         dd if=/dev/random count=1 bs=$step >> "$path" 2>/dev/null
         sleep 1
     done
@@ -77,15 +76,26 @@ write_test_file() {
 
 testrun() {
     # used only for testing the script
-    tmpfile=$(mktemp)
+    target=$(mktemp)
     size=123
-    write_test_file "$tmpfile" $size &
+    (
+    write_test_file "$target" $size &
     pid=$!
     while ps -p $pid >/dev/null; do
-        percent $(size "$tmpfile") $size
+        if test -f "$target"; then
+            current_size=$(size "$target")
+        else
+            current_size=0
+        fi
+        percent $current_size $size
         sleep 1
     done
     wait $pid
+    ) |
+    zenity --progress --title='Concatenate movies' --text='In progress...' --percentage 0
+    if [ $? = -1 ]; then
+        zenity --error --text='Concatenation canceled.'
+    fi
 }
 
 make_sorted() {
