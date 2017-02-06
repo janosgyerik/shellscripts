@@ -51,13 +51,6 @@ done
 
 set -- "${args[@]}"  # save arguments in $@. Use "$@" in for loops, not $@ 
 
-if test $testrun = on; then
-    testrun
-    exit
-fi
-
-test $# -gt 0 || usage
-
 percent() {
     num=$1
     target=$2
@@ -201,6 +194,13 @@ concat_runner() {
         concat "$target" "${sorted[@]}"
     fi
 }
+
+if test $testrun = on; then
+    testrun
+    exit
+fi
+
+test $# -gt 0 || usage
 
 [[ $# < 2 ]] && usage "Fatal: need at least 2 movie files to concatenate"
 
