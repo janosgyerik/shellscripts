@@ -271,23 +271,31 @@ directory. It will not overwrite any existing files.
 
 * awk/avg.awk
 
-    Compute the average of numeric values in the input files or pipe
+    Compute the average of numeric values on stdin
+
+* awk/col.awk
+
+    Print the selected column on stdin
+
+* awk/lengths.awk
+
+    Compute and print the lengths of lines on stdin
 
 * awk/max.awk
 
-    Find the maximum numeric value in the input files or pipe
+    Compute the minimum of numeric values on stdin
 
 * awk/min.awk
 
-    Find the minimum numeric value in the input files or pipe
+    Compute the minimum of numeric values on stdin
 
 * awk/sum.awk
 
-    Compute the sum of numeric values in the input files or pipe
+    Compute the sum of numeric values on stdin
 
 * awk/var.awk
 
-    Compute the variance of numeric values in the input files or pipe
+    Compute the variance of numeric values on stdin
 
 ## Python
 

@@ -70,7 +70,11 @@ print_section() {
     shift
     for script; do
         echo "* $script ..."
-        usage=$(./"$script" -h | sed -ne 3p)
+        if [[ $script == *.awk ]]; then
+            usage=$(sed -ne 3s/..//p "$script")
+        else
+            usage=$(./"$script" -h | sed -ne 3p)
+        fi
         test "$usage" || usage=TODO
         cat <<EOF >>$readme
 * $script
