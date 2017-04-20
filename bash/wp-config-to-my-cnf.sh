@@ -1,4 +1,43 @@
 #!/usr/bin/env bash
+#
+# SCRIPT: wp-config-to-my-cnf.sh
+# AUTHOR: Janos Gyerik <info@janosgyerik.com>
+# DATE:   2017-04-20
+# REV:    1.0.T (Valid are A, B, D, T and P)
+#               (For Alpha, Beta, Dev, Test and Production)
+#
+# PLATFORM: Not platform dependent
+#
+# PURPOSE: Create a MySQL my.cnf file from a WordPress configuration file.
+#
+# set -n   # Uncomment to check your syntax, without execution.
+#          # NOTE: Do not forget to put the comment back in or
+#          #       the shell script will not execute!
+# set -x   # Uncomment to debug this shell script (Korn shell only)
+#
+
+usage() {
+    test "$1" && echo $@
+    echo "Usage: $0 [OPTION]... path/to/wp-config.php"
+    echo
+    echo "Create a MySQL my.cnf file from a WordPress configuration file"
+    exit 1
+}
+
+args=()
+while [ $# != 0 ]; do
+    case $1 in
+    -h|--help) usage ;;
+    -) usage "Unknown option: $1" ;;
+    -?*) usage "Unknown option: $1" ;;
+    *) args+=("$1") ;;
+    esac
+    shift
+done
+
+set -- "${args[@]}"
+
+test $# -gt 0 || usage
 
 reset_db_vars() {
     DB_NAME=
