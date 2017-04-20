@@ -85,6 +85,10 @@ directory. It will not overwrite any existing files.
 
     Convert FLAC files to MP3 using flac and lame
 
+* bash/gen-indexhtml.sh
+
+    Generate index.html from files and directory trees
+
 * bash/get-checklists.sh
 
     Get checklists from Code Complete
@@ -233,6 +237,10 @@ directory. It will not overwrite any existing files.
 
     Find words in specified files or directories
 
+* bash/wp-config-to-my-cnf.sh
+
+    Create a MySQL my.cnf file from a WordPress configuration file
+
 ## Perl
 
 * perl/FreeBSD.pl
@@ -254,6 +262,10 @@ directory. It will not overwrite any existing files.
 * perl/geoip-lookup.pl
 
     Find the country of a hostname or IP address using Geo::IPfree
+
+* perl/pie.pl
+
+    Apply expression on the content of files, for example s/foo/bar/g
 
 ## Awk
 
