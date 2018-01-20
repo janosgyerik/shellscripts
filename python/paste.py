@@ -3,7 +3,7 @@
 import os
 import argparse
 
-parser = argparse.ArgumentParser(description='merge corresponding or subsequent lines of files')
+parser = argparse.ArgumentParser(description='Merge corresponding or subsequent lines of files')
 parser.add_argument('files', nargs='+')
 parser.add_argument('-s', dest='sep', default=',', help='separator')
 

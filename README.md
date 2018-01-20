@@ -317,7 +317,7 @@ directory. It will not overwrite any existing files.
 
 * python/paste.py
 
-    merge corresponding or subsequent lines of files
+    Merge corresponding or subsequent lines of files
 
 * python/pp.py
 
@@ -341,7 +341,7 @@ directory. It will not overwrite any existing files.
 
 * python/transpose.py
 
-    convert columns to lines or lines to columns
+    Convert columns to lines or lines to columns
 
 * python/xpath.py
 

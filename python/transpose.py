@@ -55,7 +55,7 @@ def print_content(buffer, ofs):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='convert columns to lines or lines to columns')
+    parser = argparse.ArgumentParser(description='Convert columns to lines or lines to columns')
     parser.add_argument('path')
     parser.add_argument('--ifs', default=DEFAULT_IFS, help='input field separator (used to extract columns)')
     parser.add_argument('--ofs', default=DEFAULT_OFS, help='output field separator (used to print columns)')
