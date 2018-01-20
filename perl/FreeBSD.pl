@@ -22,12 +22,8 @@ use strict;
 
 -f $ENV{HOME}.'/.FreeBSD.pl' && do $ENV{HOME}.'/.FreeBSD.pl';
 
-my $INDEX = $CFG::INDEX || '/opt/FreeBSD.pl/INDEX';
-my $FILES = $CFG::FILES || '/opt/FreeBSD.pl/packages';
-system(qq{test ! -d "$FILES" && mkdir -p "$FILES"});
-if (! -w "$FILES") {
-    warn qq{Directory "$FILES" is not writable!\n};
-}
+my $INDEX = $CFG::INDEX || $ENV{HOME}.'/local/FreeBSD.pl/INDEX';
+my $FILES = $CFG::FILES || $ENV{HOME}.'/local/FreeBSD.pl/packages';
 
 &usage() unless @ARGV;
 
@@ -58,6 +54,11 @@ so that $ENV{URL_FREEBSD}/INDEX and $ENV{URL_FREEBSD}/All make sense.
 For example:
 export URL_FREEBSD=ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/9.2-RELEASE/packages
 ' unless exists($ENV{URL_FREEBSD});
+
+system(qq{test ! -d "$FILES" && mkdir -p "$FILES"});
+if (! -w "$FILES") {
+    warn qq{Directory "$FILES" is not writable!\n};
+}
 my $URL_FREEBSD = $ENV{URL_FREEBSD};
 my $URL_INDEX = $URL_FREEBSD."/INDEX";
 my $URL_PACKAGES = $URL_FREEBSD."/All";
