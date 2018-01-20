@@ -28,7 +28,7 @@ usage() {
 
 set_longest() {
     len=${#1}
-    test $len -gt $longest && longest=$len
+    ((len > longest)) && longest=$len
 }
 
 set_padding() {
@@ -52,12 +52,13 @@ longest=5
 description='BRIEF DESCRIPTION OF THE SCRIPT'
 # options starting with "f" are flags, "p" are parameters.
 options=()
-file=
 flags=
 params=
+file=
+force=off
 args=()
 while test $# != 0; do
-    case $1 in
+    case "$1" in
     -h|--help) usage ;;
     -a|--author) shift; author=$1 ;;
     -d|--description) shift; description=$1 ;;
@@ -75,6 +76,7 @@ while test $# != 0; do
         set_longest "$1"
         params=1
         ;;
+    --force) shift; force=on ;;
     #--) shift; while test $# != 0; do args+=("$1"); shift; done; break ;;
     -|-?*) usage "Unknown option: $1" ;;
     #*) args+=("$1") ;;  # script that takes multiple arguments
@@ -83,22 +85,18 @@ while test $# != 0; do
     shift
 done
 
-test "$file" || usage
-
 #  -p, --param PARAM  A parameter that takes no arguments
 #^^^^^^^^LLLLL^LLLLL^^
-((width = 8 + longest + 3 + longest))
-test $width -gt 40 && width=40
+((width = 8 + longest + 1 + longest))
+((width > 40)) && width=40
 
-if test "$file" != "-"; then
-    [[ "$file" == *.sh ]] || file=$file.sh
-else
-    file=/tmp/.template-sh.$$
-    test=1
+test "$file" || usage
+
+[[ "$file" == *.sh ]] || file=$file.sh
+
+if test -f "$file"; then
+    test $force = off && usage "File exists. Use --force to clobber it."
 fi
-echo "Creating '$file' ..."
-
-trap 'rm -f "$file"; exit 1' 1 2 3 15
 
 truncate() {
     > "$file"
@@ -107,6 +105,10 @@ truncate() {
 append() {
     cat >> "$file"
 }
+
+echo "Creating '$file' ..."
+
+trap 'rm -f "$file"; exit 1' 1 2 3 15
 
 truncate
 
@@ -150,18 +152,18 @@ for i in "${options[@]}"; do
         optionstring="  -$first, --$oname"
         echo Adding flag: $optionstring
         set_padding "$optionstring"
-        echo "    echo \"$optionstring$padding default = \$$vname\"" | append
+        echo "    echo \"$optionstring $padding default = \$$vname\"" | append
         optionstring="      --no-$oname"
         echo Adding flag: $optionstring
         set_padding "$optionstring"
-        echo "    echo \"$optionstring$padding default = ! \$$vname\"" | append
+        echo "    echo \"$optionstring $padding default = ! \$$vname\"" | append
     else
         # this is a param
         pname=$(tr a-z A-Z <<< "$oname")
         optionstring="  -$first, --$oname $pname"
         echo Adding param: $optionstring
         set_padding "$optionstring"
-        echo "    echo \"$optionstring$padding default = \$$vname\"" | append
+        echo "    echo \"$optionstring $padding default = \$$vname\"" | append
     fi
 done
 
@@ -169,7 +171,7 @@ helpstring="  -h, --help"
 set_padding "$helpstring"
 cat << EOF | append
     echo
-    echo "$helpstring$padding Print this help"
+    echo "$helpstring $padding Print this help"
     echo
     exit 1
 }
@@ -190,7 +192,7 @@ done | append
 
 cat << "EOF" | append
 while test $# != 0; do
-    case $1 in
+    case "$1" in
     -h|--help) usage ;;
 EOF
 
@@ -235,4 +237,3 @@ test $# = 0 && usage
 EOF
 
 chmod +x "$file"
-test "$test" && cat "$file"
