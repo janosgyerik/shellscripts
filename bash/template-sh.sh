@@ -33,7 +33,11 @@ set_longest() {
 
 set_padding() {
     len=${#1}
-    padding=$(printf %$((width - len))s '')
+    if ((len < width)); then
+        padding=$(printf %$((width - len))s '')
+    else
+        padding=
+    fi
 }
 
 if test "$AUTHOR"; then
@@ -64,7 +68,7 @@ while test $# != 0; do
     -d|--description) shift; description=$1 ;;
     -f|--flag)
         shift
-        is_valid_param "$1" || usage "Invalid parameter name: '$1';\nparameter names should match the pattern: $ppattern"
+        is_valid_param "$1" || usage "Invalid parameter name: '$1'; parameter names should match the pattern: $ppattern"
         options+=("f$1")
         set_longest "$1"
         flags=1
@@ -76,10 +80,8 @@ while test $# != 0; do
         set_longest "$1"
         params=1
         ;;
-    --force) shift; force=on ;;
-    #--) shift; while test $# != 0; do args+=("$1"); shift; done; break ;;
+    --force) force=on ;;
     -|-?*) usage "Unknown option: $1" ;;
-    #*) args+=("$1") ;;  # script that takes multiple arguments
     *) test "$file" && usage "Excess argument: $1" || file=$1 ;;
     esac
     shift
@@ -99,7 +101,7 @@ if test -f "$file"; then
 fi
 
 truncate() {
-    > "$file"
+    : > "$file"
 }
 
 append() {
