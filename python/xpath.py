@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import argparse
-import libxml2
 
 example = '''Example file:
 
@@ -27,6 +26,8 @@ if args.example:
 
 xmlfile = args.file
 path = args.path
+
+import libxml2
 
 doc = libxml2.parseFile(xmlfile)
 ctx = doc.xpathNewContext()
