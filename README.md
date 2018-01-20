@@ -277,6 +277,10 @@ directory. It will not overwrite any existing files.
 
     Print the selected column on stdin
 
+* awk/column.awk
+
+    Columnate lists, imitating the BSD `column -t` command
+
 * awk/lengths.awk
 
     Compute and print the lengths of lines on stdin
