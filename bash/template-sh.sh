@@ -40,6 +40,7 @@ set_padding() {
     fi
 }
 
+# shellcheck disable=SC2153
 if test "$AUTHOR"; then
     author=$AUTHOR
 else
@@ -60,7 +61,6 @@ flags=
 params=
 file=
 force=off
-args=()
 while test $# != 0; do
     case "$1" in
     -h|--help) usage ;;
@@ -142,27 +142,29 @@ usage() {
     echo Options:
 EOF
 
-for i in "${options[@]}"; do 
-    f=${i:0:1}
-    name=${i:1}
+for op in "${options[@]}"; do
+    f=${op:0:1}
+    name=${op:1}
     vname=${name//-/_}
     oname=${name//_/-}
     first=${name:0:1}
 
-    if test $f = f; then
-        # this is a flag
+    if test "$f" = f; then
         optionstring="  -$first, --$oname"
+        # shellcheck disable=SC2086
         echo Adding flag: $optionstring
         set_padding "$optionstring"
         echo "    echo \"$optionstring $padding default = \$$vname\"" | append
         optionstring="      --no-$oname"
+        # shellcheck disable=SC2086
         echo Adding flag: $optionstring
         set_padding "$optionstring"
         echo "    echo \"$optionstring $padding default = ! \$$vname\"" | append
     else
-        # this is a param
+        # shellcheck disable=SC2018,SC2019
         pname=$(tr a-z A-Z <<< "$oname")
         optionstring="  -$first, --$oname $pname"
+        # shellcheck disable=SC2086
         echo Adding param: $optionstring
         set_padding "$optionstring"
         echo "    echo \"$optionstring $padding default = \$$vname\"" | append
@@ -184,12 +186,12 @@ EOF
 test "$flags" || echo '#flag=off' | append
 test "$params" || echo '#param=' | append
 
-for i in "${options[@]}"; do 
-    f=${i:0:1}
-    name=${i:1}
+for op in "${options[@]}"; do
+    f=${op:0:1}
+    name=${op:1}
     vname=${name//-/_}
     oname=${name//_/-}
-    test $f = f && echo "$vname=off" || echo "$vname="
+    test "$f" = f && echo "$vname=off" || echo "$vname="
 done | append
 
 cat << "EOF" | append
@@ -209,18 +211,16 @@ if ! test "$params"; then
     echo "    #-p|--param) shift; param=\$1 ;;"
 fi | append
 
-for i in "${options[@]}"; do 
-    f=${i:0:1}
-    name=${i:1}
+for op in "${options[@]}"; do
+    f=${op:0:1}
+    name=${op:1}
     vname=${name//-/_}
     oname=${name//_/-}
     first=${name:0:1}
-    if test $f = f; then
-        # this is a flag
+    if test "$f" = f; then
         echo "    -$first|--$oname) $vname=on ;;"
         echo "    --no-$oname) $vname=off ;;"
     else
-        # this is a param
         echo "    -$first|--$oname) shift; $vname=\$1 ;;"
     fi
 done | append
