@@ -215,7 +215,7 @@ directory. It will not overwrite any existing files.
 
 * bash/template-sh.sh
 
-    Generate a /bin/sh script template with a simple argument parser
+    Generate a Bash script template with a simple argument parser
 
 * bash/unrar.sh
 

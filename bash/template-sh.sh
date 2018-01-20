@@ -3,23 +3,17 @@
 # SCRIPT: template-sh.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
 # DATE:   2005-08-11
-# REV:    1.0.T (Valid are A, B, D, T and P)
 #
-# PLATFORM: Not platform dependent (Confirmed in: Linux, FreeBSD, Solaris 10)
+# PLATFORM: Not platform dependent
 #
-# PURPOSE: Generate a /bin/sh script template with a simple command line parser
+# PURPOSE: Generate a Bash script template with a simple command line parser
 #
-# set -n   # Uncomment to check your syntax, without execution.
-#          # NOTE: Do not forget to put the comment back in or
-#          #       the shell script will not execute!
-# set -x   # Uncomment to debug this shell script (Korn shell only)
-#          
 
 usage() {
     test $# = 0 || echo "$@"
     echo "Usage: $0 [OPTION]... FILENAME"
     echo
-    echo Generate a /bin/sh script template with a simple argument parser
+    echo Generate a Bash script template with a simple argument parser
     echo
     echo Options:
     echo "  -a, --author AUTHOR     Name of the author, default = $author"
@@ -42,25 +36,49 @@ set_padding() {
     padding=$(printf %$((width - len))s '')
 }
 
-test "$AUTHOR" && author=$AUTHOR || author="$(id -un) <$(id -un)@$(hostname)>"
+if test "$AUTHOR"; then
+    author=$AUTHOR
+else
+    username=$(id -un)
+    author="$username <$username@$(hostname)>"
+fi
+
+ppattern='^[a-zA-Z0-9][a-zA-Z0-9_-]*[a-zA-Z0-9]$'
+is_valid_param() {
+    [[ $1 =~ $ppattern ]]
+}
+
 longest=5
 description='BRIEF DESCRIPTION OF THE SCRIPT'
 # options starting with "f" are flags, "p" are parameters.
-options=
+options=()
 file=
 flags=
 params=
+args=()
 while test $# != 0; do
     case $1 in
     -h|--help) usage ;;
     -a|--author) shift; author=$1 ;;
-    -d|--description) shift; description="$1" ;;
-    -f|--flag) shift; options="$options f$1"; set_longest $1; flags=1 ;;
-    -p|--param) shift; options="$options p$1"; set_longest $1; params=1 ;;
-#    --) shift; while test $# != 0; do args="$args \"$1\""; shift; done; break ;;
+    -d|--description) shift; description=$1 ;;
+    -f|--flag)
+        shift
+        is_valid_param "$1" || usage "Invalid parameter name: '$1';\nparameter names should match the pattern: $ppattern"
+        options+=("f$1")
+        set_longest "$1"
+        flags=1
+        ;;
+    -p|--param)
+        shift
+        is_valid_param "$1" || usage "Invalid parameter name: '$1'; parameter names should match the pattern: $ppattern"
+        options+=("p$1")
+        set_longest "$1"
+        params=1
+        ;;
+    #--) shift; while test $# != 0; do args+=("$1"); shift; done; break ;;
     -|-?*) usage "Unknown option: $1" ;;
-#    *) args="$args \"$1\"" ;;  # script that takes multiple arguments
-    *) test "$file" && usage || file=$1 ;;
+    #*) args+=("$1") ;;  # script that takes multiple arguments
+    *) test "$file" && usage "Excess argument: $1" || file=$1 ;;
     esac
     shift
 done
@@ -68,28 +86,36 @@ done
 test "$file" || usage
 
 #  -p, --param PARAM  A parameter that takes no arguments
-#^^^^^^^8^^^^L^^^^^L^^
-width=$((8 + longest + 2 + longest))
+#^^^^^^^^LLLLL^LLLLL^^
+((width = 8 + longest + 3 + longest))
 test $width -gt 40 && width=40
 
 if test "$file" != "-"; then
-    [[ "$file" == *.sh ]] || file="$file".sh
+    [[ "$file" == *.sh ]] || file=$file.sh
 else
     file=/tmp/.template-sh.$$
     test=1
 fi
-echo "Creating \"$file\" ..."
+echo "Creating '$file' ..."
 
 trap 'rm -f "$file"; exit 1' 1 2 3 15
 
-cat << EOF > "$file"
-#!/bin/sh
+truncate() {
+    > "$file"
+}
+
+append() {
+    cat >> "$file"
+}
+
+truncate
+
+cat << EOF | append
+#!/usr/bin/env bash
 #
 # SCRIPT: $(basename "$file")
 # AUTHOR: $author
 # DATE:   $(date +%F)
-# REV:    1.0.D (Valid are A, B, D, T and P)
-#               (For Alpha, Beta, Dev, Test and Production)
 #
 # PLATFORM: Not platform dependent
 # PLATFORM: Linux only
@@ -112,7 +138,7 @@ usage() {
     echo Options:
 EOF
 
-for i in $options; do 
+for i in "${options[@]}"; do 
     f=${i:0:1}
     name=${i:1}
     vname=${name//-/_}
@@ -124,61 +150,62 @@ for i in $options; do
         optionstring="  -$first, --$oname"
         echo Adding flag: $optionstring
         set_padding "$optionstring"
-        echo "    echo \"$optionstring$padding default = \$$vname\"" >> "$file"
+        echo "    echo \"$optionstring$padding default = \$$vname\"" | append
         optionstring="      --no-$oname"
         echo Adding flag: $optionstring
         set_padding "$optionstring"
-        echo "    echo \"$optionstring$padding default = ! \$$vname\"" >> "$file"
+        echo "    echo \"$optionstring$padding default = ! \$$vname\"" | append
     else
         # this is a param
-        pname=$(echo $oname | tr a-z- A-Z_)
+        pname=$(tr a-z A-Z <<< "$oname")
         optionstring="  -$first, --$oname $pname"
         echo Adding param: $optionstring
         set_padding "$optionstring"
-        echo "    echo \"$optionstring$padding default = \$$vname\"" >> "$file"
+        echo "    echo \"$optionstring$padding default = \$$vname\"" | append
     fi
 done
 
 helpstring="  -h, --help"
 set_padding "$helpstring"
-cat << EOF >> "$file"
+cat << EOF | append
     echo
     echo "$helpstring$padding Print this help"
     echo
     exit 1
 }
 
-args=
+args=()
 EOF
 
-test "$flags" || echo '#flag=off' >> "$file"
-test "$params" || echo '#param=' >> "$file"
+test "$flags" || echo '#flag=off' | append
+test "$params" || echo '#param=' | append
 
-for i in $options; do 
+for i in "${options[@]}"; do 
     f=${i:0:1}
     name=${i:1}
     vname=${name//-/_}
     oname=${name//_/-}
-    test $f = f && echo "$vname=off" >> "$file" || echo "$vname=" >> "$file"
-done
+    test $f = f && echo "$vname=off" || echo "$vname="
+done | append
 
-cat << EOF >> "$file"
-while test \$# != 0; do
-    case \$1 in
+cat << "EOF" | append
+while test $# != 0; do
+    case $1 in
     -h|--help) usage ;;
 EOF
 
 if ! test "$flags"; then
     # an example entry to illustrate parsing a flag
-    echo "#    -f|--flag) flag=on ;;" >> "$file"
-    echo "#    --no-flag) flag=off ;;" >> "$file"
-fi
+    echo "    #-f|--flag) flag=on ;;"
+    echo "    #--no-flag) flag=off ;;"
+fi | append
+
 if ! test "$params"; then
     # an example entry to illustrate parsing a param
-    echo "#    -p|--param) shift; param=\$1 ;;" >> "$file"
-fi
+    echo "    #-p|--param) shift; param=\$1 ;;"
+fi | append
 
-for i in $options; do 
+for i in "${options[@]}"; do 
     f=${i:0:1}
     name=${i:1}
     vname=${name//-/_}
@@ -186,25 +213,25 @@ for i in $options; do
     first=${name:0:1}
     if test $f = f; then
         # this is a flag
-        echo "    -$first|--$oname) $vname=on ;;" >> "$file"
-        echo "    --no-$oname) $vname=off ;;" >> "$file"
+        echo "    -$first|--$oname) $vname=on ;;"
+        echo "    --no-$oname) $vname=off ;;"
     else
         # this is a param
-        echo "    -$first|--$oname) shift; $vname=\$1 ;;" >> "$file"
+        echo "    -$first|--$oname) shift; $vname=\$1 ;;"
     fi
-done
+done | append
 
-cat << "EOF" >> "$file"
-#    --) shift; while test $# != 0; do args="$args \"$1\""; shift; done; break ;;
+cat << "EOF" | append
+    #--) shift; while test $# != 0; do args+=("$1"); shift; done; break ;;
     -|-?*) usage "Unknown option: $1" ;;
-    *) args="$args \"$1\"" ;;  # script that takes multiple arguments
+    #*) args+=("$1") ;;  # script that takes multiple arguments
     esac
     shift
 done
 
-eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 
+set -- "${args[@]}"  # save arguments in $@
 
-test $# -gt 0 || usage
+test $# = 0 && usage
 EOF
 
 chmod +x "$file"

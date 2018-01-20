@@ -12,15 +12,13 @@ script optimization checklist
 
 * usage
 
-    * signature: usage() {
+    * function declaration style: usage() {
 
-    * test $# = 0 || echo $@
+    * test $# = 0 || echo "$@"
 
-    * adequate usage line
+    * usage line style: echo "Usage: $0 [OPTION]... FILENAME"
 
-    * usage line does not use basename $0 but simply $0
-
-    * good brief usage message in the 3rd line (of the output)
+    * good brief usage message on the 3rd line (of the output)
 
     * list of options
 
@@ -30,11 +28,13 @@ script optimization checklist
 
 	* help option -h, --help
 
-    * exit 1 in the end
+    * exit 1 at the end
 
 * command line parser
 
     * negate with --no-FLAG
+
+    * do not provide --no-FLAG if not useful
 
     * sample lines (optional if there are real examples)
     
@@ -44,7 +44,7 @@ script optimization checklist
 
     * no unnecessary "--" parsing (comment out)
 
-    * = shift; while test "$1"; do args="$args \"$1\""; shift; done; break ;;
+    * = shift; while test "$1"; do args+=("$1"); shift; done; break ;;
 
     * do not parse *) unnecessarily (comment out)
 
@@ -54,15 +54,15 @@ script optimization checklist
 
     * flag checks: on | off
 
-    * comment out or remove eval "set -- $args" if not needed
+    * comment out or remove set -- "${args[@]}" if not needed
 
-    * zero argument check: test "$1" || usage "possibly a message"
+    * zero argument check: test $# = 0 && usage "possibly a message"
 
 * main
 
     * proper handling of filenames with spaces
 
-    * proper handling of missing external commands (for example in wav2mp3.sh)
+    * proper handling of missing external commands (see for example in wav2mp3.sh)
 
     * proper handling of missing perl modules
 
@@ -70,13 +70,9 @@ script optimization checklist
 
     * watch out for differences in command flags across different OS-es
 
-    * use date +%F instead of date --iso, or even date +%Y%m%d
+    * use date +%F instead of date --iso
 
     * use $() instead of ``
 
-    * use ">/dev/null 2>&1 ;" instead of &>
-
-    * do not put space after " >"
-
-    * exit codes: make sure it's 1 on any non-normal exit
+    * exit codes: make sure it's non-zero on any non-normal exit
 
