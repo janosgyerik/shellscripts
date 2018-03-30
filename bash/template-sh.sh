@@ -10,7 +10,11 @@
 #
 
 usage() {
-    test $# = 0 || echo "$@"
+    local exitcode=0
+    if [ $# != 0 ]; then
+        echo "$@"
+        exitcode=1
+    fi
     echo "Usage: $0 [OPTION]... FILENAME"
     echo
     echo Generate a Bash script template with a simple argument parser
@@ -23,7 +27,7 @@ usage() {
     echo
     echo "  -h, --help              Print this help"
     echo
-    exit 1
+    exit $exitcode
 }
 
 set_longest() {
