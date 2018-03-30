@@ -9,6 +9,8 @@
 # PURPOSE: Generate a Bash script template with a simple command line parser
 #
 
+set -euo pipefail
+
 usage() {
     local exitcode=0
     if [ $# != 0 ]; then
@@ -45,7 +47,7 @@ set_padding() {
 }
 
 # shellcheck disable=SC2153
-if test "$AUTHOR"; then
+if test "${AUTHOR+x}"; then
     author=$AUTHOR
 else
     username=$(id -un)
@@ -96,12 +98,12 @@ done
 ((width = 8 + longest + 1 + longest))
 ((width > 40)) && width=40
 
-test "$file" || usage
+test "$file" || usage "Error: specify filename"
 
 [[ "$file" == *.sh ]] || file=$file.sh
 
 if test -f "$file"; then
-    test $force = off && usage "File exists. Use --force to clobber it."
+    test $force = off && usage "Error: file exists. Use --force to clobber it."
 fi
 
 truncate() {
@@ -135,10 +137,14 @@ cat << EOF | append
 #          focused on the task at hand.
 #
 
-set -e
+set -euo pipefail
 
 usage() {
-    test \$# = 0 || echo "\$@"
+    local exitcode=0
+    if [ \$# != 0 ]; then
+        echo "\$@"
+        exitcode=1
+    fi
     echo "Usage: \$0 [OPTION]... [ARG]..."
     echo
     echo $description
@@ -181,7 +187,7 @@ cat << EOF | append
     echo
     echo "$helpstring $padding Print this help"
     echo
-    exit 1
+    exit \$exitcode
 }
 
 args=()
@@ -239,7 +245,7 @@ done
 
 set -- "${args[@]}"  # save arguments in $@
 
-test $# = 0 && usage
+test $# != 0 || usage "Error: specify ..."
 EOF
 
 chmod +x "$file"
