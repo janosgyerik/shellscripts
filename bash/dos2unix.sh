@@ -10,14 +10,13 @@
 #
 # PURPOSE: Remove carriage return from files.
 #
-# set -n   # Uncomment to check your syntax, without execution.
-#          # NOTE: Do not forget to put the comment back in or
-#          #       the shell script will not execute!
-# set -x   # Uncomment to debug this shell script (Korn shell only)
-#
 
 usage() {
-    test $# = 0 || echo $@
+    local exitcode=0
+    if [ $# != 0 ]; then
+        echo "$@"
+        exitcode=1
+    fi
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
     echo Remove carriage return from files
@@ -31,29 +30,20 @@ usage() {
 }
 
 args=
-#arg=
-#flag=off
-#param=
 outdir=
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-#    -f|--flag) flag=on ;;
-#    --no-flag) flag=off ;;
-#    -p|--param) shift; param=$1 ;;
     -o|--outdir) shift; outdir=$1 ;;
-#    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
-#    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
-#    *) arg=$1 ;;  # forgiving with excess arguments
     esac
     shift
 done
 
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 
 
-test -f "$1" || usage
+test $# != 0 || usage "Specify files to convert"
 
 test "$outdir" && mkdir -p "$outdir"
 
@@ -61,16 +51,16 @@ msg() {
     echo '* '$*
 }
 
-for i in "$@"; do
+for i; do
     test -f "$i" || continue
     if test "$outdir"; then
-	msg creating $outdir/$(basename "$i") ...
-	cp "$i" "$outdir"
-	tr -d '\r' < "$i" > "$outdir"/"$(basename "$i")"
+        msg creating $outdir/$(basename "$i") ...
+        cp "$i" "$outdir"
+        tr -d '\r' < "$i" > "$outdir"/"$(basename "$i")"
     else
-	msg converting $i ...
-	tr -d '\r' < "$i" > "$i".unix
-	cat "$i".unix > "$i" # this way permissions are preserved
-	rm "$i".unix
+        msg converting $i ...
+        tr -d '\r' < "$i" > "$i".unix
+        cat "$i".unix > "$i" # this way permissions are preserved
+        rm "$i".unix
     fi
 done

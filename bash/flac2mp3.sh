@@ -4,34 +4,28 @@
 #
 
 usage() {
-    test "$1" && echo $@
+    local exitcode=0
+    if [ $# != 0 ]; then
+        echo "$@"
+        exitcode=1
+    fi
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
     echo "Convert FLAC files to MP3 using flac and lame"
-    exit 1
+    exit $exitcode
 }
 
 args=
-#arg=
-#flag=off
-#param=
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-#    -f|--flag) flag=on ;;
-#    -p|--param) shift; param=$1 ;;
-#    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
-#    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
-#    *) arg=$1 ;;  # forgiving with excess arguments
     esac
     shift
 done
 
 eval "set -- $args"
-
-#test -f "$1" || usage
 
 require="flac lame"
 failed=no
@@ -43,9 +37,7 @@ for program in $require; do
 done
 test $failed = no || exit 1
 
-for i in "$@"; do
+for i; do
     echo "flac -c -d \"$i\" | lame -m j -b 192 -s 44.1 - \"${i%.flac}.mp3\""
     flac -c -d "$i" | lame -m j -b 192 -s 44.1 - "${i%.flac}.mp3"
 done
-
-# end of script

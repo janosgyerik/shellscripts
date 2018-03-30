@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # SCRIPT: find-recent.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
@@ -10,14 +10,13 @@
 #
 # PURPOSE: Find and sort files by atime/ctime/mtime
 #
-# set -n   # Uncomment to check your syntax, without execution.
-#          # NOTE: Do not forget to put the comment back in or
-#          #       the shell script will not execute!
-# set -x   # Uncomment to debug this shell script (Korn shell only)
-#
 
 usage() {
-    test $# = 0 || echo $@
+    local exitcode=0
+    if [ $# != 0 ]; then
+        echo "$@"
+        exitcode=1
+    fi
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
     echo Find and sort files by atime/ctime/mtime
@@ -35,7 +34,7 @@ usage() {
     echo
     echo "  -h, --help                 Print this help"
     echo
-    exit 1
+    exit $exitcode
 }
 
 args=
@@ -58,19 +57,16 @@ while [ $# != 0 ]; do
     --mindepth) shift; mindepth=$1 ;;
     --cmd) shift; cmd=$1 ;;
     -v|--verbose) verbose=on ;;
-#    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -) usage "Unknown option: $1" ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
-#    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
-#    *) arg=$1 ;;  # forgiving with excess arguments
     esac
     shift
 done
 
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 
 
-test $# -gt 0 || usage
+test $# != 0 || set -- .
 
 uname | grep Linux >/dev/null && linux=1 || linux=
 

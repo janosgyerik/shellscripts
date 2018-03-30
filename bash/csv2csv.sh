@@ -10,16 +10,15 @@
 #
 # PURPOSE: Convert CSV to CSV using specified locale
 #
-# set -n   # Uncomment to check your syntax, without execution.
-#          # NOTE: Do not forget to put the comment back in or
-#          #       the shell script will not execute!
-# set -x   # Uncomment to debug this shell script (Korn shell only)
-#
 
-set -e
+set -euo pipefail
 
 usage() {
-    test $# = 0 || echo "$@"
+    local exitcode=0
+    if [ $# != 0 ]; then
+        echo "$@"
+        exitcode=1
+    fi
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
     echo Convert CSV to CSV using specified locale
@@ -30,27 +29,20 @@ usage() {
     echo
     echo "  -h, --help         Print this help"
     echo
-    exit 1
+    exit $exitcode
 }
 
 args=
-#arg=
-#flag=off
-#param=
 en=on
 fr=off
 while test $# != 0; do
     case $1 in
     -h|--help) usage ;;
-#   -p|--param) shift; param=$1 ;;
     -e|--en) en=on ;;
     -f|--fr) fr=on ;;
-#    --) shift; while test $# != 0; do args="$args \"$1\""; shift; done; break ;;
     -) usage "Unknown option: $1" ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
-#    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
-#    *) arg=$1 ;;  # forgiving with excess arguments
     esac
     shift
 done
@@ -65,9 +57,9 @@ csv2csv() {
     fi
 }
 
-if test $# -gt 0; then
-    for i; do
-        csv2csv < "$i"
+if test $# != 0; then
+    for path; do
+        csv2csv < "$path"
     done
 else
     csv2csv

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # SCRIPT: gen-index.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
@@ -14,10 +14,14 @@
 #          focused on the task at hand.
 #
 
-set -e
+set -euo pipefail
 
 usage() {
-    test $# = 0 || echo "$@"
+    local exitcode=0
+    if [ $# != 0 ]; then
+        echo "$@"
+        exitcode=1
+    fi
     echo "Usage: $0 [OPTION]... [ARG]..."
     echo
     echo Generate index.html from files and directory trees
@@ -30,22 +34,19 @@ usage() {
     echo
     echo "  -h, --help                 Print this help"
     echo
-    exit 1
+    exit $exitcode
 }
 
 args=
-#param=
 recursive=off
 dryrun=off
 while test $# != 0; do
     case $1 in
     -h|--help) usage ;;
-#    -p|--param) shift; param=$1 ;;
     -r|--recursive) recursive=on ;;
     --no-recursive) recursive=off ;;
     -n|--dry-run) dryrun=on ;;
     --no-dry-run) dryrun=off ;;
-#    --) shift; while test $# != 0; do args="$args \"$1\""; shift; done; break ;;
     -|-?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
     esac
@@ -54,7 +55,7 @@ done
 
 eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@ 
 
-test $# -gt 0 || usage
+test $# != 0 || usage "Error: specify target directories"
 
 gen_header() {
     basename=${PWD##*/}
