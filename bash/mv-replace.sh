@@ -1,21 +1,14 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # SCRIPT: mv-replace.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
 # DATE:   2004-11-28
-# REV:    1.0.T (Valid are A, B, D, T and P)
-#               (For Alpha, Beta, Dev, Test and Production)
 #
 # PLATFORM: Not platform dependent (Confirmed in: Ubuntu)
 #
 # PURPOSE: Rename specified files (or files in the current directory) by
 #          replacing <pattern> with (possibly empty) <replacement>.
 #
-# set -n   # Uncomment to check your syntax, without execution.
-#          # NOTE: Do not forget to put the comment back in or
-#          #       the shell script will not execute!
-# set -x   # Uncomment to debug this shell script (Korn shell only)
-#          
 #
 
 usage() {
@@ -50,6 +43,7 @@ global=off
 pattern=
 replacement=
 replacement_flag=off
+renum=off
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
@@ -57,41 +51,44 @@ while [ $# != 0 ]; do
     -f|--force) force=on ;;
     -t|--test) testonly=on ;;
     -g|--global) global=on ;;
+    --renum) renum=on ;;
 #    -p|--param) shift; param=$1 ;;
     --) shift
-	while [ $# != 0 ]; do 
-	    if test "$pattern"; then
-		if test $replacement_flag = off; then
-		    replacement_flag=on
-		    replacement=$1
-		else
-		    args="$args \"$1\""
-		fi
-	    else
-		pattern=$1
-	    fi
-	    shift
-	done
-	break
-	;;
+    while [ $# != 0 ]; do
+        if test "$pattern"; then
+        if test $replacement_flag = off; then
+            replacement_flag=on
+            replacement=$1
+        else
+            args="$args \"$1\""
+        fi
+        else
+        pattern=$1
+        fi
+        shift
+    done
+    break
+    ;;
     -?*) usage "Unknown option: $1" ;;
-    *) 
-	if test "$pattern"; then
-	    if test $replacement_flag = off; then
-		replacement_flag=on
-		replacement=$1
-	    else
-		args="$args \"$1\""
-	    fi
-	else
-	    pattern=$1
-	fi
-	;;
+    *)
+    if test $renum = on; then
+        args="$args \"$1\""
+    elif test "$pattern"; then
+        if test $replacement_flag = off; then
+        replacement_flag=on
+        replacement=$1
+        else
+        args="$args \"$1\""
+        fi
+    else
+        pattern=$1
+    fi
+    ;;
     esac
     shift
 done
 
-test "$pattern" || usage
+test "$pattern" -o $renum = on || usage
 
 test "$args" && eval "set -- $args" || set -- *
 
@@ -103,10 +100,16 @@ test $global = on && s_flags=g || s_flags=
 
 test $testonly = off && msg= || msg='test: '
 
-for from in "$@"; do
-    to=$(echo $from | sed -e "s/$pattern/$replacement/$s_flags")
+i=0
+for from; do
+    if test $renum = off; then
+        to=$(echo $from | sed -e "s/$pattern/$replacement/$s_flags")
+    else
+        ((i++))
+        to=$(printf "%02d-%s" $i "$from")
+    fi
     if test "$from" != "$to"; then
-	echo $msg "\`$from' -> \`$to'"
-	test $testonly = off && mv $mv_ops -- "$from" "$to"
+        echo $msg "\`$from' -> \`$to'"
+        test $testonly = off && mv $mv_ops -- "$from" "$to"
     fi
 done
