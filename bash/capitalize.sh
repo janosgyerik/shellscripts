@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # SCRIPT: capitalize.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
@@ -10,14 +10,13 @@
 #
 # PURPOSE: Capitalize words in the filenames.
 #
-# set -n   # Uncomment to check your syntax, without execution.
-#          # NOTE: Do not forget to put the comment back in or
-#          #       the shell script will not execute!
-# set -x   # Uncomment to debug this shell script (Korn shell only)
-#          
 
 usage() {
-    test $# = 0 || echo $@
+    local exitcode=0
+    if [ $# != 0 ]; then
+        echo "$@"
+        exitcode=1
+    fi
     echo "Usage: $0 [OPTION]... FILE..."
     echo
     echo Capitalize words in filenames
@@ -26,39 +25,36 @@ usage() {
     echo
     echo "  -h, --help            Print this help"
     echo
-    exit 1
+    exit $exitcode
 }
 
 args=
-#flag=off
-#param=
 global=off
 while [ $# != 0 ]; do
     case $1 in
     -h|--help) usage ;;
-#    -f|--flag) flag=on ;;
-#    -p|--param) shift; param=$1 ;;
     -g|--global) global=on ;;
     --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
-#    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
-#    *) arg=$1 ;;  # forgiving with excess arguments
     esac
     shift
 done
 
 eval "set -- $args"
 
-test $# -gt 0 || usage
+test $# != 0 || usage "Error: specify file names to capitalize"
 
 test $global = on && g=g || g=
 
-for i in "$@"; do
-    file=`basename "$i"`
-    dir=`dirname "$i"`
-    capitalized=`echo "$file" | tr A-Z a-z | perl -ne "s/((?<=[^\w.'])|^)./\U\$&/$g; print"`
-    old="$dir/$file"
-    new="$dir/$capitalized"
-    test "$new" != "$old" && echo "\`$i' -> \`$new'" && mv -i -- "$i" "$new"
+for path; do
+    filename=$(basename "$path")
+    basedir=$(dirname "$path")
+    capitalized=$(perl -pe "tr/A-Z/a-z/; s/((?<=[^\w.'])|^)./\U\$&/$g" <<< "$filename")
+    old="$basedir/$filename"
+    new="$basedir/$capitalized"
+
+    if test "$new" != "$old"; then
+        mv -vi -- "$path" "$new"
+    fi
 done
