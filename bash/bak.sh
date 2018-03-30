@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # SCRIPT: bak.sh
 # AUTHOR: Janos Gyerik <info@janosgyerik.com>
@@ -10,22 +10,15 @@
 #
 # PURPOSE: Move or copy files and directories with .bak or .YYYYMMDD suffix
 #
-# REV LIST:
-#        DATE:  DATE_of_REVISION
-#        BY:    AUTHOR_of_MODIFICATION   
-#        MODIFICATION: Describe what was modified, new features, etc-
-#
-#
-# set -n   # Uncomment to check your syntax, without execution.
-#          # NOTE: Do not forget to put the comment back in or
-#          #       the shell script will not execute!
-# set -x   # Uncomment to debug this shell script (Korn shell only)
-#          
 
-set -e
+set -euo pipefail
 
 usage() {
-    test $# = 0 || echo "$@"
+    local exitcode=0
+    if [ $# != 0 ]; then
+        echo "$@"
+        exitcode=1
+    fi
     echo "Usage: $0 [OPTION]..."
     echo
     echo "Move or copy files and directories with .bak or .YYYYMMDD suffix"
@@ -39,7 +32,7 @@ usage() {
     echo
     echo "  -h, --help          Print this help"
     echo
-    exit 1
+    exit $exitcode
 }
 
 
@@ -55,19 +48,18 @@ while [ $# != 0 ]; do
     --date|-d) suffix=.$(date +%Y%m%d) ;;
     --timestamp|--ts) suffix=.$(date +%Y%m%d%H%M%S) ;;
     --suffix) shift; suffix=$1 ;;
-#    --) shift; while [ $# != 0 ]; do args="$args \"$1\""; shift; done; break ;;
     -?*) usage "Unknown option: $1" ;;
     *) args="$args \"$1\"" ;;  # script that takes multiple arguments
-#    *) test "$arg" && usage || arg=$1 ;;  # strict with excess arguments
-#    *) arg=$1 ;;  # forgiving with excess arguments
     esac
     shift
 done
 
 eval "set -- $args"
 
+[ $# != 0 ] || usage "Error: specify files to backup"
+
 test $move = off && cmd="cp -vRi --" || cmd="mv -vi --"
-for i; do
-    j=${i%%/}
-    $cmd "$i" "$j$suffix"
+for source; do
+    fn=${source%%/}
+    $cmd "$source" "$fn$suffix"
 done
