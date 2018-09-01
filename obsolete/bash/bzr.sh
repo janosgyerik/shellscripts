@@ -121,7 +121,7 @@ repolistcmd() {
 }
 
 require_bzrroot() {
-    case "$bzrroot" in
+    case $bzrroot in
 	/*) ;;
 	?*) fatal 'bzrroot should be absolute path' ;;
 	*) fatal 'Use --bzrroot to specify repository root' ;;
@@ -135,22 +135,22 @@ test "$bzrhost" || protocol=
 test "$bzrhost" -a ! "$protocol" && protocol=bzr+ssh://
 
 # validate protocol
-case "$protocol" in
+case $protocol in
     bzr+ssh://) test "$bzrhost" || fatal 'Use --bzrhost to specify bzrhost!' ;;
     '') ;;
     *) fatal "Don't know how to handle repos with protocol=$protocol" ;;
 esac
 
-case "$1" in
+case $1 in
     checkout|co)
-	case "$protocol" in
+	case $protocol in
 	    bzr+ssh://) ;;
 	    '') ;;
 	    *) fatal "Don't know how to checkout repos with protocol=$protocol" ;;
 	esac
 	require_bzrroot
 	test "$2" && localbase=$(normalpath "$2") || localbase=.
-	case "$protocol" in
+	case $protocol in
 	    bzr+ssh://) ssh $bzrhost "$(repolistcmd $bzrroot)" ;;
 	    '') eval "$(repolistcmd $bzrroot)" ;;
 	esac | while read rdir; do
@@ -187,7 +187,7 @@ case "$1" in
 	done
 	;;
     list|ls)
-	case "$protocol" in
+	case $protocol in
 	    bzr+ssh://) 
 		require_bzrroot
 		ssh $bzrhost "$(repolistcmd $bzrroot)" ;;
@@ -206,7 +206,7 @@ case "$1" in
 	esac
 	;;
     diff)
-	case "$protocol" in
+	case $protocol in
 	    bzr+ssh://) ;;
 	    '') ;;
 	    *) fatal "Don't know how to diff repos with protocol=$protocol" ;;
@@ -214,7 +214,7 @@ case "$1" in
 	require_bzrroot
 	test "$2" && localrepo=$(normalpath "$2") || localrepo=$PWD
 	eval "$(repolistcmd $localrepo)" | sed -e "s?$localrepo??" > $workfile
-	case "$protocol" in
+	case $protocol in
 	    bzr+ssh://) ssh $bzrhost "$(repolistcmd $bzrroot)" ;;
 	    '') eval "$(repolistcmd $bzrroot)" ;;
 	esac | sed -e "s?$bzrroot??" | diff -u - $workfile

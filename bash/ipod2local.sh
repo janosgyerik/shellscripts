@@ -69,7 +69,7 @@ cnt=0
 
 find "$source" -type f | while read f; do
     echo processing file: $f ...
-    case "$f" in
+    case $f in
 	*.mp3)
 	    ddd=mp3
 	    if test "$have_id3v2"; then

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-case "$1" in
+case $1 in
     -h|--help)
         echo Usage: $0 JAR...
         echo

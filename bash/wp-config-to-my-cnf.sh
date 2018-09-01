@@ -62,7 +62,7 @@ extract_db_vars() {
     fi
     while read -r line; do
         value=${line#*=}
-        case "$line" in
+        case $line in
             DB_NAME=*) DB_NAME="$value" ;;
             DB_HOST=*) DB_HOST="$value" ;;
             DB_USER=*) DB_USER="$value" ;;

@@ -32,7 +32,7 @@ usage() {
 
 args=()
 while test $# != 0; do
-    case "$1" in
+    case $1 in
     -h|--help) usage ;;
     -|-?*) usage "Unknown option: $1" ;;
     *) args+=("$1") ;;

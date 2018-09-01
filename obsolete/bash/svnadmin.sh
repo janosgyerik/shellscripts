@@ -96,7 +96,7 @@ ok_to_erase() {
     test $yes = on && return 0
     echo -n Ok to erase \'$target\'?' [yN] '
     read ans
-    case "$ans" in
+    case $ans in
 	[yY]*) ans=0;;
 	*) ans=1;;
     esac

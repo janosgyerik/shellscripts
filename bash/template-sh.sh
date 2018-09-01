@@ -68,7 +68,7 @@ params=
 file=
 force=off
 while test $# != 0; do
-    case "$1" in
+    case $1 in
     -h|--help) usage ;;
     -a|--author) shift; author=$1 ;;
     -d|--description) shift; description=$1 ;;
@@ -206,7 +206,7 @@ done | append
 
 cat << "EOF" | append
 while test $# != 0; do
-    case "$1" in
+    case $1 in
     -h|--help) usage ;;
 EOF
 

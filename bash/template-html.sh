@@ -74,7 +74,7 @@ done
 
 test "$file" || usage
 
-case "$dtd" in 
+case $dtd in 
     h*|html4) dtd=$dtd_html4 ;;
     t*|transitional) dtd=$dtd_transitional ;;
     s*|strict) dtd=$dtd_strict ;;

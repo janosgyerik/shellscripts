@@ -79,7 +79,7 @@ eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@
 workfile=/tmp/.svn.sh-$$
 trap 'rm -f $workfile; exit 1' 1 2 3 15
 
-case "$1" in
+case $1 in
     checkout|co)
 	test "$svnhost" || usage 'Use --ssh to specify svnhost and svnroot!'
 	test "$svnroot" || usage 'Use --ssh to specify svnhost and svnroot!'
