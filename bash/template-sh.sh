@@ -34,7 +34,7 @@ usage() {
 
 set_longest() {
     len=${#1}
-    ((len > longest)) && longest=$len
+    ((len > longest)) && longest=$len || :
 }
 
 set_padding() {
@@ -96,7 +96,7 @@ done
 #  -p, --param PARAM  A parameter that takes no arguments
 #^^^^^^^^LLLLL^LLLLL^^
 ((width = 8 + longest + 1 + longest))
-((width > 40)) && width=40
+((width > 40)) && width=40 || :
 
 test "$file" || usage "Error: specify filename"
 
@@ -116,7 +116,7 @@ append() {
 
 echo "Creating '$file' ..."
 
-trap 'rm -f "$file"; exit 1' 1 2 3 15
+trap 'rm -f "$file"; exit 1' EXIT
 
 truncate
 
