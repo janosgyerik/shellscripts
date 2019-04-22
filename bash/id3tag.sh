@@ -31,8 +31,21 @@
 # set -x   # Uncomment to debug this shell script (Korn shell only)
 #          
 
-configfile=./.id3tag.sh
+require() {
+    local program all_ok=1
+    for program; do
+        if ! type "$program" &>/dev/null; then
+            echo "Error: the required program '$program' is not installed or not in PATH"
+            all_ok=
+        fi
+    done
+    test "$all_ok" || exit 1
+}
+
 program=id3v2
+require "$program"
+
+configfile=./.id3tag.sh
 missing=missing
 mp3info=mp3info
 mp3info_ops=-x
@@ -60,11 +73,6 @@ while [ "$#" != 0 ]; do
     esac
     shift
 done
-
-if ! type $program >/dev/null 2>/dev/null; then
-    echo Error: the program "'$program'" is not installed or not in PATH
-    exit
-fi
 
 update_tags() {
     pattern=$1
