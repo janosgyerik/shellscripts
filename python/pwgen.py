@@ -42,6 +42,16 @@ def pwgen(alphabet, easy, length=16):
                        for _ in range(TERMINAL_WIDTH // (length + 1))))
 
 
+def pwgen_from_words(n):
+    with open('/usr/share/dict/words') as fh:
+        words = [w.strip().lower() for w in fh.readlines() if 5 <= len(w) <= 7]
+
+    random.shuffle(words)
+    for i in range(TERMINAL_HEIGHT - 3):
+        pw = ' '.join(words[4*i:4*i+4])
+        print(pw)
+
+
 def main():
     parser = ArgumentParser(description='Generate random passwords')
     parser.add_argument('-a', '--alphabet',
@@ -51,12 +61,19 @@ def main():
     parser.add_argument('--easy', action='store_true', default=False,
                         help='use a simple default alphabet, without ambiguous or doubled characters')
     parser.add_argument('-l', '--length', type=int, default=DEFAULT_LENGTH)
+    parser.add_argument('-w', '--words', action='store_true', default=False,
+                        help='use 4 random words')
     args = parser.parse_args()
 
+    words = args.words
     alphabet = args.alphabet
     complex_ = args.complex_
     easy = args.easy
     length = args.length
+
+    if words:
+        pwgen_from_words(4)
+        return
 
     if alphabet is None:
         if complex_:
