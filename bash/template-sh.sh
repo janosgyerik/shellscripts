@@ -116,7 +116,7 @@ append() {
 
 echo "Creating '$file' ..."
 
-trap 'rm -f "$file"; exit 1' EXIT
+trap 'rm -f "$file"; exit 1' 1 2 3 15
 
 truncate
 
