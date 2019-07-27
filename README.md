@@ -9,33 +9,13 @@ directory. It will not overwrite any existing files.
 
 ## Bash
 
-* bash/add-stub-pl.sh
-
-    Insert a script header after the first line of a perl script
-
-* bash/add-stub-sh.sh
-
-    Insert a script header after the first line of a shell script
-
-* bash/add-usage-sh.sh
-
-    Add a usage() function after the first blank line of a shell script
-
-* bash/alert.sh
-
-    Sound the system bell
-
-* bash/backup.sh
-
-    Archive files under BASE/sources/{daily,weekly,monthly}
-
 * bash/bak.sh
 
     Move or copy files and directories with .bak or .YYYYMMDD suffix
 
-* bash/bzr.sh
+* bash/bell.sh
 
-    Perform repository operations on a tree of bzr repositories
+    Sound the system bell
 
 * bash/capitalize.sh
 
@@ -61,17 +41,17 @@ directory. It will not overwrite any existing files.
 
     Remove carriage return from files
 
-* bash/download-lj.sh
+* bash/ebook-convert.sh
 
-    Download Linux Journal PDFs from your digital subscription
-
-* bash/download-lm.sh
-
-    Download Linux Magazine PDFs from your digital subscription
+    TODO
 
 * bash/eggtimer.sh
 
     Countdown from specified minutes and seconds
+
+* bash/extract-audio-from-video.sh
+
+    Extract audio content from video files
 
 * bash/extract-icon-from-platter.sh
 
@@ -137,6 +117,10 @@ directory. It will not overwrite any existing files.
 
     Convert M4A files to MP3 using faad and bladeenc
 
+* bash/mv-many.sh
+
+    Rename files by editing their names in vim
+
 * bash/mv-replace.sh
 
     Replace regex patterns in filenames
@@ -169,14 +153,6 @@ directory. It will not overwrite any existing files.
 
     Rip a DVD movie into a high quality DIVX file
 
-* bash/save-flash-linux.sh
-
-    Copy a flash movie (youtube.com, etc) saved by a browser in /private
-
-* bash/save-flash-mac.sh
-
-    Copy a flash movie (youtube.com, etc) saved by a browser in /private
-
 * bash/save-webpage.sh
 
     Save a webpage and all the files necessary to display properly
@@ -192,14 +168,6 @@ directory. It will not overwrite any existing files.
 * bash/ssh-tunnel-keeper.sh
 
     Create an ssh rtunnel and try to keep it alive as long as possible
-
-* bash/svn.sh
-
-    Perform repository operations on a tree of svn repositories
-
-* bash/svnadmin.sh
-
-    Subversion repository tool based on svnadmin
 
 * bash/sys-vitalbackup-Linux.sh
 
@@ -243,10 +211,6 @@ directory. It will not overwrite any existing files.
 
 ## Perl
 
-* perl/FreeBSD.pl
-
-    A package manager for FreeBSD emulating some of the functionality of apt-get
-
 * perl/atime.pl
 
     Print access time of specified files
@@ -254,14 +218,6 @@ directory. It will not overwrite any existing files.
 * perl/base64.pl
 
     Encode (= default) or decode Base64
-
-* perl/dbi-info.pl
-
-    Print the list of available DBI drivers and data sources
-
-* perl/geoip-lookup.pl
-
-    Find the country of a hostname or IP address using Geo::IPfree
 
 * perl/pie.pl
 
@@ -272,10 +228,6 @@ directory. It will not overwrite any existing files.
 * awk/avg.awk
 
     Compute the average of numeric values on stdin
-
-* awk/col.awk
-
-    Print the selected column on stdin
 
 * awk/column.awk
 
@@ -327,7 +279,7 @@ directory. It will not overwrite any existing files.
 
     Generate random passwords
 
-* python/reorder.py
+* python/renum.py
 
     Add numeric prefix to filenames to match the order specified in a list file
 
