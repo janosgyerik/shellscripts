@@ -119,7 +119,7 @@ directory. It will not overwrite any existing files.
 
 * bash/mv-many.sh
 
-    Rename files by editing their names in vim
+    Rename files and directories by editing their names in vim
 
 * bash/mv-replace.sh
 
@@ -140,6 +140,10 @@ directory. It will not overwrite any existing files.
 * bash/pdf-pages.sh
 
     Cut out a range of pages from PDF files
+
+* bash/pwgen.sh
+
+    Generate random alphanumeric passwords
 
 * bash/quote.sh
 
