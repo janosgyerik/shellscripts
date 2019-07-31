@@ -122,7 +122,7 @@ trap 'rm -f "$file"; exit 1' 1 2 3 15
 
 truncate
 
-cat << EOF | append
+cat << SCRIPT_TOP | append
 #!/usr/bin/env bash
 #
 # SCRIPT: $(basename "$file")
@@ -147,12 +147,13 @@ usage() {
         echo "\$@"
         exitcode=1
     fi
-    echo "Usage: \$0 [OPTION]... [ARG]..."
-    echo
-    echo $description
-    echo
-    echo Options:
-EOF
+    cat << EOF
+Usage: \$0 [OPTION]... [ARG]...
+
+$description
+
+Options:
+SCRIPT_TOP
 
 for op in "${options[@]}"; do
     f=${op:0:1}
@@ -166,12 +167,12 @@ for op in "${options[@]}"; do
         # shellcheck disable=SC2086
         echo Adding flag: $optionstring
         set_padding "$optionstring"
-        echo "    echo \"$optionstring $padding default = \$$vname\"" | append
+        echo "$optionstring $padding default = \$$vname" | append
         optionstring="      --no-$oname"
         # shellcheck disable=SC2086
         echo Adding flag: $optionstring
         set_padding "$optionstring"
-        echo "    echo \"$optionstring $padding default = ! \$$vname\"" | append
+        echo "$optionstring $padding default = ! \$$vname" | append
     else
         # shellcheck disable=SC2018,SC2019
         pname=$(tr a-z A-Z <<< "$oname")
@@ -179,21 +180,22 @@ for op in "${options[@]}"; do
         # shellcheck disable=SC2086
         echo Adding param: $optionstring
         set_padding "$optionstring"
-        echo "    echo \"$optionstring $padding default = \$$vname\"" | append
+        echo "$optionstring $padding default = \$$vname" | append
     fi
 done
 
 helpstring="  -h, --help"
 set_padding "$helpstring"
-cat << EOF | append
-    echo
-    echo "$helpstring $padding Print this help"
-    echo
+cat << SCRIPT_MID | append
+
+$helpstring $padding Print this help
+
+EOF
     exit \$exitcode
 }
 
 args=()
-EOF
+SCRIPT_MID
 
 test "$flags" || echo '#flag=off' | append
 test "$params" || echo '#param=' | append
