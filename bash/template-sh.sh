@@ -14,7 +14,7 @@ set -euo pipefail
 usage() {
     local exitcode=0
     if [ $# != 0 ]; then
-        echo "$@"
+        echo "$*" >&2
         exitcode=1
     fi
     echo "Usage: $0 [OPTION]... FILENAME"
@@ -29,7 +29,7 @@ usage() {
     echo
     echo "  -h, --help              Print this help"
     echo
-    exit $exitcode
+    exit "$exitcode"
 }
 
 set_longest() {
@@ -144,7 +144,7 @@ set -euo pipefail
 usage() {
     local exitcode=0
     if [ \$# != 0 ]; then
-        echo "\$@"
+        echo "\$*" >&2
         exitcode=1
     fi
     cat << EOF
@@ -191,7 +191,7 @@ cat << SCRIPT_MID | append
 $helpstring $padding Print this help
 
 EOF
-    exit \$exitcode
+    exit "\$exitcode"
 }
 
 args=()
