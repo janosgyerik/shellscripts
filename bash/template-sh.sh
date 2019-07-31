@@ -74,6 +74,7 @@ while test $# != 0; do
     -d|--description) shift; description=$1 ;;
     -f|--flag)
         shift
+        [[ $# != 0 ]] || usage 'Error: the -f, --flag option requires a parameter'
         is_valid_param "$1" || usage "Invalid parameter name: '$1'; parameter names should match the pattern: $ppattern"
         options+=("f$1")
         set_longest "$1"
@@ -81,6 +82,7 @@ while test $# != 0; do
         ;;
     -p|--param)
         shift
+        [[ $# != 0 ]] || usage 'Error: the -p, --param option requires a parameter'
         is_valid_param "$1" || usage "Invalid parameter name: '$1'; parameter names should match the pattern: $ppattern"
         options+=("p$1")
         set_longest "$1"
