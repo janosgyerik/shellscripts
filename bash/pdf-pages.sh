@@ -57,10 +57,14 @@ eval "set -- $args"  # save arguments in $@. Use "$@" in for loops, not $@
 
 test "$first" -a "$last" || usage
 
-for i in "$@"; do
-    test -f "$i" || continue
-    out=$(echo $i | sed -e s/.pdf$//i)-p$first-$last.pdf
-    echo '* creating '$out ...
-    pdftops -f $first -l $last "$i" - | ps2pdf - "$out"
-    echo '* done'
+msg() {
+    echo "* $*"
+}
+
+for path; do
+    test -f "$path" || continue
+    out=${path%.pdf}-p$first-$last.pdf
+    msg "creating $out"
+    pdftops -f "$first" -l "$last" "$path" - | ps2pdf - "$out"
+    msg "done"
 done
