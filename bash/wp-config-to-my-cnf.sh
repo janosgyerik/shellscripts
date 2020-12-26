@@ -78,10 +78,12 @@ create_my_cnf() {
 # you can connect to this database with the command:
 # mysql --defaults-file=$my_cnf_path
 [client]
-database=$DB_NAME
 host=$DB_HOST
 user=$DB_USER
 password=$DB_PASSWORD
+
+[mysql]
+database=$DB_NAME
 EOF
 }
 
