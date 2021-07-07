@@ -208,6 +208,10 @@ directory. It will not overwrite any existing files.
 * bash/words.sh
 
     Find words in specified files or directories
+    
+* bash/install_lamp.sh
+
+    Install lamp stack in systems Linux (Debian based)
 
 * bash/wp-config-to-my-cnf.sh
 
